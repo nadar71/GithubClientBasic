@@ -2,7 +2,6 @@ package com.mapelli.simone.githubclient;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,7 +31,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
-        if (findViewById(R.id.item_detail_container) != null) {
+        if (findViewById(R.id.user_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
@@ -81,16 +80,16 @@ public class SearchUsersActivity extends AppCompatActivity {
                 DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(UserDetailFragment.ARG_ITEM_ID, item.id);
-                    UserDetailFragment fragment = new UserDetailFragment();
+                    arguments.putString(UserDetailFragment_tmp.ARG_ITEM_ID, item.id);
+                    UserDetailFragment_tmp fragment = new UserDetailFragment_tmp();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.item_detail_container, fragment)
+                            .replace(R.id.user_detail_container, fragment)
                             .commit();
                 } else {
                     Context context = view.getContext();
-                    Intent intent = new Intent(context, UserDetailActivity.class);
-                    intent.putExtra(UserDetailFragment.ARG_ITEM_ID, item.id);
+                    Intent intent = new Intent(context, UserDetailActivity_tmp.class);
+                    intent.putExtra(UserDetailFragment_tmp.ARG_ITEM_ID, item.id);
 
                     context.startActivity(intent);
                 }

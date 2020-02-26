@@ -3,21 +3,17 @@ package com.mapelli.simone.githubclient;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.ActionBar;
 import androidx.core.app.NavUtils;
 
 import android.view.MenuItem;
 
 
-public class UserDetailActivity extends AppCompatActivity {
+public class UserDetailActivity_tmp extends AppCompatActivity {
     Toolbar toolbar;
 
     @Override
@@ -31,14 +27,14 @@ public class UserDetailActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putString(UserDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(UserDetailFragment.ARG_ITEM_ID));
+            arguments.putString(UserDetailFragment_tmp.ARG_ITEM_ID,
+                    getIntent().getStringExtra(UserDetailFragment_tmp.ARG_ITEM_ID));
 
-            UserDetailFragment fragment = new UserDetailFragment();
+            UserDetailFragment_tmp fragment = new UserDetailFragment_tmp();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
+                    .add(R.id.user_detail_container, fragment)
                     .commit();
         }
     }
@@ -52,6 +48,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private void setupUpperBar() {
         toolbar = findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -59,10 +56,6 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
 
-    // Used by UserDetailFragment
-    public void setupToolbarTitle(String title) {
-        toolbar.setTitle(title);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
