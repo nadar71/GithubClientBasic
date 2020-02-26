@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">GithubClientBasic</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - - Label - - - - - - - - - - - - - - - - - - - - - - -->
     <string name="title_item_detail">Item Detail</string>
+    <string name="search_title">Search for users</string>
+    <string name="loadMore_btn_title">Load More</string>
 </resources>
