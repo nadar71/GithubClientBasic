@@ -1,8 +1,10 @@
 package com.mapelli.simone.githubclient;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -10,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 import com.mapelli.simone.githubclient.dummy.DummyContent;
 
 /**
@@ -21,6 +26,15 @@ import com.mapelli.simone.githubclient.dummy.DummyContent;
  * on handsets.
  */
 public class UserDetailFragment_tmp extends Fragment {
+
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    DetailSectionAdapter detailSectionAdapter;
+    TabItem tabProfile;
+    TabItem tabRepositories;
+
+    Activity activity;
+
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -42,20 +56,20 @@ public class UserDetailFragment_tmp extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        activity = this.getActivity();
+
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
-            Activity activity = this.getActivity();
+
             Toolbar toolbar = activity.findViewById(R.id.detail_toolbar);
             if (toolbar != null) {
                 toolbar.setTitle(mItem.content);
             }
-
-
-
         }
     }
 
@@ -71,6 +85,37 @@ public class UserDetailFragment_tmp extends Fragment {
         }
 
         */
+
+        tabLayout = rootView.findViewById(R.id.tablayout);
+        tabProfile = rootView.findViewById(R.id.tabProfile);
+        tabRepositories = rootView.findViewById(R.id.tabRepositories);
+
+        viewPager = rootView.findViewById(R.id.viewPager);
+
+
+
+
+        detailSectionAdapter = new DetailSectionAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(detailSectionAdapter);
+
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 
 

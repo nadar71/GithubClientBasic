@@ -1,0 +1,31 @@
+package com.mapelli.simone.githubclient;
+
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+public class RepositoriesFragment extends Fragment {
+
+    TextView text;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        // setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.fragment_repositories, container, false);
+    }
+
+
+}

@@ -7,4 +7,7 @@
     <string name="loadMore_btn_title">Load More</string>
     <string name="profile_tab_title">Profile</string>
     <string name="repositories_tab_title">Repositories</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
