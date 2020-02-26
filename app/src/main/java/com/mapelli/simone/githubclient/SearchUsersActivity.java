@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
@@ -26,10 +24,7 @@ import java.util.List;
 
 public class SearchUsersActivity extends AppCompatActivity {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
+    // true if running on a tablet device.
     private boolean mTwoPane;
 
     @Override
@@ -117,9 +112,9 @@ public class SearchUsersActivity extends AppCompatActivity {
             return new ViewHolder(view);
         }
 
+
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            // holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
 
             holder.itemView.setTag(mValues.get(position));
@@ -132,12 +127,10 @@ public class SearchUsersActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            // final TextView mIdView;
             final TextView mContentView;
 
             ViewHolder(View view) {
                 super(view);
-                // mIdView = (TextView) view.findViewById(R.id.id_text);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
         }
