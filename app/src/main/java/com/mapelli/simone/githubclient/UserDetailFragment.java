@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
+
 
 import com.mapelli.simone.githubclient.dummy.DummyContent;
 
@@ -49,10 +51,21 @@ public class UserDetailFragment extends Fragment {
             mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
+            /*
             CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.content);
             }
+            */
+
+
+            Toolbar toolbar = activity.findViewById(R.id.detail_toolbar);
+            if (toolbar != null) {
+                toolbar.setTitle(mItem.content);
+            }
+
+
+
         }
     }
 

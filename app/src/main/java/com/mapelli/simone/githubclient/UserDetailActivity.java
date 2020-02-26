@@ -18,15 +18,15 @@ import android.view.MenuItem;
 
 
 public class UserDetailActivity extends AppCompatActivity {
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-        Toolbar toolbar = findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
 
-        setupActionBar();
+
+        setupUpperBar();
 
 
         if (savedInstanceState == null) {
@@ -49,13 +49,20 @@ public class UserDetailActivity extends AppCompatActivity {
      * Set icons, title etc. in action bar
      * ---------------------------------------------------------------------------------------------
      */
-    private void setupActionBar() {
+    private void setupUpperBar() {
+        toolbar = findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
+
+    // Used by UserDetailFragment
+    public void setupToolbarTitle(String title) {
+        toolbar.setTitle(title);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
