@@ -24,13 +24,13 @@ import java.util.List;
 public class SearchUsersActivity extends AppCompatActivity {
 
     // true if running on a tablet device.
-    private boolean mTwoPane;
+    // private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
-
+/*
         if (findViewById(R.id.user_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
@@ -38,7 +38,7 @@ public class SearchUsersActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
+*/
         setupActionBar();
 
         View recyclerView = findViewById(R.id.item_list);
@@ -60,7 +60,7 @@ public class SearchUsersActivity extends AppCompatActivity {
 
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS)); //, mTwoPane));
     }
 
 
@@ -73,11 +73,12 @@ public class SearchUsersActivity extends AppCompatActivity {
 
         private final SearchUsersActivity mParentActivity;
         private final List<DummyContent.DummyItem> mValues;
-        private final boolean mTwoPane;
+        // private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                /*
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(UserDetailFragment_tmp.ARG_ITEM_ID, item.id);
@@ -88,20 +89,27 @@ public class SearchUsersActivity extends AppCompatActivity {
                             .commit();
                 } else {
                     Context context = view.getContext();
-                    Intent intent = new Intent(context, UserDetailActivity_tmp.class);
+                    Intent intent = new Intent(context, UserDetailActivity.class);
                     intent.putExtra(UserDetailFragment_tmp.ARG_ITEM_ID, item.id);
 
                     context.startActivity(intent);
                 }
+                */
+
+                Context context = view.getContext();
+                Intent intent = new Intent(context, UserDetailActivity.class);
+                intent.putExtra(UserDetailFragment_tmp.ARG_ITEM_ID, item.id);
+
+                context.startActivity(intent);
             }
         };
 
         SimpleItemRecyclerViewAdapter(SearchUsersActivity parent,
-                                      List<DummyContent.DummyItem> items,
-                                      boolean twoPane) {
+                                      List<DummyContent.DummyItem> items) //,boolean twoPane)
+                                      {
             mValues = items;
             mParentActivity = parent;
-            mTwoPane = twoPane;
+            // mTwoPane = twoPane;
         }
 
         @Override

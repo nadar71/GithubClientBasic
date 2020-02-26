@@ -1,10 +1,8 @@
 package com.mapelli.simone.githubclient;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -22,7 +20,7 @@ import com.mapelli.simone.githubclient.dummy.DummyContent;
 /**
  * A fragment representing a single Item detail screen.
  * This fragment is either contained in a {@link SearchUsersActivity}
- * in two-pane mode (on tablets) or a {@link UserDetailActivity_tmp}
+ * in two-pane mode (on tablets) or a {@link UserDetailActivity}
  * on handsets.
  */
 public class UserDetailFragment_tmp extends Fragment {
@@ -95,7 +93,7 @@ public class UserDetailFragment_tmp extends Fragment {
 
 
 
-        detailSectionAdapter = new DetailSectionAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        // detailSectionAdapter = new DetailSectionAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(detailSectionAdapter);
 
 

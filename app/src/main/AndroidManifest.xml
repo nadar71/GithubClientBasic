@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UserDetailActivity_tmp"
+            android:name=".UserDetailActivity"
             android:label="@string/title_item_detail"
             android:parentActivityName=".SearchUsersActivity"
             android:theme="@style/AppTheme.NoActionBar">

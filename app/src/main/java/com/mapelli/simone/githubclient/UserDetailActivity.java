@@ -1,6 +1,7 @@
 package com.mapelli.simone.githubclient;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -9,22 +10,61 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.MenuItem;
 
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
-public class UserDetailActivity_tmp extends AppCompatActivity {
+
+public class UserDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
+
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    DetailSectionAdapter detailSectionAdapter;
+    TabItem tabProfile;
+    TabItem tabRepositories;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
+        tabLayout =       findViewById(R.id.tablayout);
+        tabProfile =      findViewById(R.id.tabProfile);
+        tabRepositories = findViewById(R.id.tabRepositories);
+
+        viewPager =       findViewById(R.id.viewPager);
 
         setupUpperBar();
 
+        detailSectionAdapter = new DetailSectionAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(detailSectionAdapter);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+
+        /*
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
             arguments.putString(UserDetailFragment_tmp.ARG_ITEM_ID,
@@ -37,6 +77,8 @@ public class UserDetailActivity_tmp extends AppCompatActivity {
                     .add(R.id.user_detail_container, fragment)
                     .commit();
         }
+        */
+
     }
 
 
