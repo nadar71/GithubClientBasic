@@ -1,7 +1,6 @@
-package com.mapelli.simone.githubclient;
+package com.mapelli.simone.githubclient.UI;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -10,7 +9,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
@@ -18,6 +16,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.dummy.DummyContent;
 
 

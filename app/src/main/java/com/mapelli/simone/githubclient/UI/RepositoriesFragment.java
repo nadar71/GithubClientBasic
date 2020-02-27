@@ -1,4 +1,4 @@
-package com.mapelli.simone.githubclient;
+package com.mapelli.simone.githubclient.UI;
 
 
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mapelli.simone.githubclient.R;
 
 
 public class RepositoriesFragment extends Fragment {

@@ -1,4 +1,4 @@
-package com.mapelli.simone.githubclient;
+package com.mapelli.simone.githubclient.UI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
+import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.dummy.DummyContent;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.mapelli.simone.githubclient;
+package com.mapelli.simone.githubclient.UI;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

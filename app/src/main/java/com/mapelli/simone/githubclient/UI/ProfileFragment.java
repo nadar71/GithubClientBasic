@@ -1,4 +1,4 @@
-package com.mapelli.simone.githubclient;
+package com.mapelli.simone.githubclient.UI;
 
 
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.mapelli.simone.githubclient.R;
 
 
 public class ProfileFragment extends Fragment {
