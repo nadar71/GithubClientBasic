@@ -13,13 +13,18 @@ import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+import com.mapelli.simone.githubclient.dummy.DummyContent;
 
 
 public class UserDetailActivity extends AppCompatActivity {
+
+    private static final String TAG = UserDetailActivity.class.getSimpleName();
+
     Toolbar toolbar;
 
     TabLayout tabLayout;
@@ -27,6 +32,10 @@ public class UserDetailActivity extends AppCompatActivity {
     DetailSectionAdapter detailSectionAdapter;
     TabItem tabProfile;
     TabItem tabRepositories;
+
+    // toolbar title
+    public static final String ARG_ITEM_ID = "item_id";
+    private DummyContent.DummyItem mItem;
 
 
     @Override
@@ -37,7 +46,6 @@ public class UserDetailActivity extends AppCompatActivity {
         tabLayout =       findViewById(R.id.tablayout);
         tabProfile =      findViewById(R.id.tabProfile);
         tabRepositories = findViewById(R.id.tabRepositories);
-
         viewPager =       findViewById(R.id.viewPager);
 
         setupUpperBar();
@@ -64,21 +72,6 @@ public class UserDetailActivity extends AppCompatActivity {
 
 
 
-        /*
-        if (savedInstanceState == null) {
-            Bundle arguments = new Bundle();
-            arguments.putString(UserDetailFragment_tmp.ARG_ITEM_ID,
-                    getIntent().getStringExtra(UserDetailFragment_tmp.ARG_ITEM_ID));
-
-            UserDetailFragment_tmp fragment = new UserDetailFragment_tmp();
-            fragment.setArguments(arguments);
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.user_detail_container, fragment)
-                    .commit();
-        }
-        */
-
     }
 
 
@@ -89,12 +82,25 @@ public class UserDetailActivity extends AppCompatActivity {
      */
     private void setupUpperBar() {
         toolbar = findViewById(R.id.detail_toolbar);
+
+        Intent intent = getIntent();
+        String user_id = intent.getStringExtra(ARG_ITEM_ID) ;
+        if (user_id != "" ) {
+            // Load the dummy content
+            // TODO : load with real user id
+            mItem = DummyContent.ITEM_MAP.get(user_id);
+            Log.d(TAG, "*****setupUpperBar: "+mItem);
+            toolbar.setTitle(mItem.content);
+        }
+
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+
     }
 
 
