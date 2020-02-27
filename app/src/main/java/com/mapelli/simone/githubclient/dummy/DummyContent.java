@@ -5,28 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
- */
+// TODO: Helper class for providing sample content Replace all uses of this class before publishing your app.
 public class DummyContent {
 
-    /**
-     * An array of sample (dummy) items.
-     */
+    // An array of sample (dummy) items.
     public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
 
-    /**
-     * A map of sample (dummy) items, by ID.
-     */
+    // A map of sample (dummy) items, by ID.
     public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
 
     private static final int COUNT = 25;
 
     static {
-        // Add some sample items.
         for (int i = 1; i <= COUNT; i++) {
             addItem(createDummyItem(i));
         }
@@ -38,7 +28,9 @@ public class DummyContent {
     }
 
     private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
+        return new DummyItem(String.valueOf(position),
+                "Item " + position, makeDetails(position),
+                "https://avatars0.githubusercontent.com/u/3753994?v=4");
     }
 
     private static String makeDetails(int position) {
@@ -50,18 +42,18 @@ public class DummyContent {
         return builder.toString();
     }
 
-    /**
-     * A dummy item representing a piece of content.
-     */
+    // A dummy item representing a piece of content.
     public static class DummyItem {
         public final String id;
         public final String content;
         public final String details;
+        public final String avatar_url;
 
-        public DummyItem(String id, String content, String details) {
+        public DummyItem(String id, String content, String details, String avatar_url) {
             this.id = id;
             this.content = content;
             this.details = details;
+            this.avatar_url = avatar_url;
         }
 
         @Override
