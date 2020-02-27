@@ -34,6 +34,7 @@ public class UserDetailActivity extends AppCompatActivity {
     TabItem tabRepositories;
 
     // toolbar title
+    // TODO : with dummy item, use real user id
     public static final String ARG_ITEM_ID = "item_id";
     private DummyContent.DummyItem mItem;
 
