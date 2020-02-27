@@ -19,8 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.dummy.DummyContent;
 
-import java.util.List;
-
 
 public class SearchUsersActivity extends AppCompatActivity {
 
@@ -51,13 +49,13 @@ public class SearchUsersActivity extends AppCompatActivity {
 
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS));
+        recyclerView.setAdapter(new UsersListAdapter(this, DummyContent.ITEMS));
     }
 
 
 
     // TODO : create my own, set in another file
-    public static class SimpleItemRecyclerViewAdapter
+    /*public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final SearchUsersActivity mParentActivity;
@@ -113,7 +111,7 @@ public class SearchUsersActivity extends AppCompatActivity {
                 mContentView = view.findViewById(R.id.content);
             }
         }
-    }
+    }*/
 
 
     /**
