@@ -1,4 +1,13 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">GithubClientBasic</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - - Label - - - - - - - - - - - - - - - - - - - - - - -->
     <string name="title_item_detail">Item Detail</string>
+    <string name="search_title">Search for users</string>
+    <string name="loadMore_btn_title">Load More</string>
+    <string name="profile_tab_title">Profile</string>
+    <string name="repositories_tab_title">Repositories</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
