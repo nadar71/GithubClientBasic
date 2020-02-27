@@ -69,7 +69,7 @@ public class SearchUsersActivity extends AppCompatActivity {
 
                 Context context = view.getContext();
                 Intent intent = new Intent(context, UserDetailActivity.class);
-                intent.putExtra(UserDetailFragment_tmp.ARG_ITEM_ID, item.id);
+                intent.putExtra(UserDetailActivity.ARG_ITEM_ID, item.id);
 
                 context.startActivity(intent);
             }
