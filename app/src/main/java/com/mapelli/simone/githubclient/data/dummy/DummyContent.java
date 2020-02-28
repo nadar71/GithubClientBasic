@@ -1,5 +1,7 @@
 package com.mapelli.simone.githubclient.data.dummy;
 
+import android.content.Intent;
+
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class DummyContent {
     }
 
     private static UserProfile_Mini createDummyItem(int position) {
-        return new UserProfile_Mini("nadar71 " + position,
+        return new UserProfile_Mini(Integer.toString(position),"nadar71 " + position,
                 "https://avatars0.githubusercontent.com/u/3753994?v=4",
                 "nadar71 " + position);
     }

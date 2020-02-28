@@ -1,21 +1,40 @@
 package com.mapelli.simone.githubclient.data.entity;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "USERS_REPOSITORIES")
+// @Entity(tableName = "USERS_REPOSITORIES")
 public class UserRepository {
 
     @PrimaryKey
+    // @SerializedName("login")
     private String user_id_owner;
+
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("full_name")
     private String full_name;
+
+    @SerializedName("html_url")
     private String html_url;
+
+    @SerializedName("created_at")
     private String created_at;
+
+    @SerializedName("updated_at")
     private String updated_at;
+
+    @SerializedName("pushed_at")
     private String pushed_at;
+
+    @SerializedName("stargazers_count")
     private String stargazers_count;
+
+    @SerializedName("forks_count")
     private String forks_count;
 
     public UserRepository(String user_id_owner, String name, String full_name, String html_url,

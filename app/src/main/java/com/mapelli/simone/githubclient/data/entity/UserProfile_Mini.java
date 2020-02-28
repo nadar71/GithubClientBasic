@@ -1,20 +1,41 @@
 package com.mapelli.simone.githubclient.data.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "USERS_PROFILES_MINI")
+// @Entity(tableName = "USERS_PROFILES_MINI")
 public class UserProfile_Mini {
 
     @PrimaryKey
+    @SerializedName("id")
+    private String id;
+
+    @SerializedName("login")
     private String login;
+
+    @SerializedName("avatar_url")
     private String avatar_url;
+
+
+    @SerializedName("name")
     private String name;
 
-    public UserProfile_Mini(String login, String avatar_url, String name) {
+    public UserProfile_Mini(String id, String login, String avatar_url, String name) {
+        this.id = id;
         this.login = login;
         this.avatar_url = avatar_url;
         this.name = name;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLogin() {

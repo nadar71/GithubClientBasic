@@ -1,22 +1,37 @@
 package com.mapelli.simone.githubclient.data.entity;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "USERS_PROFILES_FULL")
-public class UserProfile_full {
+// @Entity(tableName = "USERS_PROFILES_FULL")
+public class UserProfile_Full {
 
     @PrimaryKey
-    private String id;
+    @SerializedName("login")
     private String login;
+
+    @SerializedName("id")
+    private String id;
+
+    @SerializedName("avatar_url")
     private String avatar_url;
+
+    @SerializedName("repos_url")
     private String repos_url;
+
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("location")
     private String location;
+
+    @SerializedName("email")
     private String email;
 
-    public UserProfile_full(String login, String id, String avatar_url, String repos_url,
+    public UserProfile_Full(String login, String id, String avatar_url, String repos_url,
                             String name, String location, String email) {
         this.login = login;
         this.id = id;
