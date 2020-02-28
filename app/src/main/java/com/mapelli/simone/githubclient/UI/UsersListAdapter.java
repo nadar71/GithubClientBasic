@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
-import com.mapelli.simone.githubclient.data.dummy.DummyContent;
 
 import java.util.List;
 
