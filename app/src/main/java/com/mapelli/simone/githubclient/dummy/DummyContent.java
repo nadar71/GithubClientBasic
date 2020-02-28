@@ -14,7 +14,7 @@ public class DummyContent {
     // A map of sample (dummy) items, by ID.
     public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
 
-    private static final int COUNT = 25;
+    private static final int COUNT = 100;
 
     static {
         for (int i = 1; i <= COUNT; i++) {
