@@ -1,23 +1,19 @@
 package com.mapelli.simone.githubclient.UI;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.mapelli.simone.githubclient.R;
-import com.mapelli.simone.githubclient.dummy.DummyContent;
+import com.mapelli.simone.githubclient.data.dummy.DummyContent;
 
 
 public class SearchUsersActivity extends AppCompatActivity {

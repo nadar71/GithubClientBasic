@@ -11,7 +11,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mapelli.simone.githubclient.R;
-import com.mapelli.simone.githubclient.dummy.DummyContent;
+import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
+import com.mapelli.simone.githubclient.data.dummy.DummyContent;
 
 import java.util.List;
 
@@ -20,28 +21,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>{
 
-    private final SearchUsersActivity mParentActivity;
-    private final List<DummyContent.DummyItem> mValues;
+    private final SearchUsersActivity parentActivity;
+    private final List<UserProfile_Mini> usersList;
 
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+            UserProfile_Mini item = (UserProfile_Mini) view.getTag();
 
             Context context = view.getContext();
             Intent intent = new Intent(context, UserDetailActivity.class);
-            intent.putExtra(UserDetailActivity.ARG_ITEM_ID, item.id);
+            intent.putExtra(UserDetailActivity.ARG_ITEM_ID, item.getLogin());
 
             context.startActivity(intent);
         }
     };
 
     UsersListAdapter(SearchUsersActivity parent,
-                                  List<DummyContent.DummyItem> items)
+                                  List<UserProfile_Mini> items)
     {
-        mValues = items;
-        mParentActivity = parent;
+        usersList = items;
+        parentActivity = parent;
 
     }
 
@@ -55,22 +56,22 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
 
     @Override
     public void onBindViewHolder(@NonNull UsersListViewHolder holder, int position) {
-        DummyContent.DummyItem item = mValues.get(position);
-        holder.mContentView.setText(item.content);
+        UserProfile_Mini item = usersList.get(position);
+        holder.mContentView.setText(item.getName());
 
-        Glide.with(mParentActivity.getBaseContext())
-                .load(item.avatar_url)
+        Glide.with(parentActivity.getBaseContext())
+                .load(item.getAvatar_url())
                 .fitCenter()
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.userPhoto);
 
-        holder.itemView.setTag(mValues.get(position));
+        holder.itemView.setTag(usersList.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return usersList.size();
     }
 
     class UsersListViewHolder extends RecyclerView.ViewHolder {

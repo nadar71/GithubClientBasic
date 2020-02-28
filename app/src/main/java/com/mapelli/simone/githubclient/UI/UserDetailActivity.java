@@ -17,7 +17,8 @@ import android.view.MenuItem;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.mapelli.simone.githubclient.R;
-import com.mapelli.simone.githubclient.dummy.DummyContent;
+import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
+import com.mapelli.simone.githubclient.data.dummy.DummyContent;
 
 
 public class UserDetailActivity extends AppCompatActivity {
@@ -35,7 +36,7 @@ public class UserDetailActivity extends AppCompatActivity {
     // toolbar title
     // TODO : with dummy item, use real user id
     public static final String ARG_ITEM_ID = "item_id";
-    private DummyContent.DummyItem mItem;
+    private UserProfile_Mini currentUser;
 
 
     @Override
@@ -88,9 +89,9 @@ public class UserDetailActivity extends AppCompatActivity {
         if (user_id != "" ) {
             // Load the dummy content
             // TODO : load with real user id
-            mItem = DummyContent.ITEM_MAP.get(user_id);
-            Log.d(TAG, "*****setupUpperBar: "+mItem);
-            toolbar.setTitle(mItem.content);
+            currentUser = DummyContent.ITEM_MAP.get(user_id);
+            Log.d(TAG, "*****setupUpperBar: "+currentUser);
+            toolbar.setTitle(currentUser.getName());
         }
 
         setSupportActionBar(toolbar);
