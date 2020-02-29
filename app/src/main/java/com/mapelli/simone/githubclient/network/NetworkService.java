@@ -30,13 +30,6 @@ public interface NetworkService {
     Call<UserProfile_Full> userProfileByUserLogin(@Path("login") String login);
 
 
-    // get repositories list for a specific user; default : full_name asc
-    // https://api.github.com/users/nadar71/repos
-    @GET("/users/{user}/repos")
-    Call<ArrayList<UserRepository>> reposForuser(@Path("user") String user);
-
-
-
     //----------------------------------------------------------------------------------------------
     //                               REPO QUERIES REQUESTS
     //----------------------------------------------------------------------------------------------
@@ -44,24 +37,16 @@ public interface NetworkService {
     // repositories with direction full_name desc
     // https://api.github.com/users/nadar71/repos?direction=desc
     @GET("/users/{user}/repos")
-    Call<ArrayList<UserRepository>> reposForuser_name_desc(@Path("user") String user,
-                                               @Query("direction") String direction);
+    Call<ArrayList<UserRepository>> userReposBy_name_direction(@Path("user") String user,
+                                                               @Query("direction") String direction);
 
 
     // repositories sort=created  and direction=asc
     // https://api.github.com/users/nadar71/repos?sort=created&direction=asc
     @GET("/users/{user}/repos")
-    Call<ArrayList<UserRepository>> reposForuser_created_asc(@Path("user") String user,
-                                                       @Query("sort") String created,
-                                                       @Query("direction") String direction);
-
-
-    // repositories sort=created  and direction=desc
-    // https://api.github.com/users/nadar71/repos?sort=created&direction=desc
-    @GET("/users/{user}/repos")
-    Call<ArrayList<UserRepository>> reposForuser_created_desc(@Path("user") String user,
-                                                       @Query("sort") String created,
-                                                       @Query("direction") String direction);
+    Call<ArrayList<UserRepository>> userReposBy_created_direction(@Path("user") String user,
+                                                                  @Query("sort") String created,
+                                                                  @Query("direction") String direction);
 
 
     // repositories sort=updated  and direction=asc
@@ -72,32 +57,12 @@ public interface NetworkService {
                                                        @Query("direction") String direction);
 
 
-    // repositories sort=updated  and direction=desc
-    // https://api.github.com/users/nadar71/repos?sort=updated&direction=desc
-    @GET("/users/{user}/repos")
-    Call<ArrayList<UserRepository>> reposForuser_updated_desc(@Path("user") String user,
-                                                       @Query("sort") String updated,
-                                                       @Query("direction") String direction);
-
-
-
-
     // repositories sort=pushed  and direction=asc
     // https://api.github.com/users/nadar71/repos?sort=pushed&direction=asc
     @GET("/users/{user}/repos")
     Call<ArrayList<UserRepository>> reposForuser_pushed_asc(@Path("user") String user,
                                                        @Query("sort") String pushed,
                                                        @Query("direction") String direction);
-
-
-
-    // repositories sort=pushed  and direction=desc
-    // https://api.github.com/users/nadar71/repos?sort=pushed&direction=desc
-    @GET("/users/{user}/repos")
-    Call<ArrayList<UserRepository>> reposForuser_pushed_desc(@Path("user") String user,
-                                                       @Query("sort") String pushed,
-                                                       @Query("direction") String direction);
-
-
+    
 
 }

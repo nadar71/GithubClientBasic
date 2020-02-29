@@ -2,8 +2,6 @@ package com.mapelli.simone.githubclient.network;
 
 
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
@@ -11,7 +9,6 @@ import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini_List;
 import com.mapelli.simone.githubclient.data.entity.UserRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -118,13 +115,14 @@ public class NetworkRequests {
     }
 
 
+
+
     /**
      * ---------------------------------------------------------------------------------------------
-     * Get repo list for user
-     * By default name are in asc direction.
+     * Repo with name in asc/desc direction
      * @param login
      */
-    public void getUserRepo(String login){
+    public void getRepoFilterByName_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create());
@@ -132,7 +130,8 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call = client.reposForuser(login);
+        Call<ArrayList<UserRepository>> call = client.userReposBy_name_direction(login, direction);
+
         call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
             public void onResponse(Call<ArrayList<UserRepository>> call,
@@ -143,47 +142,13 @@ public class NetworkRequests {
                     Log.d(TAG, "onResponse: " +
                             "user_id_owner + "+repo.getUser_id_owner()+
                             "name + "+repo.getName() +
-                             "full_name + "+repo.getFull_name() +
+                            "full_name + "+repo.getFull_name() +
                             "html_url + "+repo.getHtml_url() +
                             "created_at + "+repo.getCreated_at() +
                             "updated_at + "+repo.getUpdated_at() +
                             "pushed_at + "+repo.getPushed_at() +
                             "stargazers_count + "+repo.getStargazers_count() +
-                            "forks_count + "+repo.getForks_count()
-                    );
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserProfileFullById ",  t);
-            }
-        });
-
-    }
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Repo with name in desc direction
-     * @param user
-     */
-    public void getRepo_Name_Desc(String user){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<ArrayList<UserRepository>> call = client.reposForuser_name_desc(user,"desc");
-        call.enqueue(new Callback<ArrayList<UserRepository>>() {
-            @Override
-            public void onResponse(Call<ArrayList<UserRepository>> call,
-                                   Response<ArrayList<UserRepository>> response) {
-                ArrayList<UserRepository> listRepo = response.body();
-                for(UserRepository repo:listRepo){
-                    Log.d(TAG, "onResponse: name + "+repo.getName());
+                            "forks_count + "+repo.getForks_count() );
                 }
             }
 
@@ -198,10 +163,10 @@ public class NetworkRequests {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Repo with created in asc direction
-     * @param user
+     * Repo with created in asc/desc direction
+     * @param login
      */
-    public void getRepo_created_Asc(String user){
+    public void getRepoFilterByCreated_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create());
@@ -209,8 +174,8 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call = client.reposForuser_created_asc(user,"created",
-                "asc");
+        Call<ArrayList<UserRepository>> call =
+                client.userReposBy_created_direction(login,"created", direction);
         call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
             public void onResponse(Call<ArrayList<UserRepository>> call,
@@ -230,12 +195,15 @@ public class NetworkRequests {
 
 
 
+
+
+
     /**
      * ---------------------------------------------------------------------------------------------
-     * Repo with created in desc direction
-     * @param user
+     * Repo with updated in asc/desc direction
+     * @param login
      */
-    public void getRepo_created_Desc(String user){
+    public void getRepoFilterByUpdated_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create());
@@ -243,42 +211,8 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call = client.reposForuser_created_asc(user,"created",
-                "desc");
-        call.enqueue(new Callback<ArrayList<UserRepository>>() {
-            @Override
-            public void onResponse(Call<ArrayList<UserRepository>> call,
-                                   Response<ArrayList<UserRepository>> response) {
-                ArrayList<UserRepository> listRepo = response.body();
-                for(UserRepository repo:listRepo){
-                    Log.d(TAG, "onResponse:  created_at : "+repo.getCreated_at());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
-            }
-        });
-    }
-
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Repo with updated in asc direction
-     * @param user
-     */
-    public void getRepo_updated_Asc(String user){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<ArrayList<UserRepository>> call = client.reposForuser_updated_asc(user,"updated",
-                "asc");
+        Call<ArrayList<UserRepository>> call =
+                client.reposForuser_updated_asc(login,"updated", direction);
         call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
             public void onResponse(Call<ArrayList<UserRepository>> call,
@@ -299,12 +233,15 @@ public class NetworkRequests {
 
 
 
+
+
+
     /**
      * ---------------------------------------------------------------------------------------------
-     * Repo with updated in desc direction
-     * @param user
+     * Repo with pushed in asc/desc direction
+     * @param login
      */
-    public void getRepo_updated_Desc(String user){
+    public void getRepoFilterByPushed_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create());
@@ -312,42 +249,7 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call = client.reposForuser_updated_asc(user,"updated",
-                "desc");
-        call.enqueue(new Callback<ArrayList<UserRepository>>() {
-            @Override
-            public void onResponse(Call<ArrayList<UserRepository>> call,
-                                   Response<ArrayList<UserRepository>> response) {
-                ArrayList<UserRepository> listRepo = response.body();
-                for(UserRepository repo:listRepo){
-                    Log.d(TAG, "onResponse:  updated_at : "+repo.getUpdated_at());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
-            }
-        });
-    }
-
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Repo with pushed in asc direction
-     * @param user
-     */
-    public void getRepo_pushed_Asc(String user){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<ArrayList<UserRepository>> call = client.reposForuser_pushed_asc(user,"pushed",
-                "asc");
+        Call<ArrayList<UserRepository>> call = client.reposForuser_pushed_asc(login,"pushed", direction);
         call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
             public void onResponse(Call<ArrayList<UserRepository>> call,
@@ -367,37 +269,6 @@ public class NetworkRequests {
 
 
 
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Repo with pushed in desc direction
-     * @param user
-     */
-    public void getRepo_pushed_Desc(String user){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<ArrayList<UserRepository>> call = client.reposForuser_pushed_desc(user,"pushed",
-                "desc");
-        call.enqueue(new Callback<ArrayList<UserRepository>>() {
-            @Override
-            public void onResponse(Call<ArrayList<UserRepository>> call,
-                                   Response<ArrayList<UserRepository>> response) {
-                ArrayList<UserRepository> listRepo = response.body();
-                for(UserRepository repo:listRepo){
-                    Log.d(TAG, "onResponse:  pushed_at : "+repo.getPushed_at());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
-            }
-        });
-    }
 
 
 }

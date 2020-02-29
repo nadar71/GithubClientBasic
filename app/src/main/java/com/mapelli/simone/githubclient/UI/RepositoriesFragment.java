@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -25,13 +24,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
 import com.mapelli.simone.githubclient.data.entity.UserRepository;
-import com.mapelli.simone.githubclient.network.NetworkRequests;
 import com.mapelli.simone.githubclient.network.NetworkService;
 
 import java.util.ArrayList;
@@ -47,6 +43,7 @@ public class RepositoriesFragment extends Fragment {
 
     private UserDetailActivity parent;
     private UserProfile_Full currentUser;
+    private String user_login;
 
     private ArrayList<UserRepository> userRepoList;
     private RecyclerView recyclerView;
@@ -61,6 +58,8 @@ public class RepositoriesFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_repositories, container, false);
         parent = (UserDetailActivity) getActivity();
         currentUser = parent.getCurrentUser();
+        user_login  = currentUser.getLogin();
+
         parentContext = parent.getBaseContext();
 
         title_list     = rootView.findViewById(R.id.title_list_txt);
@@ -71,7 +70,7 @@ public class RepositoriesFragment extends Fragment {
 
 
         // **** TODO : FOR DEBUG ONLY
-        getUserRepo(currentUser.getLogin());
+        getRepoFilterByName_Direction(user_login,"asc");
 
         return rootView;
     }
@@ -103,13 +102,13 @@ public class RepositoriesFragment extends Fragment {
             public void onClick(View v) {
                 filter_type.setText(parentContext.getString(R.string.filter_type_start_label) +
                         FILTER_TYPE + " asc ");
-
                 //**** TODO : FOR DEBUG ONLY
                 switch(FILTER_TYPE){
-                    case "data creation" :  break;
-                    case "data update"   :  break;
-                    case "data pushed"   :  break;
-                    default              :  break;
+                    case "name"          : getRepoFilterByName_Direction(user_login,"asc");    break;
+                    case "data creation" : getRepoFilterByCreated_Direction(user_login,"asc"); break;
+                    case "data update"   : getRepoFilterByUpdated_Direction(user_login,"asc"); break;
+                    case "data pushed"   : getRepoFilterByPushed_Direction(user_login,"asc");  break;
+                    default              : break;
                 }
             }
         });
@@ -120,16 +119,17 @@ public class RepositoriesFragment extends Fragment {
             public void onClick(View v) {
                 filter_type.setText(parentContext.getString(R.string.filter_type_start_label) +
                         FILTER_TYPE + " desc ");
-
                 //**** TODO : FOR DEBUG ONLY
                 switch(FILTER_TYPE){
-                    case "data creation" :  break;
-                    case "data update"   :  break;
-                    case "data pushed"   :  break;
-                    default              :  break;
+                    case "name"          : getRepoFilterByName_Direction(user_login,"desc");    break;
+                    case "data creation" : getRepoFilterByCreated_Direction(user_login,"desc"); break;
+                    case "data update"   : getRepoFilterByUpdated_Direction(user_login,"desc"); break;
+                    case "data pushed"   : getRepoFilterByPushed_Direction(user_login,"desc");  break;
+                    default              : break;
                 }
             }
         });
+
     }
 
 
@@ -208,7 +208,7 @@ public class RepositoriesFragment extends Fragment {
     //                                     DEBUG
     // **** ONLY FOR DEBUGGING, DELETED AFTER CREATING REPOSITORY + VIEWMODEL/LIVEDATA LAYER
 
-    public void getUserRepo(String login){
+    public void getRepoFilterByName_Direction(String user, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create());
@@ -216,7 +216,7 @@ public class RepositoriesFragment extends Fragment {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call = client.reposForuser(login);
+        Call<ArrayList<UserRepository>> call = client.userReposBy_name_direction(user, direction);
         call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
             public void onResponse(Call<ArrayList<UserRepository>> call,
@@ -225,7 +225,7 @@ public class RepositoriesFragment extends Fragment {
                 updateAdapter(userRepoList);
 
                 for(UserRepository repo:userRepoList){
-                    repo.setUser_id_owner(login);
+                    repo.setUser_id_owner(user);
                     Log.d(TAG, "onResponse: " +
                             "user_id_owner + "+repo.getUser_id_owner()+
                             "name + "+repo.getName() +
@@ -248,5 +248,100 @@ public class RepositoriesFragment extends Fragment {
 
     }
 
+    public void getRepoFilterByCreated_Direction(String login, String direction){
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+        NetworkService client = retrofit.create(NetworkService.class);
+
+        Call<ArrayList<UserRepository>> call =
+                client.userReposBy_created_direction(login,"created", direction);
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
+            @Override
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                userRepoList = response.body();
+                updateAdapter(userRepoList);
+                for(UserRepository repo:userRepoList){
+                    Log.d(TAG, "onResponse:  created_at : "+repo.getCreated_at());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
+                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
+            }
+        });
+    }
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Repo with updated in asc/desc direction
+     * @param login
+     */
+    public void getRepoFilterByUpdated_Direction(String login, String direction){
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+        NetworkService client = retrofit.create(NetworkService.class);
+
+        Call<ArrayList<UserRepository>> call =
+                client.reposForuser_updated_asc(login,"updated", direction);
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
+            @Override
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                userRepoList = response.body();
+                updateAdapter(userRepoList);
+                for(UserRepository repo:userRepoList){
+                    Log.d(TAG, "onResponse:  updated_at : "+repo.getUpdated_at());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
+                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
+            }
+        });
+    }
+
+
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Repo with pushed in asc/desc direction
+     * @param login
+     */
+    public void getRepoFilterByPushed_Direction(String login, String direction){
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+        NetworkService client = retrofit.create(NetworkService.class);
+
+        Call<ArrayList<UserRepository>> call = client.reposForuser_pushed_asc(login,"pushed", direction);
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
+            @Override
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                userRepoList = response.body();
+                updateAdapter(userRepoList);
+                for(UserRepository repo:userRepoList){
+                    Log.d(TAG, "onResponse:  pushed_at : "+repo.getPushed_at());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
+                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
+            }
+        });
+    }
 
 }
