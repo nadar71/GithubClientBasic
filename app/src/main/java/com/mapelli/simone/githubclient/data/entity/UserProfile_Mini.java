@@ -5,6 +5,12 @@ import com.google.gson.annotations.SerializedName;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+
+/**
+ * UserProdile_Mini is a lighter fields number version UserProfile_Full
+ * In case of great number of Load More pressing in SearchUserActivity,
+ * it decrease the data load in memory.
+ */
 // @Entity(tableName = "USERS_PROFILES_MINI")
 public class UserProfile_Mini {
 
@@ -18,15 +24,15 @@ public class UserProfile_Mini {
     @SerializedName("avatar_url")
     private String avatar_url;
 
-
-    @SerializedName("name")
-    private String name;
+    // see issue #13 on github repo
+    // @SerializedName("name")
+    // private String name;
 
     public UserProfile_Mini(String id, String login, String avatar_url, String name) {
         this.id = id;
         this.login = login;
         this.avatar_url = avatar_url;
-        this.name = name;
+        // this.name = name;
     }
 
 
@@ -54,6 +60,7 @@ public class UserProfile_Mini {
         this.avatar_url = avatar_url;
     }
 
+    /*
     public String getName() {
         return name;
     }
@@ -61,4 +68,5 @@ public class UserProfile_Mini {
     public void setName(String name) {
         this.name = name;
     }
+    */
 }

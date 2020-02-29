@@ -23,14 +23,17 @@ public class NetworkRequests {
 
     private final static String TAG  =  NetworkRequests.class.getSimpleName();
 
-    // TODO : will MutableLivedata in next steps
+    // TODO : will be MutableLivedata in next steps
     private ArrayList<UserProfile_Mini> usersProfiles = new ArrayList<>();
+    // TODO : only for debug, will use ViewModel/Livedata in next steps
+    public ArrayList<UserProfile_Mini> getUsersProfiles(){
+        return usersProfiles;
+    }
 
     /**
      * ---------------------------------------------------------------------------------------------
      * Recover user list based on keyword.
      * @param keyword
-     * ---------------------------------------------------------------------------------------------
      */
     public void getUsersSearch(String keyword){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -46,15 +49,15 @@ public class NetworkRequests {
             public void onResponse(Call<UserProfile_Mini_List> call,
                                    Response<UserProfile_Mini_List> response) {
                 UserProfile_Mini_List result = response.body();
-                ArrayList<UserProfile_Mini> list = result.getUserList();
-                for(UserProfile_Mini profile: list) {
+                ArrayList<UserProfile_Mini> userList = result.getUserList();
+                for(UserProfile_Mini profile: userList) {
                     Log.d(TAG, "onResponse: login + " + profile.getLogin() +
                             " id : " + profile.getId() +
                             " avatar_url : " + profile.getAvatar_url() +
-                            " login : " + profile.getLogin() +
-                            " name : " + profile.getName()
+                            " login : " + profile.getLogin()
                     );
                 }
+                postChanges_usersList(userList);
             }
 
             @Override
@@ -65,6 +68,16 @@ public class NetworkRequests {
     }
 
 
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Post changes on usersProfiles
+     */
+     private void postChanges_usersList(ArrayList<UserProfile_Mini> userList){
+         usersProfiles = userList;
+     }
+
+
+
 
 
 
@@ -72,7 +85,6 @@ public class NetworkRequests {
      * ---------------------------------------------------------------------------------------------
      * Get single user full profile by login
      * @param login
-     * ---------------------------------------------------------------------------------------------
      */
     public void getUserProfileFullByLogin(String login){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -88,6 +100,14 @@ public class NetworkRequests {
             public void onResponse(Call<UserProfile_Full> call,
                                    Response<UserProfile_Full> response) {
                 UserProfile_Full profile = response.body();
+                Log.d(TAG, "onResponse: login + "+profile.getLogin() +
+                        " id : "+profile.getId()+
+                        " avatar_url : "+profile.getAvatar_url()+
+                        " email : "+profile.getEmail()+
+                        " location : "+profile.getLocation()+
+                        " name : "+profile.getName()+
+                        " repos_url : "+profile.getRepos_url()
+                );
             }
 
             @Override
@@ -103,7 +123,6 @@ public class NetworkRequests {
      * Get repo list for user
      * By default name are in asc direction.
      * @param login
-     * ---------------------------------------------------------------------------------------------
      */
     public void getUserRepo(String login){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -137,7 +156,6 @@ public class NetworkRequests {
      * ---------------------------------------------------------------------------------------------
      * Repo with name in desc direction
      * @param user
-     * ---------------------------------------------------------------------------------------------
      */
     public void getRepo_Name_Desc(String user){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -171,7 +189,6 @@ public class NetworkRequests {
      * ---------------------------------------------------------------------------------------------
      * Repo with created in asc direction
      * @param user
-     * ---------------------------------------------------------------------------------------------
      */
     public void getRepo_created_Asc(String user){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -206,7 +223,6 @@ public class NetworkRequests {
      * ---------------------------------------------------------------------------------------------
      * Repo with created in desc direction
      * @param user
-     * ---------------------------------------------------------------------------------------------
      */
     public void getRepo_created_Desc(String user){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -241,7 +257,6 @@ public class NetworkRequests {
      * ---------------------------------------------------------------------------------------------
      * Repo with updated in asc direction
      * @param user
-     * ---------------------------------------------------------------------------------------------
      */
     public void getRepo_updated_Asc(String user){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -277,7 +292,6 @@ public class NetworkRequests {
      * ---------------------------------------------------------------------------------------------
      * Repo with updated in desc direction
      * @param user
-     * ---------------------------------------------------------------------------------------------
      */
     public void getRepo_updated_Desc(String user){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -312,7 +326,6 @@ public class NetworkRequests {
      * ---------------------------------------------------------------------------------------------
      * Repo with pushed in asc direction
      * @param user
-     * ---------------------------------------------------------------------------------------------
      */
     public void getRepo_pushed_Asc(String user){
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -347,7 +360,6 @@ public class NetworkRequests {
      * ---------------------------------------------------------------------------------------------
      * Repo with pushed in desc direction
      * @param user
-     * ---------------------------------------------------------------------------------------------
      */
     public void getRepo_pushed_Desc(String user){
         Retrofit.Builder builder = new Retrofit.Builder()

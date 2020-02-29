@@ -10,6 +10,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
 import androidx.viewpager.widget.ViewPager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,8 +22,10 @@ import android.view.MenuItem;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.mapelli.simone.githubclient.R;
+import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
 import com.mapelli.simone.githubclient.data.dummy.DummyContent;
+import com.mapelli.simone.githubclient.network.NetworkService;
 
 
 public class UserDetailActivity extends AppCompatActivity {
@@ -33,10 +40,12 @@ public class UserDetailActivity extends AppCompatActivity {
     TabItem tabProfile;
     TabItem tabRepositories;
 
-    // toolbar title
-    // TODO : with dummy item, use real user id
+    // current user data, toolbar title
     public static final String ARG_ITEM_ID = "item_id";
-    private UserProfile_Mini currentUser;
+    private String user_login;
+    private UserProfile_Full currentUser;
+    private Bundle bundleCurrentUser;
+
 
 
     @Override
@@ -51,7 +60,60 @@ public class UserDetailActivity extends AppCompatActivity {
 
         setupUpperBar();
 
-        detailSectionAdapter = new DetailSectionAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        Intent intent = getIntent();
+        user_login = intent.getStringExtra(ARG_ITEM_ID) ;
+
+        // **** FOR DEBUG ONLY
+        retrieveUserProfile(user_login);
+
+
+
+
+
+    }
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Used to export the current user to child fragments
+     */
+    public UserProfile_Full getCurrentUser(){
+        return currentUser;
+    }
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Set icons, title etc. in action bar
+     */
+    private void setupUpperBar() {
+        toolbar = findViewById(R.id.detail_toolbar);
+
+        if (user_login != "" ) {
+            Log.d(TAG, "currentuser login : "+user_login);
+            toolbar.setTitle(user_login);
+        }
+
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+
+    }
+
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Setup adapter and ViewPager
+     */
+    private void setupViewPager() {
+        detailSectionAdapter = new DetailSectionAdapter(getSupportFragmentManager(),
+                tabLayout.getTabCount());
+
         viewPager.setAdapter(detailSectionAdapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -70,42 +132,15 @@ public class UserDetailActivity extends AppCompatActivity {
             }
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
-
     }
 
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Set icons, title etc. in action bar
-     * ---------------------------------------------------------------------------------------------
+     * Home button setup
+     * @param item
+     * @return
      */
-    private void setupUpperBar() {
-        toolbar = findViewById(R.id.detail_toolbar);
-
-        Intent intent = getIntent();
-        String user_id = intent.getStringExtra(ARG_ITEM_ID) ;
-        if (user_id != "" ) {
-            // Load the dummy content
-            // TODO : load with real user id
-            currentUser = DummyContent.ITEM_MAP.get(user_id);
-            Log.d(TAG, "*****setupUpperBar: "+currentUser);
-            toolbar.setTitle(currentUser.getName());
-        }
-
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-
-    }
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -121,5 +156,35 @@ public class UserDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    //==============================================================================================
+    //                                     DEBUG
+    // **** ONLY FOR DEBUGGING, DELETED AFTER CREATING REPOSITORY + VIEWMODEL/LIVEDATA LAYER
+    public void retrieveUserProfile(String user_login) {
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("https://api.github.com")
+                    .addConverterFactory(GsonConverterFactory.create());
+
+            Retrofit retrofit = builder.build();
+            NetworkService client = retrofit.create(NetworkService.class);
+
+            Call<UserProfile_Full> call = client.userProfileByUserLogin(user_login);
+            call.enqueue(new Callback<UserProfile_Full>() {
+                @Override
+                public void onResponse(Call<UserProfile_Full> call,
+                                       Response<UserProfile_Full> response) {
+                    // pass user profile to fragments
+                    currentUser = response.body();
+                    setupViewPager();
+                }
+
+                @Override
+                public void onFailure(Call<UserProfile_Full> call, Throwable t) {
+                    Log.e(TAG, "onFailure: getUserProfileFullById ",  t);
+                }
+            });
+
     }
 }

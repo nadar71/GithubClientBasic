@@ -28,7 +28,7 @@ public class DummyContent {
 
     private static void addItem(UserProfile_Mini item) {
         ITEMS.add(item);
-        ITEM_MAP.put(item.getName(), item);
+        ITEM_MAP.put(item.getLogin(), item);
     }
 
     private static UserProfile_Mini createDummyItem(int position) {

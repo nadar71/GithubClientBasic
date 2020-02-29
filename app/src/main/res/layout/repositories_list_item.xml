@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/stars_img"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="star"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_star_border_black_24dp" />
+
+    <TextView
+        android:id="@+id/stars_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="2000"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/stars_img"
+        app:layout_constraintStart_toEndOf="@+id/stars_img"
+        app:layout_constraintTop_toBottomOf="@+id/stars_img"
+        app:layout_constraintVertical_bias="0.487" />
+
+    <TextView
+        android:id="@+id/repo_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="repo name"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/stars_num"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/stars_num"
+        app:layout_constraintTop_toBottomOf="@+id/stars_num"
+        app:layout_constraintVertical_bias="0.526" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

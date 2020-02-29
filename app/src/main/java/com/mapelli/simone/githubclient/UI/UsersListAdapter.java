@@ -2,6 +2,7 @@ package com.mapelli.simone.githubclient.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>{
+    private final static String TAG  = UsersListAdapter.class.getSimpleName();
 
-    private final SearchUsersActivity parentActivity;
-    private final List<UserProfile_Mini> usersList;
+    private SearchUsersActivity parentActivity;
+    private List<UserProfile_Mini> usersList;
 
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -37,11 +39,11 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
         }
     };
 
-    UsersListAdapter(SearchUsersActivity parent,
-                                  List<UserProfile_Mini> items)
-    {
-        usersList = items;
+
+    public UsersListAdapter(SearchUsersActivity parent,
+                                  List<UserProfile_Mini> userList) {
         parentActivity = parent;
+        usersList      = userList;
 
     }
 
@@ -56,7 +58,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     @Override
     public void onBindViewHolder(@NonNull UsersListViewHolder holder, int position) {
         UserProfile_Mini item = usersList.get(position);
-        holder.mContentView.setText(item.getName());
+        holder.mContentView.setText(item.getLogin());
 
         Glide.with(parentActivity.getBaseContext())
                 .load(item.getAvatar_url())
@@ -70,17 +72,45 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
 
     @Override
     public int getItemCount() {
+        if (usersList == null) return 0;
         return usersList.size();
     }
 
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Class Item Holder
+     */
     class UsersListViewHolder extends RecyclerView.ViewHolder {
         final TextView mContentView;
         final ImageView userPhoto;
 
         UsersListViewHolder(View view) {
             super(view);
-            mContentView = view.findViewById(R.id.content);
+            mContentView = view.findViewById(R.id.user_name);
             userPhoto    = view.findViewById(R.id.user_photo_img);
         }
+    }
+
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Init/update the adapter with userList
+     * @param userList
+     */
+    public void setAdapterUserList(List<UserProfile_Mini> userList) {
+        this.usersList = userList;
+        notifyDataSetChanged();    //refresh recyclerview
+    }
+
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Reset adapter
+     */
+    public void resetUsersList() {
+        if  (usersList != null) usersList.clear();
     }
 }
