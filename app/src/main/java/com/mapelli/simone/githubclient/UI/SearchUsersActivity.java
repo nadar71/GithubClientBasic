@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.mapelli.simone.githubclient.R;
-import com.mapelli.simone.githubclient.Util.AppExecutors;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini_List;
 import com.mapelli.simone.githubclient.network.NetworkService;
@@ -19,7 +18,6 @@ import com.mapelli.simone.githubclient.network.NetworkService;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 
 /**
+ * -------------------------------------------------------------------------------------------------
  *  Collect the list of user data in json array "items"
  *  from request like https://api.github.com/search/users
  */

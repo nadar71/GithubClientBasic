@@ -23,8 +23,6 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
-import com.mapelli.simone.githubclient.data.dummy.DummyContent;
 import com.mapelli.simone.githubclient.network.NetworkService;
 
 

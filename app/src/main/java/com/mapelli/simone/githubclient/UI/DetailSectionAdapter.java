@@ -1,9 +1,5 @@
 package com.mapelli.simone.githubclient.UI;
 
-import android.os.Bundle;
-import android.util.Log;
-
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

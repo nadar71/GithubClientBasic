@@ -1,17 +1,14 @@
 package com.mapelli.simone.githubclient.UI;
 
-import android.content.Context;
-import android.content.Intent;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+
 import com.mapelli.simone.githubclient.R;
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
 import com.mapelli.simone.githubclient.data.entity.UserRepository;
 
 import java.util.List;

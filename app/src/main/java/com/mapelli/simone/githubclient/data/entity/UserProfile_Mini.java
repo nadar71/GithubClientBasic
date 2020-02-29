@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey;
 
 
 /**
- * UserProdile_Mini is a lighter fields number version UserProfile_Full
+ * -------------------------------------------------------------------------------------------------
+ * UserProfile_Mini is a lighter fields number version UserProfile_Full
  * In case of great number of Load More pressing in SearchUserActivity,
  * it decrease the data load in memory.
  */
