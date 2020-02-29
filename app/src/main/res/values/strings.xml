@@ -9,7 +9,7 @@
     <string name="alert_filter_title">Choose Filter parameter</string>
     <string name="ok">OK</string>
 
-    <!-- - - - - - - - - - - - - - - - - Filte  Type - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - - - - - - - - - - - - - - - Filter Type - - - - - - - - - - - - - - - - - - - - - - -->
     <string name="filter_type_start_label">filter type : </string>
 
 
