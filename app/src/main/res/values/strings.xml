@@ -8,4 +8,18 @@
     <string name="profile_tab_title">Profile</string>
     <string name="repositories_tab_title">Repositories</string>
 
+    <!-- - - - - - - - - - - - - - - - - - - - Type - - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="filter_type_name_asc">filter type : name asc</string>
+    <string name="filter_type_name_desc">filter type : name desc</string>
+
+    <string name="filter_type_created_at_asc">filter type : created_at asc</string>
+    <string name="filter_type_created_at_desc">filter type : created_at desc</string>
+
+    <string name="filter_type_updated_at_asc">filter type : updated_at asc</string>
+    <string name="filter_type_updated_at_desc">filter type : updated_at desc</string>
+
+    <string name="filter_type_pushed_at_asc">filter type : pushed_at asc</string>
+    <string name="filter_type_pushed_at_desc">filter type : pushed_at desc</string>
+    
+
 </resources>

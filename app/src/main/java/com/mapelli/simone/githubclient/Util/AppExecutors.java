@@ -9,10 +9,10 @@ import java.util.concurrent.Executors;
 import androidx.annotation.NonNull;
 
 /**
- * --------------------------------------------------------------------------------
- * Global executor for all the app request; all tasks are grouped here.
- * Used to run tasks outside main thread.
- * --------------------------------------------------------------------------------
+ * -------------------------------------------------------------------------------------------------
+ * Global executor pools for the whole application.
+ * Grouping tasks like this avoids the effects of task starvation (e.g. disk reads don't wait behind
+ * webservice requests).
  */
 public class AppExecutors {
     // singleton instantiation

@@ -43,7 +43,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     public UsersListAdapter(SearchUsersActivity parent,
                                   List<UserProfile_Mini> userList) {
         parentActivity = parent;
-        usersList      = userList;
+        this.usersList = userList;
 
     }
 

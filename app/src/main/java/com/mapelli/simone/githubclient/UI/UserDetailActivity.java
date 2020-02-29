@@ -32,13 +32,13 @@ public class UserDetailActivity extends AppCompatActivity {
 
     private static final String TAG = UserDetailActivity.class.getSimpleName();
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    DetailSectionAdapter detailSectionAdapter;
-    TabItem tabProfile;
-    TabItem tabRepositories;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private DetailSectionAdapter detailSectionAdapter;
+    private TabItem tabProfile;
+    private TabItem tabRepositories;
 
     // current user data, toolbar title
     public static final String ARG_ITEM_ID = "item_id";
@@ -63,11 +63,8 @@ public class UserDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         user_login = intent.getStringExtra(ARG_ITEM_ID) ;
 
-        // **** FOR DEBUG ONLY
+        // **** TODO : FOR DEBUG ONLY
         retrieveUserProfile(user_login);
-
-
-
 
 
     }

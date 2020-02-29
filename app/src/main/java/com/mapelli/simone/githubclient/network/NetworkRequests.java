@@ -132,19 +132,30 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<List<UserRepository>> call = client.reposForuser(login);
-        call.enqueue(new Callback<List<UserRepository>>() {
+        Call<ArrayList<UserRepository>> call = client.reposForuser(login);
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                List<UserRepository> listRepo = response.body();
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                ArrayList<UserRepository> listRepo = response.body();
                 for(UserRepository repo:listRepo){
-                    Log.d(TAG, "onResponse: name + "+repo.getName());
+                    repo.setUser_id_owner(login);
+                    Log.d(TAG, "onResponse: " +
+                            "user_id_owner + "+repo.getUser_id_owner()+
+                            "name + "+repo.getName() +
+                             "full_name + "+repo.getFull_name() +
+                            "html_url + "+repo.getHtml_url() +
+                            "created_at + "+repo.getCreated_at() +
+                            "updated_at + "+repo.getUpdated_at() +
+                            "pushed_at + "+repo.getPushed_at() +
+                            "stargazers_count + "+repo.getStargazers_count() +
+                            "forks_count + "+repo.getForks_count()
+                    );
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserProfileFullById ",  t);
             }
         });
@@ -165,19 +176,19 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<List<UserRepository>> call = client.reposForuser_name_desc(user,"desc");
-        call.enqueue(new Callback<List<UserRepository>>() {
+        Call<ArrayList<UserRepository>> call = client.reposForuser_name_desc(user,"desc");
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                List<UserRepository> listRepo = response.body();
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                ArrayList<UserRepository> listRepo = response.body();
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse: name + "+repo.getName());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
@@ -198,20 +209,20 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<List<UserRepository>> call = client.reposForuser_created_asc(user,"created",
+        Call<ArrayList<UserRepository>> call = client.reposForuser_created_asc(user,"created",
                 "asc");
-        call.enqueue(new Callback<List<UserRepository>>() {
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                List<UserRepository> listRepo = response.body();
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                ArrayList<UserRepository> listRepo = response.body();
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  created_at : "+repo.getCreated_at());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
@@ -232,20 +243,20 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<List<UserRepository>> call = client.reposForuser_created_asc(user,"created",
+        Call<ArrayList<UserRepository>> call = client.reposForuser_created_asc(user,"created",
                 "desc");
-        call.enqueue(new Callback<List<UserRepository>>() {
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                List<UserRepository> listRepo = response.body();
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                ArrayList<UserRepository> listRepo = response.body();
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  created_at : "+repo.getCreated_at());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
@@ -266,20 +277,20 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<List<UserRepository>> call = client.reposForuser_updated_asc(user,"updated",
+        Call<ArrayList<UserRepository>> call = client.reposForuser_updated_asc(user,"updated",
                 "asc");
-        call.enqueue(new Callback<List<UserRepository>>() {
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                List<UserRepository> listRepo = response.body();
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                ArrayList<UserRepository> listRepo = response.body();
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  updated_at : "+repo.getUpdated_at());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
@@ -301,20 +312,20 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<List<UserRepository>> call = client.reposForuser_updated_asc(user,"updated",
+        Call<ArrayList<UserRepository>> call = client.reposForuser_updated_asc(user,"updated",
                 "desc");
-        call.enqueue(new Callback<List<UserRepository>>() {
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                List<UserRepository> listRepo = response.body();
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                ArrayList<UserRepository> listRepo = response.body();
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  updated_at : "+repo.getUpdated_at());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
@@ -335,20 +346,20 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<List<UserRepository>> call = client.reposForuser_pushed_asc(user,"pushed",
+        Call<ArrayList<UserRepository>> call = client.reposForuser_pushed_asc(user,"pushed",
                 "asc");
-        call.enqueue(new Callback<List<UserRepository>>() {
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                List<UserRepository> listRepo = response.body();
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                ArrayList<UserRepository> listRepo = response.body();
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  pushed_at : "+repo.getPushed_at());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
@@ -369,20 +380,20 @@ public class NetworkRequests {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<List<UserRepository>> call = client.reposForuser_pushed_desc(user,"pushed",
+        Call<ArrayList<UserRepository>> call = client.reposForuser_pushed_desc(user,"pushed",
                 "desc");
-        call.enqueue(new Callback<List<UserRepository>>() {
+        call.enqueue(new Callback<ArrayList<UserRepository>>() {
             @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                List<UserRepository> listRepo = response.body();
+            public void onResponse(Call<ArrayList<UserRepository>> call,
+                                   Response<ArrayList<UserRepository>> response) {
+                ArrayList<UserRepository> listRepo = response.body();
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  pushed_at : "+repo.getPushed_at());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });

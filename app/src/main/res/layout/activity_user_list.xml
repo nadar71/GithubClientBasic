@@ -40,10 +40,13 @@
 
         <Button
             android:id="@+id/loadMore_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
+            android:backgroundTint="@android:color/background_light"
+            android:elevation="@dimen/fab_margin"
             android:text="@string/loadMore_btn_title"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

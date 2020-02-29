@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,21 +34,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SearchUsersActivity extends AppCompatActivity {
     private final static String TAG  = SearchUsersActivity.class.getSimpleName();
 
-    AppExecutors appExecutors;
-    ArrayList<UserProfile_Mini> userList;
-    RecyclerView recyclerView;
+    private ArrayList<UserProfile_Mini> userList;
+    private RecyclerView recyclerView;
     private UsersListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
-
         setupActionBar();
-        recyclerView = findViewById(R.id.userList);
-
-        setupRecyclerView(recyclerView);
-
+        setupRecyclerView();
     }
 
 
@@ -63,10 +59,12 @@ public class SearchUsersActivity extends AppCompatActivity {
 
 
     /** --------------------------------------------------------------------------------------------
-     * Setup RecyclerView : it starts empty
-     * @param recyclerView
+     * Setup RecyclerView : it starts empty. TODO : with data layer, load the last search results
      */
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView() {
+        recyclerView = findViewById(R.id.userList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         adapter = new UsersListAdapter(this,userList);
 
         // recyclerView.setAdapter(new UsersListAdapter(this,DummyContent.ITEMS));
@@ -109,7 +107,7 @@ public class SearchUsersActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String keywords) {
-                // **** FOR DEBUG ONLY
+                // **** TODO : FOR DEBUG ONLY
                 retrievedata(keywords);
                 return false;
             }
@@ -154,7 +152,7 @@ public class SearchUsersActivity extends AppCompatActivity {
             public void onResponse(Call<UserProfile_Mini_List> call,
                                    Response<UserProfile_Mini_List> response) {
                 UserProfile_Mini_List result = response.body();
-                ArrayList<UserProfile_Mini> userList = result.getUserList();
+                userList = result.getUserList();
                 updateAdapter(userList);
             }
 
