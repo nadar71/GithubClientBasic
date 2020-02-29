@@ -58,10 +58,12 @@ public class UserDetailActivity extends AppCompatActivity {
         tabRepositories = findViewById(R.id.tabRepositories);
         viewPager =       findViewById(R.id.viewPager);
 
-        setupUpperBar();
+
 
         Intent intent = getIntent();
         user_login = intent.getStringExtra(ARG_ITEM_ID) ;
+
+        setupUpperBar();
 
         // **** TODO : FOR DEBUG ONLY
         retrieveUserProfile(user_login);

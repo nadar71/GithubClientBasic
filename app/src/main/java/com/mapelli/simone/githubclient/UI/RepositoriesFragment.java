@@ -1,6 +1,9 @@
 package com.mapelli.simone.githubclient.UI;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
@@ -39,6 +43,7 @@ public class RepositoriesFragment extends Fragment {
     private static final String TAG = "RepositoriesFragment :";
     private TextView title_list, filter_type;
     private Button   filter_btn,asc_order_btn,desc_order_btn;
+    private Context parentContext;
 
     private UserDetailActivity parent;
     private UserProfile_Full currentUser;
@@ -47,6 +52,8 @@ public class RepositoriesFragment extends Fragment {
     private RecyclerView recyclerView;
     private UserRepoListAdapter adapter;
 
+    private String FILTER_TYPE = "name";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,14 +61,14 @@ public class RepositoriesFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_repositories, container, false);
         parent = (UserDetailActivity) getActivity();
         currentUser = parent.getCurrentUser();
+        parentContext = parent.getBaseContext();
 
         title_list     = rootView.findViewById(R.id.title_list_txt);
         filter_type    = rootView.findViewById(R.id.filter_type_txt);
-        filter_btn     = rootView.findViewById(R.id.filter_btn);
-        asc_order_btn  = rootView.findViewById(R.id.asc_order_btn);
-        desc_order_btn = rootView.findViewById(R.id.desc_order_btn);
 
         setupRecyclerView(rootView);
+        setupButton(rootView, parentContext);
+
 
         // **** TODO : FOR DEBUG ONLY
         getUserRepo(currentUser.getLogin());
@@ -70,7 +77,64 @@ public class RepositoriesFragment extends Fragment {
     }
 
 
-    /** --------------------------------------------------------------------------------------------
+
+
+    /**
+     * --------------------------------------------------------------------------------------------
+     * Button creation and setup
+     * @param rootView
+     * @param parentContext
+     */
+    private void setupButton(View rootView, Context parentContext) {
+        filter_btn     = rootView.findViewById(R.id.filter_btn);
+        asc_order_btn  = rootView.findViewById(R.id.asc_order_btn);
+        desc_order_btn = rootView.findViewById(R.id.desc_order_btn);
+
+
+        filter_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialog();
+            }
+        });
+
+        asc_order_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filter_type.setText(parentContext.getString(R.string.filter_type_start_label) +
+                        FILTER_TYPE + " asc ");
+
+                //**** TODO : FOR DEBUG ONLY
+                switch(FILTER_TYPE){
+                    case "data creation" :  break;
+                    case "data update"   :  break;
+                    case "data pushed"   :  break;
+                    default              :  break;
+                }
+            }
+        });
+
+
+        desc_order_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filter_type.setText(parentContext.getString(R.string.filter_type_start_label) +
+                        FILTER_TYPE + " desc ");
+
+                //**** TODO : FOR DEBUG ONLY
+                switch(FILTER_TYPE){
+                    case "data creation" :  break;
+                    case "data update"   :  break;
+                    case "data pushed"   :  break;
+                    default              :  break;
+                }
+            }
+        });
+    }
+
+
+    /**
+     * --------------------------------------------------------------------------------------------
      * Setup RecyclerView : it starts with currnt user data repos
      */
     private void setupRecyclerView(View rootView) {
@@ -94,6 +158,50 @@ public class RepositoriesFragment extends Fragment {
         adapter.setAdapterUserList(userRepoList);
     }
 
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Alert dialog for setting filter type
+     */
+    private void showAlertDialog() {
+        AlertDialog alert;
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(parent);
+        alertDialog.setTitle(parentContext.getString(R.string.alert_filter_title ));
+
+        String[] items = {"name","data creation","data update","data pushed"};
+        int checkedItem = 0;
+        switch(FILTER_TYPE){
+            case "data creation" : checkedItem = 1; break;
+            case "data update"   : checkedItem = 2; break;
+            case "data pushed"   : checkedItem = 3; break;
+            default              : checkedItem = 0; break;
+        }
+        alertDialog.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: FILTER_TYPE = "name"; break;
+                    case 1: FILTER_TYPE = "data creation"; break;
+                    case 2: FILTER_TYPE = "data update"; break;
+                    case 3: FILTER_TYPE = "data pushed"; break;
+                }
+            }
+        });
+
+
+        alert = alertDialog.create();
+        /*
+        alertDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                alert.cancel();
+            }
+        });
+        */
+        alert.setCanceledOnTouchOutside(true);
+
+        alert.show();
+
+    }
 
 
     //==============================================================================================
