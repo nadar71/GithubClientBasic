@@ -24,6 +24,13 @@ public interface NetworkService {
     @GET("/search/users")
     Call<UserProfile_Mini_List> usersListSearch(@Query("q") String searchKeyword);
 
+    // get result from free search users loading next pages sequentially
+    // https://api.github.com/search/users?q=simone&page=2&per_page=100
+    @GET("/search/users")
+    Call<UserProfile_Mini_List> usersListSearch_Paging(@Query("q") String searchKeyword,
+                                                       @Query("page") String page_num,
+                                                       @Query("per_page") String res_x_page);
+
     // get specific user profile from user login field
     // https://api.github.com/users/nadar71
     @GET("/users/{login}")
@@ -63,6 +70,6 @@ public interface NetworkService {
     Call<ArrayList<UserRepository>> reposForuser_pushed_asc(@Path("user") String user,
                                                        @Query("sort") String pushed,
                                                        @Query("direction") String direction);
-    
+
 
 }

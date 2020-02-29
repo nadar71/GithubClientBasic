@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>{
     private final static String TAG  = UsersListAdapter.class.getSimpleName();
-
     private SearchUsersActivity parentActivity;
     private List<UserProfile_Mini> usersList;
 
@@ -75,6 +74,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
         if (usersList == null) return 0;
         return usersList.size();
     }
+
 
 
     /**

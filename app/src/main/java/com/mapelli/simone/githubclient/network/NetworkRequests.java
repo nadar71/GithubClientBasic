@@ -19,6 +19,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkRequests {
 
     private final static String TAG  =  NetworkRequests.class.getSimpleName();
+    
+    public final static String BASE_URL_API  = "https://api.github.com";
 
     // TODO : will be MutableLivedata in next steps
     private ArrayList<UserProfile_Mini> usersProfiles = new ArrayList<>();
@@ -34,13 +36,52 @@ public class NetworkRequests {
      */
     public void getUsersSearch(String keyword){
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
+                .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
         Call<UserProfile_Mini_List> call = client.usersListSearch(keyword);
+        call.enqueue(new Callback<UserProfile_Mini_List>() {
+            @Override
+            public void onResponse(Call<UserProfile_Mini_List> call,
+                                   Response<UserProfile_Mini_List> response) {
+                UserProfile_Mini_List result = response.body();
+                ArrayList<UserProfile_Mini> userList = result.getUserList();
+                for(UserProfile_Mini profile: userList) {
+                    Log.d(TAG, "onResponse: login + " + profile.getLogin() +
+                            " id : " + profile.getId() +
+                            " avatar_url : " + profile.getAvatar_url() +
+                            " login : " + profile.getLogin()
+                    );
+                }
+                postChanges_usersList(userList);
+            }
+
+            @Override
+            public void onFailure(Call<UserProfile_Mini_List> call, Throwable t) {
+                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
+            }
+        });
+    }
+
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Recover user list based on keyword.
+     * @param keyword
+     */
+    public void usersListSearch_Paging(String keyword, String page_num, String per_page){
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(BASE_URL_API)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+        NetworkService client = retrofit.create(NetworkService.class);
+
+        Call<UserProfile_Mini_List> call = client.usersListSearch_Paging(keyword,page_num, per_page);
         call.enqueue(new Callback<UserProfile_Mini_List>() {
             @Override
             public void onResponse(Call<UserProfile_Mini_List> call,
@@ -85,7 +126,7 @@ public class NetworkRequests {
      */
     public void getUserProfileFullByLogin(String login){
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
+                .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
@@ -124,7 +165,7 @@ public class NetworkRequests {
      */
     public void getRepoFilterByName_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
+                .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
@@ -168,7 +209,7 @@ public class NetworkRequests {
      */
     public void getRepoFilterByCreated_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
+                .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
@@ -205,7 +246,7 @@ public class NetworkRequests {
      */
     public void getRepoFilterByUpdated_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
+                .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
@@ -243,7 +284,7 @@ public class NetworkRequests {
      */
     public void getRepoFilterByPushed_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
+                .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();

@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 
@@ -34,14 +36,34 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SearchUsersActivity extends AppCompatActivity {
     private final static String TAG  = SearchUsersActivity.class.getSimpleName();
 
-    private ArrayList<UserProfile_Mini> userList;
+    private ArrayList<UserProfile_Mini> userList = new ArrayList<>();
     private RecyclerView recyclerView;
     private UsersListAdapter adapter;
+    private Button loadMore_btn;
+    private int pageCount   = 1;
+    private int userPerPage = 30;
+    private String currentSearchingKeywords = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
+
+        loadMore_btn = findViewById(R.id.loadMore_btn);
+        loadMore_btn.setVisibility(View.INVISIBLE);
+        loadMore_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // **** TODO : FOR DEBUG ONLY
+                usersListSearch_Paging(currentSearchingKeywords,
+                        Integer.toString(pageCount),
+                        Integer.toString(userPerPage));
+                pageCount++;
+
+
+            }
+        });
+
         setupActionBar();
         setupRecyclerView();
     }
@@ -66,13 +88,24 @@ public class SearchUsersActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new UsersListAdapter(this,userList);
-
-        // recyclerView.setAdapter(new UsersListAdapter(this,DummyContent.ITEMS));
         recyclerView.setAdapter(adapter);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(),
                 LinearLayout.VERTICAL);
         recyclerView.addItemDecoration(decoration);
+    }
+
+
+    /** --------------------------------------------------------------------------------------------
+     * Scrollup a bit RecyclerView : useful after new loading by pagination
+     */
+    private void bumpUpList(int currentPos) {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.smoothScrollToPosition(adapter.getItemCount()-(userPerPage-2));
+            }
+        });
     }
 
     /**
@@ -81,6 +114,9 @@ public class SearchUsersActivity extends AppCompatActivity {
      * @param userList
      */
     private void updateAdapter(@Nullable List<UserProfile_Mini> userList) {
+        if(!userList.isEmpty()){
+            loadMore_btn.setVisibility(View.VISIBLE);
+        }
         adapter.setAdapterUserList(userList);
     }
 
@@ -107,8 +143,15 @@ public class SearchUsersActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String keywords) {
+                currentSearchingKeywords = keywords;
                 // **** TODO : FOR DEBUG ONLY
-                retrievedata(keywords);
+                // retrievedata(keywords);
+                usersListSearch_Paging(currentSearchingKeywords,
+                        Integer.toString(pageCount),
+                        Integer.toString(userPerPage));
+
+                pageCount++;
+
                 return false;
             }
 
@@ -120,6 +163,8 @@ public class SearchUsersActivity extends AppCompatActivity {
 
         return true;
     }
+
+
 
 
 
@@ -163,6 +208,51 @@ public class SearchUsersActivity extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Recover user list based on keyword.
+     * @param keyword
+     */
+    public void usersListSearch_Paging(String keyword, String page_num, String per_page){
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("https://api.github.com")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+        NetworkService client = retrofit.create(NetworkService.class);
+
+        Call<UserProfile_Mini_List> call = client.usersListSearch_Paging(keyword,page_num, per_page);
+        call.enqueue(new Callback<UserProfile_Mini_List>() {
+            @Override
+            public void onResponse(Call<UserProfile_Mini_List> call,
+                                   Response<UserProfile_Mini_List> response) {
+                UserProfile_Mini_List result = response.body();
+                ArrayList<UserProfile_Mini> userList_newPage = result.getUserList();
+                for(UserProfile_Mini profile: userList_newPage) {
+                    // update userList
+                    userList.add(profile);
+
+                    Log.d(TAG, "onResponse: login + " + profile.getLogin() +
+                            " id : " + profile.getId() +
+                            " avatar_url : " + profile.getAvatar_url() +
+                            " login : " + profile.getLogin()
+                    );
+                }
+                int currentPos = adapter.getItemCount();
+                updateAdapter(userList);
+                bumpUpList(currentPos);
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<UserProfile_Mini_List> call, Throwable t) {
+                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
+            }
+        });
+    }
 
 
 
