@@ -5,10 +5,10 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RepositoriesFragment">
+    tools:context=".UI.RepositoriesFragment">
 
     <TextView
-        android:id="@+id/repository_list_txt"
+        android:id="@+id/title_list_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -19,48 +19,78 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/filter_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
-        android:src="@drawable/ic_filter_list_black_24dp"
-        app:layout_constraintBottom_toTopOf="@+id/repository_list_txt"
-        app:layout_constraintStart_toEndOf="@+id/repository_list_txt"
-        app:layout_constraintTop_toBottomOf="@+id/repository_list_txt"
-        app:layout_constraintVertical_bias="0.51" />
 
-    <ImageView
-        android:id="@+id/asc_order_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:src="@drawable/ic_arrow_downward_black_24dp"
-        app:layout_constraintBottom_toTopOf="@+id/filter_img"
-        app:layout_constraintStart_toEndOf="@+id/filter_img"
-        app:layout_constraintTop_toBottomOf="@+id/filter_img" />
+    <Button
+        android:id="@+id/filter_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="80dp"
+        android:layout_weight="0"
+        android:background="@drawable/ic_filter_list_black_24dp"
+        android:elevation="@dimen/fab_margin"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/title_list_txt"
+        app:layout_constraintStart_toEndOf="@+id/title_list_txt"
+        app:layout_constraintTop_toBottomOf="@+id/title_list_txt"
+        app:layout_constraintVertical_bias="0.561" />
 
-    <ImageView
-        android:id="@+id/desc_order_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_arrow_upward_black_24dp"
-        app:layout_constraintBottom_toTopOf="@+id/asc_order_img"
+    <Button
+        android:id="@+id/asc_order_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="32dp"
+        android:layout_weight="0"
+        android:background="@drawable/ic_arrow_upward_black_24dp"
+        android:elevation="@dimen/fab_margin"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/filter_btn"
+        app:layout_constraintStart_toEndOf="@+id/filter_btn"
+        app:layout_constraintTop_toBottomOf="@+id/filter_btn" />
+
+
+    <Button
+        android:id="@+id/desc_order_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="40dp"
+        android:layout_weight="0"
+        android:background="@drawable/ic_arrow_downward_black_24dp"
+        android:elevation="@dimen/fab_margin"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/asc_order_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/asc_order_img"
-        app:layout_constraintTop_toBottomOf="@+id/asc_order_img" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/asc_order_btn"
+        app:layout_constraintTop_toBottomOf="@+id/asc_order_btn" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/repo_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/filter_type_txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/repository_list_txt" />
+        app:layout_constraintTop_toBottomOf="@+id/title_list_txt">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/filter_type_txt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/filter_type_name_asc"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repo_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>

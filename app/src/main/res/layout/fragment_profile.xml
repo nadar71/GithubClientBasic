@@ -5,12 +5,12 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".UI.ProfileFragment">
 
     <ImageView
-        android:id="@+id/user_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/user_photo_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="64dp"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
@@ -26,10 +26,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:text="Name"
-        app:layout_constraintEnd_toStartOf="@+id/user_img"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintEnd_toStartOf="@+id/user_photo_img"
         app:layout_constraintHorizontal_bias="0.519"
-        app:layout_constraintStart_toEndOf="@+id/user_img"
-        app:layout_constraintTop_toBottomOf="@+id/user_img" />
+        app:layout_constraintStart_toEndOf="@+id/user_photo_img"
+        app:layout_constraintTop_toBottomOf="@+id/user_photo_img" />
 
     <TextView
         android:id="@+id/location_txt"
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:text="Location"
+        android:textColor="@android:color/background_dark"
         app:layout_constraintEnd_toStartOf="@+id/name_txt"
         app:layout_constraintStart_toEndOf="@+id/name_txt"
         app:layout_constraintTop_toBottomOf="@+id/name_txt" />
@@ -47,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:text="Email"
+        android:textColor="@android:color/background_dark"
         app:layout_constraintEnd_toStartOf="@+id/location_txt"
         app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toEndOf="@+id/location_txt"
@@ -58,6 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:text="Profile_url"
+        android:textColor="@android:color/background_dark"
         app:layout_constraintEnd_toStartOf="@+id/email_txt"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toEndOf="@+id/email_txt"
