@@ -1,4 +1,29 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="title_item_detail">Item Detail</string>
+    <string name="app_name">GithubClientBasic</string>
+
+    <string name="title_user_detail">User Detail</string>
+    <string name="search_title">Search for users</string>
+    <string name="loadMore_btn_title">Load More</string>
+    <string name="profile_tab_title">Profile</string>
+    <string name="repositories_tab_title">Repositories</string>
+    <string name="alert_filter_title">Choose Filter parameter</string>
+    <string name="ok">OK</string>
+
+    <!-- - - - - - - - - - - - - - - - - Filte  Type - - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="filter_type_start_label">filter type : </string>
+
+
+    <string name="filter_type_name_asc">filter type : name asc</string>
+    <string name="filter_type_name_desc">filter type : name desc</string>
+
+    <string name="filter_type_created_at_asc">filter type : data creation asc</string>
+    <string name="filter_type_created_at_desc">filter type : data creation desc</string>
+
+    <string name="filter_type_updated_at_asc">filter type : data update asc</string>
+    <string name="filter_type_updated_at_desc">filter type : data update desc</string>
+
+    <string name="filter_type_pushed_at_asc">filter type : data pushed asc</string>
+    <string name="filter_type_pushed_at_desc">filter type : data pushed desc</string>
+
+
 </resources>
