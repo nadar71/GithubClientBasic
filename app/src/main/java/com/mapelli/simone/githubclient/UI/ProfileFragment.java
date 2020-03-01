@@ -53,7 +53,6 @@ public class ProfileFragment extends Fragment {
         email.setText(currentUser.getEmail());
         profile_url.setText(currentUser.getRepos_url());
 
-
         return rootView;
     }
 

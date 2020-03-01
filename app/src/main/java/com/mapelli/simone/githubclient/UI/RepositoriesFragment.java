@@ -74,6 +74,18 @@ public class RepositoriesFragment extends Fragment {
         setupRecyclerView(rootView);
         setupButton(rootView, parentContext);
 
+        setupRepoListObserver();
+        mViewModel.storeUserRepoList_ByName(user_login, "asc");
+
+        return rootView;
+    }
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Set up ViewModel/Livedata for retrieving new users repository data from repo
+     */
+    private void setupRepoListObserver() {
         // set up viewmodel/livedata to observe data in db and ask for new ones to repo
         factory = new UserRepositoriesViewModelFactory();
         mViewModel = new ViewModelProvider(this, factory).get(UserRepositoriesViewModel.class);
@@ -95,10 +107,6 @@ public class RepositoriesFragment extends Fragment {
                 }
             }
         });
-
-        mViewModel.storeUserRepoList_ByName(user_login, "asc");
-
-        return rootView;
     }
 
 
@@ -192,7 +200,6 @@ public class RepositoriesFragment extends Fragment {
     /**
      * ---------------------------------------------------------------------------------------------
      * Renew recyclerview data
-     *
      * @param userRepoList
      */
     private void updateAdapter(@Nullable List<UserRepository> userRepoList) {
@@ -244,16 +251,7 @@ public class RepositoriesFragment extends Fragment {
                 }
             }
         });
-
-
         alert = alertDialog.create();
-        /*
-        alertDialog.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                alert.cancel();
-            }
-        });
-        */
         alert.setCanceledOnTouchOutside(true);
 
         alert.show();

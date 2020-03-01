@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">GithubClientBasic</string>
 
+    <!-- - - - - - - - - - - - - - - - - label, title - - - - - - - - - - - - - - - - - - - - - -->
     <string name="title_user_detail">User Detail</string>
     <string name="search_title">Search for users</string>
     <string name="loadMore_btn_title">Load More</string>
@@ -8,6 +9,10 @@
     <string name="repositories_tab_title">Repositories</string>
     <string name="alert_filter_title">Choose Filter parameter</string>
     <string name="ok">OK</string>
+    <string name="profile_name_title">NAME :</string>
+    <string name="profile_location_title">LOCATION :</string>
+    <string name="profile_email_title">EMAIL :</string>
+    <string name="profile_profile_url_title">PROFILE URL :</string>
 
     <!-- - - - - - - - - - - - - - - - - Filter Type - - - - - - - - - - - - - - - - - - - - - - -->
     <string name="filter_type_start_label">filter type : </string>
@@ -30,8 +35,6 @@
     <string name="no_data">No data retrieved, try another search</string>
     <string name="no_connection">No network, check your connection...</string>
     <string name="searching">Searching...</string>
-
-
 
 
 

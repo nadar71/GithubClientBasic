@@ -87,7 +87,7 @@ public class SearchUsersActivity extends AppCompatActivity {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Set up ViewModel/Livedata for retrieving new users profiles data from repo
+     * Set up ViewModel/Livedata for retrieving new users nick list from repo
      */
     private void setupUsersDataObserver() {
         factory = new SearchUserViewModelFactory();
