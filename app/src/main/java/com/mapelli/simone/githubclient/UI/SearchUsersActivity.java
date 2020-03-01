@@ -58,7 +58,9 @@ public class SearchUsersActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<UserProfile_Mini> userEntries) {
                 if (userEntries != null && !userEntries.isEmpty()) { // data ready in db
                     userList = userEntries;
+                    int currentPos = adapter.getItemCount();
                     updateAdapter(userEntries);
+                    bumpUpList(currentPos);
                     /*
                     // used to update the last update field, updated by datasource at 1st start
                     checkPreferences();

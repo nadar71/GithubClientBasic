@@ -63,7 +63,9 @@ public class UserSearchViewModel extends ViewModel {
      * Used to delete table from previous user list results
      */
     public void deleteUserList() {
-        githubUsersAppRepository.dropUserMiniTable();
+        executors.diskIO().execute(() -> {
+            githubUsersAppRepository.dropUserMiniTable();
+        });
     }
 
 
