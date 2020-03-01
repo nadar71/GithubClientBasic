@@ -210,7 +210,12 @@ public class SearchUsersActivity extends AppCompatActivity {
     private void showUserList() {
         loadingInProgress.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
-        emptyListText.setVisibility(View.INVISIBLE);
+
+        if (adapter.getItemCount() <= 0 ) {
+            emptyListText.setVisibility(View.VISIBLE);
+            emptyListText.setText("Click on lens and search someone !");
+        }else
+            emptyListText.setVisibility(View.INVISIBLE);
     }
 
 

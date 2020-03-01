@@ -62,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="@string/no_data"
