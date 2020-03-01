@@ -170,35 +170,4 @@ public class UserDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    //==============================================================================================
-    //                                     DEBUG
-    // **** ONLY FOR DEBUGGING, DELETED AFTER CREATING REPOSITORY + VIEWMODEL/LIVEDATA LAYER
-    /*
-    public void retrieveUserProfile(String user_login) {
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl("https://api.github.com")
-                    .addConverterFactory(GsonConverterFactory.create());
-
-            Retrofit retrofit = builder.build();
-            NetworkService client = retrofit.create(NetworkService.class);
-
-            Call<UserProfile_Full> call = client.userProfileByUserLogin(user_login);
-            call.enqueue(new Callback<UserProfile_Full>() {
-                @Override
-                public void onResponse(Call<UserProfile_Full> call,
-                                       Response<UserProfile_Full> response) {
-                    // pass user profile to fragments
-                    currentUser = response.body();
-                    setupViewPager();
-                }
-
-                @Override
-                public void onFailure(Call<UserProfile_Full> call, Throwable t) {
-                    Log.e(TAG, "onFailure: getUserProfileFullById ",  t);
-                }
-            });
-
-    }
-     */
 }

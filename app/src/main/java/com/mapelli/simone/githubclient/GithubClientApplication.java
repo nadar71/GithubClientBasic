@@ -14,7 +14,8 @@ import com.mapelli.simone.githubclient.util.AppExecutors;
  * Class used for access classes singletons and application context wherever in the app.
  * Just like repository is an interface for all data operations.
  * NB :
- * registered in manifest in <Application android:name=".com.mapelli.simone.githubclient.GithubClientApplication" > </Application>
+ * registered in manifest in <Application android:name=
+ * ".com.mapelli.simone.githubclient.GithubClientApplication" > </Application>
  */
 public class GithubClientApplication extends Application {
     private AppExecutors mAppExecutors;
