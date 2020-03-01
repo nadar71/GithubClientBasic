@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
@@ -37,7 +38,7 @@ public class SearchUsersActivity extends AppCompatActivity {
     private List<UserProfile_Mini> userList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ProgressBar loadingInProgress;
-    private TextView emptyListText;
+    private TextView emptyListText, toolbarTitle;
     private UsersListAdapter adapter;
 
     private UserSearchViewModel mViewModel;
@@ -60,6 +61,12 @@ public class SearchUsersActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        toolbarTitle.setText(R.string.toolbar_title);
+    }
+
     /**
      * ---------------------------------------------------------------------------------------------
      * Set up progress bar,btn etc.
@@ -67,6 +74,7 @@ public class SearchUsersActivity extends AppCompatActivity {
     private void setupGenericViews() {
         loadingInProgress = findViewById(R.id.loading_view);
         emptyListText     = findViewById(R.id.empty_view);
+        toolbarTitle      = findViewById(R.id.toolbar_title);
 
 
         loadMore_btn = findViewById(R.id.loadMore_btn);
@@ -122,8 +130,10 @@ public class SearchUsersActivity extends AppCompatActivity {
      */
     private void setupActionBar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getString(R.string.search_title));
+        // ActionBar actionBar = getSupportActionBar();
+        // toolbar.setTitle(getString(R.string.search_title));
     }
 
 
@@ -253,6 +263,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        toolbarTitle.setText("");
 
         return super.onOptionsItemSelected(item);
     }
