@@ -2,20 +2,6 @@ package com.mapelli.simone.githubclient.UI;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
-import androidx.viewpager.widget.ViewPager;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -23,7 +9,18 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
-import com.mapelli.simone.githubclient.network.NetworkService;
+import com.mapelli.simone.githubclient.viewmodel.UserDetailViewModel;
+import com.mapelli.simone.githubclient.viewmodel.UserDetailViewModelFactory;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
 
 public class UserDetailActivity extends AppCompatActivity {
@@ -42,8 +39,9 @@ public class UserDetailActivity extends AppCompatActivity {
     public static final String ARG_ITEM_ID = "item_id";
     private String user_login;
     private UserProfile_Full currentUser;
-    private Bundle bundleCurrentUser;
 
+    private UserDetailViewModel mViewModel;
+    private UserDetailViewModelFactory factory;
 
 
     @Override
@@ -51,20 +49,33 @@ public class UserDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
-        tabLayout =       findViewById(R.id.tablayout);
-        tabProfile =      findViewById(R.id.tabProfile);
+        tabLayout = findViewById(R.id.tablayout);
+        tabProfile = findViewById(R.id.tabProfile);
         tabRepositories = findViewById(R.id.tabRepositories);
-        viewPager =       findViewById(R.id.viewPager);
-
+        viewPager = findViewById(R.id.viewPager);
 
 
         Intent intent = getIntent();
-        user_login = intent.getStringExtra(ARG_ITEM_ID) ;
+        user_login = intent.getStringExtra(ARG_ITEM_ID);
 
         setupUpperBar();
 
-        // **** TODO : FOR DEBUG ONLY
-        retrieveUserProfile(user_login);
+        // setup viewModel and observe currentUser
+        factory = new UserDetailViewModelFactory();
+        mViewModel = new ViewModelProvider(this, factory).get(UserDetailViewModel.class);
+
+        LiveData<UserProfile_Full> currentUser_observed = mViewModel.getUserObserved();
+        currentUser_observed.observe(this, new Observer<UserProfile_Full>() {
+            @Override
+            public void onChanged(@Nullable UserProfile_Full userEntry) {
+                if (userEntry != null) {
+                    currentUser = userEntry;
+                    setupViewPager();
+                }
+            }
+        });
+
+        mViewModel.storeUserFull(user_login);
 
 
     }
@@ -74,7 +85,7 @@ public class UserDetailActivity extends AppCompatActivity {
      * ---------------------------------------------------------------------------------------------
      * Used to export the current user to child fragments
      */
-    public UserProfile_Full getCurrentUser(){
+    public UserProfile_Full getCurrentUser() {
         return currentUser;
     }
 
@@ -86,8 +97,8 @@ public class UserDetailActivity extends AppCompatActivity {
     private void setupUpperBar() {
         toolbar = findViewById(R.id.detail_toolbar);
 
-        if (user_login != "" ) {
-            Log.d(TAG, "currentuser login : "+user_login);
+        if (user_login != "") {
+            Log.d(TAG, "currentuser login : " + user_login);
             toolbar.setTitle(user_login);
         }
 
@@ -100,7 +111,6 @@ public class UserDetailActivity extends AppCompatActivity {
 
 
     }
-
 
 
     /**
@@ -159,6 +169,7 @@ public class UserDetailActivity extends AppCompatActivity {
     //==============================================================================================
     //                                     DEBUG
     // **** ONLY FOR DEBUGGING, DELETED AFTER CREATING REPOSITORY + VIEWMODEL/LIVEDATA LAYER
+    /*
     public void retrieveUserProfile(String user_login) {
             Retrofit.Builder builder = new Retrofit.Builder()
                     .baseUrl("https://api.github.com")
@@ -184,4 +195,5 @@ public class UserDetailActivity extends AppCompatActivity {
             });
 
     }
+     */
 }

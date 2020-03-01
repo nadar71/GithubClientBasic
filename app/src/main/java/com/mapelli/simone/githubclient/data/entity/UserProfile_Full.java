@@ -57,6 +57,7 @@ public class UserProfile_Full {
     /**
      * ---------------------------------------------------------------------------------------------
      * For db insert
+     *
      * @param idx
      * @param login
      * @param id
@@ -77,7 +78,6 @@ public class UserProfile_Full {
         this.location = location;
         this.email = email;
     }
-
 
 
     public String getLogin() {

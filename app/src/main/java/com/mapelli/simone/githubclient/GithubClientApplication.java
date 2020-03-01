@@ -25,7 +25,7 @@ public class GithubClientApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mAppExecutors = AppExecutors.getInstance();
-        sContext      = getApplicationContext();
+        sContext = getApplicationContext();
     }
 
     /**
@@ -74,7 +74,7 @@ public class GithubClientApplication extends Application {
      * Return application context wherever we are in the app
      * @return
      */
-    public static Context getsContext(){
+    public static Context getsContext() {
         return sContext;
     }
 

@@ -19,20 +19,19 @@ public abstract class GithubUsersDatabase extends RoomDatabase {
     private static final String TAG = GithubUsersDatabase.class.getSimpleName();
 
     // lock for synchro
-    private static final Object LOCK   = new Object();
+    private static final Object LOCK = new Object();
     private static final String DBNAME = "GithubUsersDB";
-    private static GithubUsersDatabase sDbInstance ;
+    private static GithubUsersDatabase sDbInstance;
 
     // get for the dao
     public abstract GithubUsersDbDao githubUsersDao();
 
 
-    public static GithubUsersDatabase getsDbInstance(Context context){
-        if(sDbInstance == null){
-            synchronized (LOCK){
+    public static GithubUsersDatabase getsDbInstance(Context context) {
+        if (sDbInstance == null) {
+            synchronized (LOCK) {
                 Log.d(TAG, "Creating App db singleton instance...");
-                sDbInstance = Room.databaseBuilder(context.getApplicationContext(), GithubUsersDatabase.class,GithubUsersDatabase.DBNAME)
-                        //.allowMainThreadQueries() // TODO : temporary in case of debugging, delete this
+                sDbInstance = Room.databaseBuilder(context.getApplicationContext(), GithubUsersDatabase.class, GithubUsersDatabase.DBNAME)
                         .build();
             }
 

@@ -2,29 +2,27 @@ package com.mapelli.simone.githubclient.viewmodel;
 
 import com.mapelli.simone.githubclient.GithubClientApplication;
 import com.mapelli.simone.githubclient.data.GithubUsersAppRepository;
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
+import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
 import com.mapelli.simone.githubclient.util.AppExecutors;
-
-import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-public class UserSearchViewModel extends ViewModel {
+public class UserDetailViewModel extends ViewModel {
     private static final String TAG = UserSearchViewModel.class.getSimpleName();
 
     private GithubUsersAppRepository githubUsersAppRepository;
     private AppExecutors executors;
 
-    // Livedata on UserProfile_Mini List to be populated by ViewModel
-    private LiveData<List<UserProfile_Mini>> userProfile_Mini_list;
+    // Livedata on UserProfile_Full List to be populated by ViewModel
+    private LiveData<UserProfile_Full> userProfile_full;
 
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Constructor with parameter used by {@link SearchUserViewModelFactory}
+     * Constructor with parameter used by {@link UserDetailViewModelFactory}
      */
-    public UserSearchViewModel() {
+    public UserDetailViewModel() {
         // get repository instance
         githubUsersAppRepository = ((GithubClientApplication) GithubClientApplication.getsContext())
                 .getRepositoryWithNetwork();
@@ -32,39 +30,30 @@ public class UserSearchViewModel extends ViewModel {
         executors = ((GithubClientApplication) GithubClientApplication.getsContext())
                 .getAppExecutorsInstance();
 
-        userProfile_Mini_list = githubUsersAppRepository.loadUserList();
+        userProfile_full = githubUsersAppRepository.loadUserFull();
     }
 
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Load user list into db for being observed,so to get UserActivity and any other observer aware
+     * Load user details into db for being observed,so to get UserActivity and any other observer aware
      */
-    public void storeUserList(String keyword, String page_num, String per_page) {
+    public void storeUserFull(String login) {
         executors.networkIO().execute(() -> {
-            githubUsersAppRepository.fetchUserSearch(keyword, page_num, per_page);
+            githubUsersAppRepository.fetchUserFull(login);
         });
+
     }
 
     /**
      * ---------------------------------------------------------------------------------------------
      * Getter for LiveData<List<UserProfile_Mini>> list, used to get the observable in
-     * SearchUserActvity
+     * UserDetailActvity
      *
      * @return
      */
-    public LiveData<List<UserProfile_Mini>> getUserListObserved() {
-        return userProfile_Mini_list;
+    public LiveData<UserProfile_Full> getUserObserved() {
+        return userProfile_full;
     }
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Used to delete table from previous user list results
-     */
-    public void deleteUserList() {
-        githubUsersAppRepository.dropUserMiniTable();
-    }
-
 
 }

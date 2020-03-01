@@ -43,6 +43,7 @@ public class UserProfile_Mini {
     /**
      * ---------------------------------------------------------------------------------------------
      * For db insert
+     *
      * @param idx
      * @param id
      * @param login

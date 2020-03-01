@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserRepository;
 
@@ -33,8 +32,8 @@ public class UserRepoListAdapter extends RecyclerView.Adapter<UserRepoListAdapte
 
 
     public UserRepoListAdapter(UserDetailActivity parent,
-                            List<UserRepository> usersRepoList) {
-        parentActivity     = parent;
+                               List<UserRepository> usersRepoList) {
+        parentActivity = parent;
         this.usersRepoList = usersRepoList;
 
     }
@@ -70,14 +69,14 @@ public class UserRepoListAdapter extends RecyclerView.Adapter<UserRepoListAdapte
      * Class Item Holder
      */
     class UsersRepoListViewHolder extends RecyclerView.ViewHolder {
-        private TextView  stars_num, repo_name;
+        private TextView stars_num, repo_name;
         private ImageView star_img;
 
         UsersRepoListViewHolder(View view) {
             super(view);
             stars_num = view.findViewById(R.id.stars_num);
             repo_name = view.findViewById(R.id.repo_name);
-            star_img  = view.findViewById(R.id.stars_img);
+            star_img = view.findViewById(R.id.stars_img);
         }
     }
 
@@ -85,6 +84,7 @@ public class UserRepoListAdapter extends RecyclerView.Adapter<UserRepoListAdapte
     /**
      * ---------------------------------------------------------------------------------------------
      * Init/update the adapter with usersRepoList
+     *
      * @param usersRepoList
      */
     public void setAdapterUserList(List<UserRepository> usersRepoList) {

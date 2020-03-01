@@ -18,8 +18,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>{
-    private final static String TAG  = UsersListAdapter.class.getSimpleName();
+public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder> {
+    private final static String TAG = UsersListAdapter.class.getSimpleName();
     private SearchUsersActivity parentActivity;
     private List<UserProfile_Mini> usersList;
 
@@ -39,7 +39,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
 
 
     public UsersListAdapter(SearchUsersActivity parent,
-                                  List<UserProfile_Mini> userList) {
+                            List<UserProfile_Mini> userList) {
         parentActivity = parent;
         this.usersList = userList;
 
@@ -75,7 +75,6 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     }
 
 
-
     /**
      * ---------------------------------------------------------------------------------------------
      * Class Item Holder
@@ -87,15 +86,15 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
         UsersListViewHolder(View view) {
             super(view);
             mContentView = view.findViewById(R.id.user_name);
-            userPhoto    = view.findViewById(R.id.user_photo_img);
+            userPhoto = view.findViewById(R.id.user_photo_img);
         }
     }
-
 
 
     /**
      * ---------------------------------------------------------------------------------------------
      * Init/update the adapter with userList
+     *
      * @param userList
      */
     public void setAdapterUserList(List<UserProfile_Mini> userList) {
@@ -104,12 +103,11 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     }
 
 
-
     /**
      * ---------------------------------------------------------------------------------------------
      * Reset adapter
      */
     public void resetUsersList() {
-        if  (usersList != null) usersList.clear();
+        if (usersList != null) usersList.clear();
     }
 }

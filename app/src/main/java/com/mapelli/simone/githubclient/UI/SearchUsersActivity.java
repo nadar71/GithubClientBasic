@@ -1,6 +1,5 @@
 package com.mapelli.simone.githubclient.UI;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +11,8 @@ import android.widget.SearchView;
 
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
-import com.mapelli.simone.githubclient.viewmodel.UserSearchViewModel;
 import com.mapelli.simone.githubclient.viewmodel.SearchUserViewModelFactory;
+import com.mapelli.simone.githubclient.viewmodel.UserSearchViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,25 +20,26 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.lifecycle.ViewModelProvider;
 
 
 public class SearchUsersActivity extends AppCompatActivity {
-    private final static String TAG  = SearchUsersActivity.class.getSimpleName();
+    private final static String TAG = SearchUsersActivity.class.getSimpleName();
 
-    private ArrayList<UserProfile_Mini> userList = new ArrayList<>();
+    private List<UserProfile_Mini> userList = new ArrayList<>();
     private RecyclerView recyclerView;
     private UsersListAdapter adapter;
 
     private UserSearchViewModel mViewModel;
     private SearchUserViewModelFactory factory;
-    private Context context;
 
     private Button loadMore_btn;
-    private int pageCount   = 1;
+    private int pageCount = 1;
     private int userPerPage = 30;
     private String currentSearchingKeywords = "";
 
@@ -48,13 +48,34 @@ public class SearchUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
-        context = this.getBaseContext();
-
-        // setup ViewModel
-        factory = new SearchUserViewModelFactory(currentSearchingKeywords,
-                Integer.toString(pageCount),
-                Integer.toString(userPerPage));
+        // set up viewmodel/livedata to observe data in db and ask for new ones to repo
+        factory = new SearchUserViewModelFactory();
         mViewModel = new ViewModelProvider(this, factory).get(UserSearchViewModel.class);
+
+        LiveData<List<UserProfile_Mini>> usersList_observed = mViewModel.getUserListObserved();
+        usersList_observed.observe(this, new Observer<List<UserProfile_Mini>>() {
+            @Override
+            public void onChanged(@Nullable List<UserProfile_Mini> userEntries) {
+                if (userEntries != null && !userEntries.isEmpty()) { // data ready in db
+                    userList = userEntries;
+                    updateAdapter(userEntries);
+                    /*
+                    // used to update the last update field, updated by datasource at 1st start
+                    checkPreferences();
+                    showEarthquakeListView();
+                     */
+                }/*
+                else {                                                         // waiting for data
+                    // While waiting that the repository getting aware that the eqs list is empty
+                    // and ask for a remote update
+                    if (MyUtil.isConnectionOk()) {
+                        showLoading();
+                    } else {
+                        showNoInternetConnection();
+                    }
+                }*/
+            }
+        });
 
         loadMore_btn = findViewById(R.id.loadMore_btn);
         loadMore_btn.setVisibility(View.INVISIBLE);
@@ -62,17 +83,10 @@ public class SearchUsersActivity extends AppCompatActivity {
         loadMore_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // **** TODO : FOR DEBUG ONLY
-                /*
-                usersListSearch_Paging(currentSearchingKeywords,
+                mViewModel.storeUserList(currentSearchingKeywords,
                         Integer.toString(pageCount),
                         Integer.toString(userPerPage));
-
-                 */
-                mViewModel.storeUserList();
                 pageCount++;
-
-
             }
         });
 
@@ -86,20 +100,21 @@ public class SearchUsersActivity extends AppCompatActivity {
      * Set icons, title etc. in action bar
      */
     private void setupActionBar() {
-        Toolbar toolbar =  findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.search_title));
     }
 
 
-    /** --------------------------------------------------------------------------------------------
-     * Setup RecyclerView : it starts empty. TODO : with data layer, load the last search results
+    /**
+     * --------------------------------------------------------------------------------------------
+     * Setup RecyclerView : it starts empty.
      */
     private void setupRecyclerView() {
         recyclerView = findViewById(R.id.userList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new UsersListAdapter(this,userList);
+        adapter = new UsersListAdapter(this, userList);
         recyclerView.setAdapter(adapter);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(),
@@ -108,14 +123,15 @@ public class SearchUsersActivity extends AppCompatActivity {
     }
 
 
-    /** --------------------------------------------------------------------------------------------
+    /**
+     * --------------------------------------------------------------------------------------------
      * Scrollup a bit RecyclerView : useful after new loading by pagination
      */
     private void bumpUpList(int currentPos) {
         recyclerView.post(new Runnable() {
             @Override
             public void run() {
-                recyclerView.smoothScrollToPosition(adapter.getItemCount()-(userPerPage-2));
+                recyclerView.smoothScrollToPosition(adapter.getItemCount() - (userPerPage - 2));
             }
         });
     }
@@ -126,13 +142,11 @@ public class SearchUsersActivity extends AppCompatActivity {
      * @param userList
      */
     private void updateAdapter(@Nullable List<UserProfile_Mini> userList) {
-        if(!userList.isEmpty()){
+        if (!userList.isEmpty() && !currentSearchingKeywords.isEmpty()) {
             loadMore_btn.setVisibility(View.VISIBLE);
         }
         adapter.setAdapterUserList(userList);
     }
-
-
 
 
     /**
@@ -156,13 +170,13 @@ public class SearchUsersActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String keywords) {
                 currentSearchingKeywords = keywords;
-                // **** TODO : FOR DEBUG ONLY
-                /*
-                usersListSearch_Paging(currentSearchingKeywords,
+
+                // delete previous results
+                mViewModel.deleteUserList();
+
+                mViewModel.storeUserList(currentSearchingKeywords,
                         Integer.toString(pageCount),
                         Integer.toString(userPerPage));
-                 */
-                mViewModel.storeUserList();
                 pageCount++;
 
                 return false;
@@ -178,9 +192,6 @@ public class SearchUsersActivity extends AppCompatActivity {
     }
 
 
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -190,7 +201,6 @@ public class SearchUsersActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     //==============================================================================================
@@ -272,8 +282,6 @@ public class SearchUsersActivity extends AppCompatActivity {
     }
 
      */
-
-
 
 
 }

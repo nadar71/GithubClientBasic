@@ -5,19 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,26 +15,38 @@ import android.widget.TextView;
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
 import com.mapelli.simone.githubclient.data.entity.UserRepository;
-import com.mapelli.simone.githubclient.network.NetworkService;
+import com.mapelli.simone.githubclient.viewmodel.UserRepositoriesViewModel;
+import com.mapelli.simone.githubclient.viewmodel.UserRepositoriesViewModelFactory;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class RepositoriesFragment extends Fragment {
 
     private static final String TAG = "RepositoriesFragment :";
     private TextView title_list, filter_type;
-    private Button   filter_btn,asc_order_btn,desc_order_btn;
+    private Button filter_btn, asc_order_btn, desc_order_btn;
     private Context parentContext;
 
     private UserDetailActivity parent;
     private UserProfile_Full currentUser;
     private String user_login;
 
-    private ArrayList<UserRepository> userRepoList;
+    private List<UserRepository> userRepoList;
     private RecyclerView recyclerView;
     private UserRepoListAdapter adapter;
+
+    private UserRepositoriesViewModel mViewModel;
+    private UserRepositoriesViewModelFactory factory;
 
     private String FILTER_TYPE = "name";
 
@@ -55,27 +54,52 @@ public class RepositoriesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView =  inflater.inflate(R.layout.fragment_repositories, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_repositories, container, false);
         parent = (UserDetailActivity) getActivity();
         currentUser = parent.getCurrentUser();
-        user_login  = currentUser.getLogin();
+        user_login = currentUser.getLogin();
 
         parentContext = parent.getBaseContext();
 
-        title_list     = rootView.findViewById(R.id.title_list_txt);
-        filter_type    = rootView.findViewById(R.id.filter_type_txt);
+        title_list = rootView.findViewById(R.id.title_list_txt);
+        filter_type = rootView.findViewById(R.id.filter_type_txt);
 
         setupRecyclerView(rootView);
         setupButton(rootView, parentContext);
 
+        // set up viewmodel/livedata to observe data in db and ask for new ones to repo
+        factory = new UserRepositoriesViewModelFactory();
+        mViewModel = new ViewModelProvider(this, factory).get(UserRepositoriesViewModel.class);
 
-        // **** TODO : FOR DEBUG ONLY
-        getRepoFilterByName_Direction(user_login,"asc");
+        LiveData<List<UserRepository>> usersList_observed = mViewModel.getUserRepoListObserved();
+        usersList_observed.observe(parent, new Observer<List<UserRepository>>() {
+            @Override
+            public void onChanged(@Nullable List<UserRepository> repoEntries) {
+                if (repoEntries != null && !repoEntries.isEmpty()) { // data ready in db
+                    userRepoList = repoEntries;
+                    updateAdapter(repoEntries);
+                    /*
+                    // used to update the last update field, updated by datasource at 1st start
+                    checkPreferences();
+                    showEarthquakeListView();
+                     */
+                }/*
+                else {                                                         // waiting for data
+                    // While waiting that the repository getting aware that the eqs list is empty
+                    // and ask for a remote update
+                    if (MyUtil.isConnectionOk()) {
+                        showLoading();
+                    } else {
+                        showNoInternetConnection();
+                    }
+                }*/
+            }
+        });
+
+        mViewModel.storeUserRepoList_ByName(user_login, "asc");
 
         return rootView;
     }
-
-
 
 
     /**
@@ -85,8 +109,8 @@ public class RepositoriesFragment extends Fragment {
      * @param parentContext
      */
     private void setupButton(View rootView, Context parentContext) {
-        filter_btn     = rootView.findViewById(R.id.filter_btn);
-        asc_order_btn  = rootView.findViewById(R.id.asc_order_btn);
+        filter_btn = rootView.findViewById(R.id.filter_btn);
+        asc_order_btn = rootView.findViewById(R.id.asc_order_btn);
         desc_order_btn = rootView.findViewById(R.id.desc_order_btn);
 
 
@@ -102,13 +126,21 @@ public class RepositoriesFragment extends Fragment {
             public void onClick(View v) {
                 filter_type.setText(parentContext.getString(R.string.filter_type_start_label) +
                         FILTER_TYPE + " asc ");
-                //**** TODO : FOR DEBUG ONLY
-                switch(FILTER_TYPE){
-                    case "name"          : getRepoFilterByName_Direction(user_login,"asc");    break;
-                    case "data creation" : getRepoFilterByCreated_Direction(user_login,"asc"); break;
-                    case "data update"   : getRepoFilterByUpdated_Direction(user_login,"asc"); break;
-                    case "data pushed"   : getRepoFilterByPushed_Direction(user_login,"asc");  break;
-                    default              : break;
+                switch (FILTER_TYPE) {
+                    case "name":
+                        mViewModel.storeUserRepoList_ByName(user_login, "asc");
+                        break;
+                    case "data creation":
+                        mViewModel.storeUserRepoList_ByCreated(user_login, "asc");
+                        break;
+                    case "data update":
+                        mViewModel.storeUserRepoList_ByUpdated(user_login, "asc");
+                        break;
+                    case "data pushed":
+                        mViewModel.storeUserRepoList_ByPushed(user_login, "asc");
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -119,13 +151,21 @@ public class RepositoriesFragment extends Fragment {
             public void onClick(View v) {
                 filter_type.setText(parentContext.getString(R.string.filter_type_start_label) +
                         FILTER_TYPE + " desc ");
-                //**** TODO : FOR DEBUG ONLY
-                switch(FILTER_TYPE){
-                    case "name"          : getRepoFilterByName_Direction(user_login,"desc");    break;
-                    case "data creation" : getRepoFilterByCreated_Direction(user_login,"desc"); break;
-                    case "data update"   : getRepoFilterByUpdated_Direction(user_login,"desc"); break;
-                    case "data pushed"   : getRepoFilterByPushed_Direction(user_login,"desc");  break;
-                    default              : break;
+                switch (FILTER_TYPE) {
+                    case "name":
+                        mViewModel.storeUserRepoList_ByName(user_login, "desc");
+                        break;
+                    case "data creation":
+                        mViewModel.storeUserRepoList_ByCreated(user_login, "desc");
+                        break;
+                    case "data update":
+                        mViewModel.storeUserRepoList_ByUpdated(user_login, "desc");
+                        break;
+                    case "data pushed":
+                        mViewModel.storeUserRepoList_ByPushed(user_login, "desc");
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -152,6 +192,7 @@ public class RepositoriesFragment extends Fragment {
     /**
      * ---------------------------------------------------------------------------------------------
      * Renew recyclerview data
+     *
      * @param userRepoList
      */
     private void updateAdapter(@Nullable List<UserRepository> userRepoList) {
@@ -166,24 +207,40 @@ public class RepositoriesFragment extends Fragment {
     private void showAlertDialog() {
         AlertDialog alert;
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parent);
-        alertDialog.setTitle(parentContext.getString(R.string.alert_filter_title ));
+        alertDialog.setTitle(parentContext.getString(R.string.alert_filter_title));
 
-        String[] items = {"name","data creation","data update","data pushed"};
+        String[] items = {"name", "data creation", "data update", "data pushed"};
         int checkedItem = 0;
-        switch(FILTER_TYPE){
-            case "data creation" : checkedItem = 1; break;
-            case "data update"   : checkedItem = 2; break;
-            case "data pushed"   : checkedItem = 3; break;
-            default              : checkedItem = 0; break;
+        switch (FILTER_TYPE) {
+            case "data creation":
+                checkedItem = 1;
+                break;
+            case "data update":
+                checkedItem = 2;
+                break;
+            case "data pushed":
+                checkedItem = 3;
+                break;
+            default:
+                checkedItem = 0;
+                break;
         }
         alertDialog.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
-                    case 0: FILTER_TYPE = "name"; break;
-                    case 1: FILTER_TYPE = "data creation"; break;
-                    case 2: FILTER_TYPE = "data update"; break;
-                    case 3: FILTER_TYPE = "data pushed"; break;
+                    case 0:
+                        FILTER_TYPE = "name";
+                        break;
+                    case 1:
+                        FILTER_TYPE = "data creation";
+                        break;
+                    case 2:
+                        FILTER_TYPE = "data update";
+                        break;
+                    case 3:
+                        FILTER_TYPE = "data pushed";
+                        break;
                 }
             }
         });
@@ -207,7 +264,7 @@ public class RepositoriesFragment extends Fragment {
     //==============================================================================================
     //                                     DEBUG
     // **** ONLY FOR DEBUGGING, DELETED AFTER CREATING REPOSITORY + VIEWMODEL/LIVEDATA LAYER
-
+    /*
     public void getRepoFilterByName_Direction(String user, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
@@ -216,11 +273,11 @@ public class RepositoriesFragment extends Fragment {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call = client.userReposBy_name_direction(user, direction);
-        call.enqueue(new Callback<ArrayList<UserRepository>>() {
+        Call<List<UserRepository>> call = client.userReposBy_name_direction(user, direction);
+        call.enqueue(new Callback<List<UserRepository>>() {
             @Override
-            public void onResponse(Call<ArrayList<UserRepository>> call,
-                                   Response<ArrayList<UserRepository>> response) {
+            public void onResponse(Call<List<UserRepository>> call,
+                                   Response<List<UserRepository>> response) {
                 userRepoList = response.body();
                 updateAdapter(userRepoList);
 
@@ -241,7 +298,7 @@ public class RepositoriesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserProfileFullById ",  t);
             }
         });
@@ -256,12 +313,12 @@ public class RepositoriesFragment extends Fragment {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call =
+        Call<List<UserRepository>> call =
                 client.userReposBy_created_direction(login,"created", direction);
-        call.enqueue(new Callback<ArrayList<UserRepository>>() {
+        call.enqueue(new Callback<List<UserRepository>>() {
             @Override
-            public void onResponse(Call<ArrayList<UserRepository>> call,
-                                   Response<ArrayList<UserRepository>> response) {
+            public void onResponse(Call<List<UserRepository>> call,
+                                   Response<List<UserRepository>> response) {
                 userRepoList = response.body();
                 updateAdapter(userRepoList);
                 for(UserRepository repo:userRepoList){
@@ -270,17 +327,21 @@ public class RepositoriesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
     }
+
+
+     */
 
     /**
      * ---------------------------------------------------------------------------------------------
      * Repo with updated in asc/desc direction
      * @param login
      */
+    /*
     public void getRepoFilterByUpdated_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
@@ -289,12 +350,12 @@ public class RepositoriesFragment extends Fragment {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call =
+        Call<List<UserRepository>> call =
                 client.reposForuser_updated_asc(login,"updated", direction);
-        call.enqueue(new Callback<ArrayList<UserRepository>>() {
+        call.enqueue(new Callback<List<UserRepository>>() {
             @Override
-            public void onResponse(Call<ArrayList<UserRepository>> call,
-                                   Response<ArrayList<UserRepository>> response) {
+            public void onResponse(Call<List<UserRepository>> call,
+                                   Response<List<UserRepository>> response) {
                 userRepoList = response.body();
                 updateAdapter(userRepoList);
                 for(UserRepository repo:userRepoList){
@@ -303,13 +364,13 @@ public class RepositoriesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
     }
 
-
+     */
 
 
     /**
@@ -317,6 +378,7 @@ public class RepositoriesFragment extends Fragment {
      * Repo with pushed in asc/desc direction
      * @param login
      */
+    /*
     public void getRepoFilterByPushed_Direction(String login, String direction){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
@@ -325,11 +387,11 @@ public class RepositoriesFragment extends Fragment {
         Retrofit retrofit = builder.build();
         NetworkService client = retrofit.create(NetworkService.class);
 
-        Call<ArrayList<UserRepository>> call = client.reposForuser_pushed_asc(login,"pushed", direction);
-        call.enqueue(new Callback<ArrayList<UserRepository>>() {
+        Call<List<UserRepository>> call = client.reposForuser_pushed_asc(login,"pushed", direction);
+        call.enqueue(new Callback<List<UserRepository>>() {
             @Override
-            public void onResponse(Call<ArrayList<UserRepository>> call,
-                                   Response<ArrayList<UserRepository>> response) {
+            public void onResponse(Call<List<UserRepository>> call,
+                                   Response<List<UserRepository>> response) {
                 userRepoList = response.body();
                 updateAdapter(userRepoList);
                 for(UserRepository repo:userRepoList){
@@ -338,10 +400,12 @@ public class RepositoriesFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserRepository>> call, Throwable t) {
+            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
                 Log.e(TAG, "onFailure: getUserIdSearch ",  t);
             }
         });
     }
+
+     */
 
 }
