@@ -4,12 +4,15 @@ package com.mapelli.simone.githubclient.data.entity;
 import com.google.gson.annotations.SerializedName;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-// @Entity(tableName = "USERS_PROFILES_FULL")
+@Entity(tableName = "USERS_PROFILES_FULL")
 public class UserProfile_Full {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int idx;
+
     @SerializedName("login")
     private String login;
 
@@ -31,6 +34,15 @@ public class UserProfile_Full {
     @SerializedName("email")
     private String email;
 
+    public int getIdx() {
+        return idx;
+    }
+
+    public void setIdx(int idx) {
+        this.idx = idx;
+    }
+
+    @Ignore
     public UserProfile_Full(String login, String id, String avatar_url, String repos_url,
                             String name, String location, String email) {
         this.login = login;
@@ -41,6 +53,32 @@ public class UserProfile_Full {
         this.location = location;
         this.email = email;
     }
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * For db insert
+     * @param idx
+     * @param login
+     * @param id
+     * @param avatar_url
+     * @param repos_url
+     * @param name
+     * @param location
+     * @param email
+     */
+    public UserProfile_Full(int idx, String login, String id, String avatar_url, String repos_url,
+                            String name, String location, String email) {
+        this.idx = idx;
+        this.login = login;
+        this.id = id;
+        this.avatar_url = avatar_url;
+        this.repos_url = repos_url;
+        this.name = name;
+        this.location = location;
+        this.email = email;
+    }
+
+
 
     public String getLogin() {
         return login;

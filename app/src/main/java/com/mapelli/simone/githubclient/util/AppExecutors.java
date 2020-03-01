@@ -1,4 +1,4 @@
-package com.mapelli.simone.githubclient.Util;
+package com.mapelli.simone.githubclient.util;
 
 import android.os.Handler;
 import android.os.Looper;

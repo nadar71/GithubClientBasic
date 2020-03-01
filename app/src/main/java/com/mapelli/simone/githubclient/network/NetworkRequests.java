@@ -9,7 +9,10 @@ import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini_List;
 import com.mapelli.simone.githubclient.data.entity.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,24 +20,26 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkRequests {
-
     private final static String TAG  =  NetworkRequests.class.getSimpleName();
-    
     public final static String BASE_URL_API  = "https://api.github.com";
 
-    // TODO : will be MutableLivedata in next steps
-    private ArrayList<UserProfile_Mini> usersProfiles = new ArrayList<>();
-    // TODO : only for debug, will use ViewModel/Livedata in next steps
-    public ArrayList<UserProfile_Mini> getUsersProfiles(){
-        return usersProfiles;
-    }
+
+    private MutableLiveData<List<UserProfile_Mini>> usersProfiles_Minis = new MutableLiveData<>();
+    private MutableLiveData<UserProfile_Full> userProfile_Full          = new MutableLiveData<>();
+    private MutableLiveData<List<UserRepository>> userRepositories      = new MutableLiveData<>();
+
+    public LiveData<List<UserProfile_Mini>> getUsersProfilesMini()  { return usersProfiles_Minis; }
+    public LiveData<UserProfile_Full>       getUserProfilesFull()   { return userProfile_Full; }
+    public LiveData<List<UserRepository>>   getUserRepositories()   { return userRepositories; }
+
 
     /**
      * ---------------------------------------------------------------------------------------------
      * Recover user list based on keyword.
      * @param keyword
      */
-    public void getUsersSearch(String keyword){
+    /*
+    public void doUsersSearch(String keyword){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create());
@@ -56,7 +61,8 @@ public class NetworkRequests {
                             " login : " + profile.getLogin()
                     );
                 }
-                postChanges_usersList(userList);
+
+                usersProfiles_Minis.postValue(userList);
             }
 
             @Override
@@ -66,14 +72,23 @@ public class NetworkRequests {
         });
     }
 
+     */
+
 
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Recover user list based on keyword.
+     * Recover user list based on keyword
+     * NB : the list of user profiles recovered with api :
+     * https://api.github.com/search/users?q=<search keywords>  with seems whatever parameters
+     * (...but I'm still investigating) do not include the full name (field "name") with which
+     * the search are done (#issue13).
+     * So another call getUserProfileFullByLogin using "login" as parameter is necessary to get "name
+     * after selecting a user in list ", for user details
      * @param keyword
      */
-    public void usersListSearch_Paging(String keyword, String page_num, String per_page){
+    public void doUsersSearch(String keyword, String page_num, String per_page){
+        Log.d(TAG, "doUsersSearch: CALLED");
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create());
@@ -95,7 +110,8 @@ public class NetworkRequests {
                             " login : " + profile.getLogin()
                     );
                 }
-                postChanges_usersList(userList);
+
+                usersProfiles_Minis.postValue(userList);
             }
 
             @Override
@@ -104,17 +120,6 @@ public class NetworkRequests {
             }
         });
     }
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Post changes on usersProfiles
-     */
-     private void postChanges_usersList(ArrayList<UserProfile_Mini> userList){
-         usersProfiles = userList;
-     }
-
-
 
 
 
@@ -146,6 +151,8 @@ public class NetworkRequests {
                         " name : "+profile.getName()+
                         " repos_url : "+profile.getRepos_url()
                 );
+
+                userProfile_Full.postValue(profile);
             }
 
             @Override
@@ -191,6 +198,7 @@ public class NetworkRequests {
                             "stargazers_count + "+repo.getStargazers_count() +
                             "forks_count + "+repo.getForks_count() );
                 }
+                userRepositories.postValue(listRepo);
             }
 
             @Override
@@ -225,6 +233,8 @@ public class NetworkRequests {
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  created_at : "+repo.getCreated_at());
                 }
+                userRepositories.postValue(listRepo);
+
             }
 
             @Override
@@ -262,6 +272,7 @@ public class NetworkRequests {
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  updated_at : "+repo.getUpdated_at());
                 }
+                userRepositories.postValue(listRepo);
             }
 
             @Override
@@ -299,6 +310,7 @@ public class NetworkRequests {
                 for(UserRepository repo:listRepo){
                     Log.d(TAG, "onResponse:  pushed_at : "+repo.getPushed_at());
                 }
+                userRepositories.postValue(listRepo);
             }
 
             @Override

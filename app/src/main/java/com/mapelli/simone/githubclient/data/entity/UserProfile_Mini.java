@@ -3,6 +3,7 @@ package com.mapelli.simone.githubclient.data.entity;
 import com.google.gson.annotations.SerializedName;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
@@ -12,10 +13,12 @@ import androidx.room.PrimaryKey;
  * In case of great number of Load More pressing in SearchUserActivity,
  * it decrease the data load in memory.
  */
-// @Entity(tableName = "USERS_PROFILES_MINI")
+@Entity(tableName = "USERS_PROFILES_MINI")
 public class UserProfile_Mini {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int idx;
+
     @SerializedName("id")
     private String id;
 
@@ -29,6 +32,7 @@ public class UserProfile_Mini {
     // @SerializedName("name")
     // private String name;
 
+    @Ignore
     public UserProfile_Mini(String id, String login, String avatar_url, String name) {
         this.id = id;
         this.login = login;
@@ -36,6 +40,28 @@ public class UserProfile_Mini {
         // this.name = name;
     }
 
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * For db insert
+     * @param idx
+     * @param id
+     * @param login
+     * @param avatar_url
+     */
+    public UserProfile_Mini(int idx, String id, String login, String avatar_url) {
+        this.idx = idx;
+        this.id = id;
+        this.login = login;
+        this.avatar_url = avatar_url;
+    }
+
+    public int getIdx() {
+        return idx;
+    }
+
+    public void setIdx(int idx) {
+        this.idx = idx;
+    }
 
     public String getId() {
         return id;

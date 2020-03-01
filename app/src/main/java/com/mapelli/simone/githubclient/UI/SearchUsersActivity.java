@@ -1,7 +1,7 @@
 package com.mapelli.simone.githubclient.UI;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,8 +12,8 @@ import android.widget.SearchView;
 
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini_List;
-import com.mapelli.simone.githubclient.network.NetworkService;
+import com.mapelli.simone.githubclient.viewmodel.UserSearchViewModel;
+import com.mapelli.simone.githubclient.viewmodel.SearchUserViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import androidx.lifecycle.ViewModelProvider;
 
 
 public class SearchUsersActivity extends AppCompatActivity {
@@ -37,6 +33,11 @@ public class SearchUsersActivity extends AppCompatActivity {
     private ArrayList<UserProfile_Mini> userList = new ArrayList<>();
     private RecyclerView recyclerView;
     private UsersListAdapter adapter;
+
+    private UserSearchViewModel mViewModel;
+    private SearchUserViewModelFactory factory;
+    private Context context;
+
     private Button loadMore_btn;
     private int pageCount   = 1;
     private int userPerPage = 30;
@@ -47,15 +48,28 @@ public class SearchUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
+        context = this.getBaseContext();
+
+        // setup ViewModel
+        factory = new SearchUserViewModelFactory(currentSearchingKeywords,
+                Integer.toString(pageCount),
+                Integer.toString(userPerPage));
+        mViewModel = new ViewModelProvider(this, factory).get(UserSearchViewModel.class);
+
         loadMore_btn = findViewById(R.id.loadMore_btn);
         loadMore_btn.setVisibility(View.INVISIBLE);
+
         loadMore_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // **** TODO : FOR DEBUG ONLY
+                /*
                 usersListSearch_Paging(currentSearchingKeywords,
                         Integer.toString(pageCount),
                         Integer.toString(userPerPage));
+
+                 */
+                mViewModel.storeUserList();
                 pageCount++;
 
 
@@ -143,11 +157,12 @@ public class SearchUsersActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String keywords) {
                 currentSearchingKeywords = keywords;
                 // **** TODO : FOR DEBUG ONLY
-                // retrievedata(keywords);
+                /*
                 usersListSearch_Paging(currentSearchingKeywords,
                         Integer.toString(pageCount),
                         Integer.toString(userPerPage));
-
+                 */
+                mViewModel.storeUserList();
                 pageCount++;
 
                 return false;
@@ -181,6 +196,7 @@ public class SearchUsersActivity extends AppCompatActivity {
     //==============================================================================================
     //                                     DEBUG
     // **** ONLY FOR DEBUGGING, DELETED AFTER CREATING REPOSITORY + VIEWMODEL/LIVEDATA LAYER
+    /*
     public void retrievedata(String keyword) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
@@ -206,12 +222,15 @@ public class SearchUsersActivity extends AppCompatActivity {
         });
     }
 
+     */
+
 
     /**
      * ---------------------------------------------------------------------------------------------
      * Recover user list based on keyword.
      * @param keyword
      */
+    /*
     public void usersListSearch_Paging(String keyword, String page_num, String per_page){
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
@@ -251,6 +270,8 @@ public class SearchUsersActivity extends AppCompatActivity {
             }
         });
     }
+
+     */
 
 
 
