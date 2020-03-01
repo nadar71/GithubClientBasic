@@ -26,4 +26,13 @@
     <string name="filter_type_pushed_at_desc">filter type : data pushed desc</string>
 
 
+    <!-- - - - - - - - - - - - - - - - - Messages - - - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="no_data">No data retrieved, try another search</string>
+    <string name="no_connection">No network, check your connection...</string>
+    <string name="searching">Searching...</string>
+
+
+
+
+
 </resources>

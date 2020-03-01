@@ -7,10 +7,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
+import com.mapelli.simone.githubclient.util.MyUtil;
 import com.mapelli.simone.githubclient.viewmodel.SearchUserViewModelFactory;
 import com.mapelli.simone.githubclient.viewmodel.UserSearchViewModel;
 
@@ -33,6 +36,8 @@ public class SearchUsersActivity extends AppCompatActivity {
 
     private List<UserProfile_Mini> userList = new ArrayList<>();
     private RecyclerView recyclerView;
+    private ProgressBar loadingInProgress;
+    private TextView emptyListText;
     private UsersListAdapter adapter;
 
     private UserSearchViewModel mViewModel;
@@ -47,37 +52,21 @@ public class SearchUsersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
+        setupGenericViews();
+        setupActionBar();
+        setupRecyclerView();
+        setupUsersDataObserver();
+    }
 
-        // set up viewmodel/livedata to observe data in db and ask for new ones to repo
-        factory = new SearchUserViewModelFactory();
-        mViewModel = new ViewModelProvider(this, factory).get(UserSearchViewModel.class);
 
-        LiveData<List<UserProfile_Mini>> usersList_observed = mViewModel.getUserListObserved();
-        usersList_observed.observe(this, new Observer<List<UserProfile_Mini>>() {
-            @Override
-            public void onChanged(@Nullable List<UserProfile_Mini> userEntries) {
-                if (userEntries != null && !userEntries.isEmpty()) { // data ready in db
-                    userList = userEntries;
-                    int currentPos = adapter.getItemCount();
-                    updateAdapter(userEntries);
-                    bumpUpList(currentPos);
-                    /*
-                    // used to update the last update field, updated by datasource at 1st start
-                    checkPreferences();
-                    showEarthquakeListView();
-                     */
-                }/*
-                else {                                                         // waiting for data
-                    // While waiting that the repository getting aware that the eqs list is empty
-                    // and ask for a remote update
-                    if (MyUtil.isConnectionOk()) {
-                        showLoading();
-                    } else {
-                        showNoInternetConnection();
-                    }
-                }*/
-            }
-        });
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Set up progress bar,btn etc.
+     */
+    private void setupGenericViews() {
+        loadingInProgress = findViewById(R.id.loading_view);
+        emptyListText     = findViewById(R.id.empty_view);
+
 
         loadMore_btn = findViewById(R.id.loadMore_btn);
         loadMore_btn.setVisibility(View.INVISIBLE);
@@ -91,9 +80,39 @@ public class SearchUsersActivity extends AppCompatActivity {
                 pageCount++;
             }
         });
+    }
 
-        setupActionBar();
-        setupRecyclerView();
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Set up ViewModel/Livedata for retrieving new users profiles data
+     */
+    private void setupUsersDataObserver() {
+        // set up viewmodel/livedata to observe data in db and ask for new ones to repo
+        factory = new SearchUserViewModelFactory();
+        mViewModel = new ViewModelProvider(this, factory).get(UserSearchViewModel.class);
+
+        LiveData<List<UserProfile_Mini>> usersList_observed = mViewModel.getUserListObserved();
+        usersList_observed.observe(this, new Observer<List<UserProfile_Mini>>() {
+            @Override
+            public void onChanged(@Nullable List<UserProfile_Mini> userEntries) {
+                if (userEntries != null && !userEntries.isEmpty()) { // data ready in db
+                    userList = userEntries;
+                    int currentPos = adapter.getItemCount();
+                    updateAdapter(userEntries);
+
+                    showUserList();
+                    bumpUpList(currentPos);
+                }
+                else {
+                    if (MyUtil.isConnectionOk()) {
+                        showLoading();
+                    } else {
+                        showNoInternetConnection();
+                    }
+                }
+            }
+        });
     }
 
 
@@ -151,6 +170,41 @@ public class SearchUsersActivity extends AppCompatActivity {
     }
 
 
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Show No Internet Connection view
+     */
+    private void showNoInternetConnection() {
+        loadingInProgress.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        emptyListText.setVisibility(View.VISIBLE);
+        emptyListText.setText(R.string.no_connection);
+    }
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Show loading in progress view, hiding  list
+     */
+    private void showLoading() {
+        loadingInProgress.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        emptyListText.setVisibility(View.VISIBLE);
+        emptyListText.setText(R.string.searching);
+    }
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Show list after loading/retrieving data completed
+     */
+    private void showUserList() {
+        loadingInProgress.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyListText.setVisibility(View.INVISIBLE);
+    }
+
+
+
     /**
      * ---------------------------------------------------------------------------------------------
      * Menu stuff
@@ -171,11 +225,10 @@ public class SearchUsersActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String keywords) {
+                showLoading();
+
                 currentSearchingKeywords = keywords;
-
-                // delete previous results
-                mViewModel.deleteUserList();
-
+                mViewModel.deleteUserList(); // delete previous results
                 mViewModel.storeUserList(currentSearchingKeywords,
                         Integer.toString(pageCount),
                         Integer.toString(userPerPage));
@@ -205,85 +258,7 @@ public class SearchUsersActivity extends AppCompatActivity {
     }
 
 
-    //==============================================================================================
-    //                                     DEBUG
-    // **** ONLY FOR DEBUGGING, DELETED AFTER CREATING REPOSITORY + VIEWMODEL/LIVEDATA LAYER
-    /*
-    public void retrievedata(String keyword) {
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
 
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<UserProfile_Mini_List> call = client.usersListSearch(keyword);
-        call.enqueue(new Callback<UserProfile_Mini_List>() {
-            @Override
-            public void onResponse(Call<UserProfile_Mini_List> call,
-                                   Response<UserProfile_Mini_List> response) {
-                UserProfile_Mini_List result = response.body();
-                userList = result.getUserList();
-                updateAdapter(userList);
-            }
-
-            @Override
-            public void onFailure(Call<UserProfile_Mini_List> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserIdSearch ", t);
-            }
-        });
-    }
-
-     */
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Recover user list based on keyword.
-     * @param keyword
-     */
-    /*
-    public void usersListSearch_Paging(String keyword, String page_num, String per_page){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<UserProfile_Mini_List> call = client.usersListSearch_Paging(keyword,page_num, per_page);
-        call.enqueue(new Callback<UserProfile_Mini_List>() {
-            @Override
-            public void onResponse(Call<UserProfile_Mini_List> call,
-                                   Response<UserProfile_Mini_List> response) {
-                UserProfile_Mini_List result = response.body();
-                ArrayList<UserProfile_Mini> userList_newPage = result.getUserList();
-                for(UserProfile_Mini profile: userList_newPage) {
-                    // update userList
-                    userList.add(profile);
-
-                    Log.d(TAG, "onResponse: login + " + profile.getLogin() +
-                            " id : " + profile.getId() +
-                            " avatar_url : " + profile.getAvatar_url() +
-                            " login : " + profile.getLogin()
-                    );
-                }
-                int currentPos = adapter.getItemCount();
-                updateAdapter(userList);
-                bumpUpList(currentPos);
-
-
-
-            }
-
-            @Override
-            public void onFailure(Call<UserProfile_Mini_List> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
-            }
-        });
-    }
-
-     */
 
 
 }
