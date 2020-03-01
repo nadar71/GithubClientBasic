@@ -59,8 +59,18 @@ public class UserDetailActivity extends AppCompatActivity {
         user_login = intent.getStringExtra(ARG_ITEM_ID);
 
         setupUpperBar();
+        setupUserProfileObserver();
 
-        // setup viewModel and observe currentUser
+        mViewModel.storeUserFull(user_login);
+
+
+    }
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Set up ViewModel/Livedata for retrieving new users profile data from repo
+     */
+    private void setupUserProfileObserver() {
         factory = new UserDetailViewModelFactory();
         mViewModel = new ViewModelProvider(this, factory).get(UserDetailViewModel.class);
 
@@ -74,10 +84,6 @@ public class UserDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
-        mViewModel.storeUserFull(user_login);
-
-
     }
 
 

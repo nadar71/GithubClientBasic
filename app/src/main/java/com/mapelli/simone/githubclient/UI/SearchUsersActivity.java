@@ -56,6 +56,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         setupActionBar();
         setupRecyclerView();
         setupUsersDataObserver();
+        showUserList();
     }
 
 
@@ -80,15 +81,15 @@ public class SearchUsersActivity extends AppCompatActivity {
                 pageCount++;
             }
         });
+
     }
 
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Set up ViewModel/Livedata for retrieving new users profiles data
+     * Set up ViewModel/Livedata for retrieving new users profiles data from repo
      */
     private void setupUsersDataObserver() {
-        // set up viewmodel/livedata to observe data in db and ask for new ones to repo
         factory = new SearchUserViewModelFactory();
         mViewModel = new ViewModelProvider(this, factory).get(UserSearchViewModel.class);
 
@@ -103,11 +104,10 @@ public class SearchUsersActivity extends AppCompatActivity {
 
                     showUserList();
                     bumpUpList(currentPos);
-                }
-                else {
-                    if (MyUtil.isConnectionOk()) {
+                }else {
+                    if (MyUtil.isConnectionOk() && !currentSearchingKeywords.isEmpty()) {
                         showLoading();
-                    } else {
+                    } else if(!MyUtil.isConnectionOk()){
                         showNoInternetConnection();
                     }
                 }

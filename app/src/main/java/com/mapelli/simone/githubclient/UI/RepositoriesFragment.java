@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
 import com.mapelli.simone.githubclient.data.entity.UserRepository;
+import com.mapelli.simone.githubclient.util.MyUtil;
 import com.mapelli.simone.githubclient.viewmodel.UserRepositoriesViewModel;
 import com.mapelli.simone.githubclient.viewmodel.UserRepositoriesViewModelFactory;
 
@@ -35,6 +37,8 @@ public class RepositoriesFragment extends Fragment {
     private static final String TAG = "RepositoriesFragment :";
     private TextView title_list, filter_type;
     private Button filter_btn, asc_order_btn, desc_order_btn;
+    private ProgressBar loadingInProgress;
+    private TextView emptyListText;
     private Context parentContext;
 
     private UserDetailActivity parent;
@@ -64,6 +68,9 @@ public class RepositoriesFragment extends Fragment {
         title_list = rootView.findViewById(R.id.title_list_txt);
         filter_type = rootView.findViewById(R.id.filter_type_txt);
 
+        loadingInProgress = rootView.findViewById(R.id.loading_view);
+        emptyListText     = rootView.findViewById(R.id.empty_view);
+
         setupRecyclerView(rootView);
         setupButton(rootView, parentContext);
 
@@ -78,21 +85,14 @@ public class RepositoriesFragment extends Fragment {
                 if (repoEntries != null && !repoEntries.isEmpty()) { // data ready in db
                     userRepoList = repoEntries;
                     updateAdapter(repoEntries);
-                    /*
-                    // used to update the last update field, updated by datasource at 1st start
-                    checkPreferences();
-                    showEarthquakeListView();
-                     */
-                }/*
-                else {                                                         // waiting for data
-                    // While waiting that the repository getting aware that the eqs list is empty
-                    // and ask for a remote update
+                    showRepoList();
+                }else {                                                         // waiting for data
                     if (MyUtil.isConnectionOk()) {
                         showLoading();
                     } else {
                         showNoInternetConnection();
                     }
-                }*/
+                }
             }
         });
 
@@ -261,151 +261,35 @@ public class RepositoriesFragment extends Fragment {
     }
 
 
-    //==============================================================================================
-    //                                     DEBUG
-    // **** ONLY FOR DEBUGGING, DELETED AFTER CREATING REPOSITORY + VIEWMODEL/LIVEDATA LAYER
-    /*
-    public void getRepoFilterByName_Direction(String user, String direction){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<List<UserRepository>> call = client.userReposBy_name_direction(user, direction);
-        call.enqueue(new Callback<List<UserRepository>>() {
-            @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                userRepoList = response.body();
-                updateAdapter(userRepoList);
-
-                for(UserRepository repo:userRepoList){
-                    repo.setUser_id_owner(user);
-                    Log.d(TAG, "onResponse: " +
-                            "user_id_owner + "+repo.getUser_id_owner()+
-                            "name + "+repo.getName() +
-                            "full_name + "+repo.getFull_name() +
-                            "html_url + "+repo.getHtml_url() +
-                            "created_at + "+repo.getCreated_at() +
-                            "updated_at + "+repo.getUpdated_at() +
-                            "pushed_at + "+repo.getPushed_at() +
-                            "stargazers_count + "+repo.getStargazers_count() +
-                            "forks_count + "+repo.getForks_count()
-                    );
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserProfileFullById ",  t);
-            }
-        });
-
-    }
-
-    public void getRepoFilterByCreated_Direction(String login, String direction){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<List<UserRepository>> call =
-                client.userReposBy_created_direction(login,"created", direction);
-        call.enqueue(new Callback<List<UserRepository>>() {
-            @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                userRepoList = response.body();
-                updateAdapter(userRepoList);
-                for(UserRepository repo:userRepoList){
-                    Log.d(TAG, "onResponse:  created_at : "+repo.getCreated_at());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
-            }
-        });
-    }
-
-
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Show No Internet Connection view
      */
+    private void showNoInternetConnection() {
+        loadingInProgress.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        emptyListText.setVisibility(View.VISIBLE);
+        emptyListText.setText(R.string.no_connection);
+    }
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Repo with updated in asc/desc direction
-     * @param login
+     * Show loading in progress view, hiding  list
      */
-    /*
-    public void getRepoFilterByUpdated_Direction(String login, String direction){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<List<UserRepository>> call =
-                client.reposForuser_updated_asc(login,"updated", direction);
-        call.enqueue(new Callback<List<UserRepository>>() {
-            @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                userRepoList = response.body();
-                updateAdapter(userRepoList);
-                for(UserRepository repo:userRepoList){
-                    Log.d(TAG, "onResponse:  updated_at : "+repo.getUpdated_at());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
-            }
-        });
+    private void showLoading() {
+        loadingInProgress.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        emptyListText.setVisibility(View.VISIBLE);
+        emptyListText.setText(R.string.searching);
     }
-
-     */
-
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Repo with pushed in asc/desc direction
-     * @param login
+     * Show list after loading/retrieving data completed
      */
-    /*
-    public void getRepoFilterByPushed_Direction(String login, String direction){
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-        NetworkService client = retrofit.create(NetworkService.class);
-
-        Call<List<UserRepository>> call = client.reposForuser_pushed_asc(login,"pushed", direction);
-        call.enqueue(new Callback<List<UserRepository>>() {
-            @Override
-            public void onResponse(Call<List<UserRepository>> call,
-                                   Response<List<UserRepository>> response) {
-                userRepoList = response.body();
-                updateAdapter(userRepoList);
-                for(UserRepository repo:userRepoList){
-                    Log.d(TAG, "onResponse:  pushed_at : "+repo.getPushed_at());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<UserRepository>> call, Throwable t) {
-                Log.e(TAG, "onFailure: getUserIdSearch ",  t);
-            }
-        });
+    private void showRepoList() {
+        loadingInProgress.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyListText.setVisibility(View.INVISIBLE);
     }
-
-     */
-
 }
