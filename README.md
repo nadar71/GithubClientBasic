@@ -1,6 +1,7 @@
 
 # The project
-This is a basic Github app client which allows searching Github users by name and return list of users' nick names and photos (check issue #13 for more details). Selecting a user in the list, a detailed profile opens, as well as the list of user's repositories, which can be ordered by name, creation, update, pushing date; below screenshot of each app view.
+This is a basic Github app client which allows searching Github users by name and return list of users' nick names and photos (*). Selecting a user in the list, a detailed profile opens, as well as the list of user's repositories, which can be ordered by name, creation, update, pushing date; below screenshot of each app view.
+
 
 
 > <img src="/sshots/screenshot_1.jpg" width="200"> <img src="/sshots/screenshot_2.jpg" width="200"> <img src="/sshots/screenshot_3.jpg" width="200"> <img src="/sshots/screenshot_4.jpg" width="200">
@@ -58,5 +59,6 @@ Developed unit tests and UI/Instrumentation tests,check in Android Studio; the a
 - migration to Kotlin and React-Native/Redux
 
 
-
+# Notes :
+* check issue #13 for more details
 
