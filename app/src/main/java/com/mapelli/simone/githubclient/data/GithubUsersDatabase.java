@@ -31,7 +31,8 @@ public abstract class GithubUsersDatabase extends RoomDatabase {
         if (sDbInstance == null) {
             synchronized (LOCK) {
                 Log.d(TAG, "Creating App db singleton instance...");
-                sDbInstance = Room.databaseBuilder(context.getApplicationContext(), GithubUsersDatabase.class, GithubUsersDatabase.DBNAME)
+                sDbInstance = Room.databaseBuilder(context.getApplicationContext(),
+                        GithubUsersDatabase.class, GithubUsersDatabase.DBNAME)
                         .build();
             }
 

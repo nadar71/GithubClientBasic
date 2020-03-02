@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mapelli.simone.githubclient">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".GithubClientApplication"
         android:allowBackup="true"
@@ -38,8 +41,6 @@
                 android:value="com.mapelli.simone.githubclient.UI.UsersSearchActivity" />
         </activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

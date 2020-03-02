@@ -34,13 +34,6 @@ public class UserProfile_Full {
     @SerializedName("email")
     private String email;
 
-    public int getIdx() {
-        return idx;
-    }
-
-    public void setIdx(int idx) {
-        this.idx = idx;
-    }
 
     @Ignore
     public UserProfile_Full(String login, String id, String avatar_url, String repos_url,
@@ -79,6 +72,14 @@ public class UserProfile_Full {
         this.email = email;
     }
 
+
+    public int getIdx() {
+        return idx;
+    }
+
+    public void setIdx(int idx) {
+        this.idx = idx;
+    }
 
     public String getLogin() {
         return login;
