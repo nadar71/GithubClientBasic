@@ -49,7 +49,7 @@ Used **Retrofit 2** for remote requests for compact and easy coding; **Glide** f
 
 
 # Testing
-Developed unit tests and UI/Instrumentation tests,check in Android Studio; the app is still in development, check the notes in each test file.
+Developed unit tests and UI/Instrumentation tests,check in Android Studio; new ones are in development, check the notes in each test file.
 
 
 
