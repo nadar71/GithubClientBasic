@@ -26,7 +26,7 @@ public class UserRepoListAdapter extends RecyclerView.Adapter<UserRepoListAdapte
         @Override
         public void onClick(View view) {
             UserRepository item = (UserRepository) view.getTag();
-            // do nothing currently TODO : open repository in browser page ?
+            // do nothing currently TODO : open repository in browser page ? issue #18
         }
     };
 

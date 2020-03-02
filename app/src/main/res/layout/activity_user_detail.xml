@@ -45,13 +45,14 @@
             android:id="@+id/tabProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Profile" />
+            android:text="@string/profile" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabRepositories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Repositories" />
+            android:contentDescription="@string/repositories"
+            android:text="@string/repositories" />
 
 
     </com.google.android.material.tabs.TabLayout>
