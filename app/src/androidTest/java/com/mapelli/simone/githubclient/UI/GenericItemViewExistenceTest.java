@@ -27,10 +27,12 @@ import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
@@ -44,7 +46,7 @@ import static org.hamcrest.Matchers.is;
 // - splashscreen and progressBar disabled
 // - ViewModel/Livedata observer disabled
 // ------
-// On Huawei 9 lite : it's ok (but searchView/Toolbar doesn't show : INCOMPATIBILITY ERROR)
+// On Huawei P9/P10 lite : it's ok (but searchView/Toolbar doesn't show : INCOMPATIBILITY ERROR)
 // ------
 // On emulator sdk 26 : can't find lens button, even if toolbar is present in screen,
 // maybe is a matter of description
@@ -81,6 +83,28 @@ public class GenericItemViewExistenceTest {
                                 1),
                         isDisplayed()));
         appCompatImageView.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.toolbar_title), withText("Github Basic Client"),
+                        childAtPosition(
+                                allOf(withId(R.id.toolbar),
+                                        childAtPosition(
+                                                withId(R.id.app_bar),
+                                                0)),
+                                0),
+                        isDisplayed()));
+        textView.check(matches(withText("Github Basic Client")));
+
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.empty_view), withText("Click on lens and search someone !"),
+                        childAtPosition(
+                                allOf(withId(R.id.coordinatorLayout2),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                2),
+                        isDisplayed()));
+        textView2.check(matches(withText("Click on lens and search someone !")));
     }
 
     private static Matcher<View> childAtPosition(

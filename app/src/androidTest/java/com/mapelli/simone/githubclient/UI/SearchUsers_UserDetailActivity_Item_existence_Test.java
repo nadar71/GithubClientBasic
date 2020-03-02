@@ -15,6 +15,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import androidx.arch.core.executor.testing.CountingTaskExecutorRule;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -47,8 +51,13 @@ public class SearchUsers_UserDetailActivity_Item_existence_Test {
     @Rule
     public ActivityTestRule<SearchUsersActivity> mActivityTestRule = new ActivityTestRule<>(SearchUsersActivity.class);
 
+    @Rule
+    public CountingTaskExecutorRule mCountingTaskExecutorRule = new CountingTaskExecutorRule();
+
+
     @Test
-    public void searchUsers_UserDetailActivity_Item_existence_Test() {
+    public void searchUsers_UserDetailActivity_Item_existence_Test() throws Throwable{
+        draintasks();
         ViewInteraction imageView = onView(
                 allOf(IsInstanceOf.<View>instanceOf(android.widget.ImageView.class), withContentDescription("Cerca"),
                         childAtPosition(
@@ -296,5 +305,10 @@ public class SearchUsers_UserDetailActivity_Item_existence_Test {
                         && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
+    }
+
+
+    private void draintasks() throws TimeoutException, InterruptedException {
+        mCountingTaskExecutorRule.drainTasks(2, TimeUnit.MINUTES);
     }
 }
