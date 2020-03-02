@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;

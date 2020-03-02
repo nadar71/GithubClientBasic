@@ -20,13 +20,19 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        startApp();
+        // startAppDirect();
+        startAppWithDelay();
         loadingHandler();
+
     }
 
+    private void startAppDirect(){
+        Intent intent = new Intent(getApplicationContext(), SearchUsersActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
-
-    private void startApp() {
+    private void startAppWithDelay() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
