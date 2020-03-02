@@ -39,7 +39,17 @@
     <string name="no_data">No data retrieved, try another search</string>
     <string name="no_connection">No network, check your connection...</string>
     <string name="searching">Searching...</string>
-
+    <string name="splash_image">splash_image</string>
+    <string name="user_name">Name</string>
+    <string name="user_location">Location</string>
+    <string name="user_email">Email</string>
+    <string name="user_profile_url">Profile_url</string>
+    <string name="profile_image">profile_image</string>
+    <string name="repositories_title">Repositories</string>
+    <string name="star_description">star</string>
+    <string name="user_photo">user_photo</string>
+    <string name="user_name_in_list">user name</string>
+    <string name="arrow_image">arrow_image</string>
 
 
 </resources>

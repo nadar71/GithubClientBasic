@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.SearchUsersActivity"
+            android:name=".UI.UsersSearchActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan"
@@ -30,12 +30,12 @@
         <activity
             android:name=".UI.UserDetailActivity"
             android:label="@string/title_user_detail"
-            android:parentActivityName=".UI.SearchUsersActivity"
+            android:parentActivityName=".UI.UsersSearchActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mapelli.simone.githubclient.UI.SearchUsersActivity" />
+                android:value="com.mapelli.simone.githubclient.UI.UsersSearchActivity" />
         </activity>
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

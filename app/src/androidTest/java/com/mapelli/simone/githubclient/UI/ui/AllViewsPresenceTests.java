@@ -6,16 +6,13 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.mapelli.simone.githubclient.R;
-import com.mapelli.simone.githubclient.UI.SearchUsersActivity;
+import com.mapelli.simone.githubclient.UI.UsersSearchActivity;
 
 import junit.framework.AssertionFailedError;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-
-import org.hamcrest.core.IsInstanceOf;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +23,6 @@ import java.util.concurrent.TimeoutException;
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
-import androidx.test.filters.SmallTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
@@ -48,17 +44,19 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class ViewExistenceTests {
+public class AllViewsPresenceTests {
 
     @Rule
-    public ActivityTestRule<SearchUsersActivity> mActivityTestRule = new ActivityTestRule<>(SearchUsersActivity.class);
+    public ActivityTestRule<UsersSearchActivity> mActivityTestRule = new ActivityTestRule<>(UsersSearchActivity.class);
 
     @Rule
     public CountingTaskExecutorRule mCountingTaskExecutorRule = new CountingTaskExecutorRule();
 
 
     @Test
-    // If load more btn is not visibile before first search : TEST MUST FAIL FOR CORRECTNESS
+    // Check If load more btn is not visibile before first search :
+    // CURRENTLY TEST MUST FAIL TO BE CONSIDERED OK
+    // => TODO :convert to tdd logic, i.e. the contrary: must have success to be considered ok
     public void checkLoadMoreBtnNotDisplayedTest() {
         try {
             onView(withId(R.id.loadMore_btn)).perform(click());
@@ -68,8 +66,8 @@ public class ViewExistenceTests {
     }
 
     @Test
-    // If load more btn is visibile only after first search
-    public void checkLoadMoreBtnDisplayedTest(){
+    // Check If load more btn is visibile only after first search
+    public void checkLoadMoreBtnDisplayedTest() {
 
         ViewInteraction appCompatImageView = onView(
                 allOf(withClassName(is("androidx.appcompat.widget.AppCompatImageView")), withContentDescription("Cerca"),
@@ -104,7 +102,7 @@ public class ViewExistenceTests {
                         isDisplayed()));
         searchAutoComplete2.perform(pressImeActionButton());
 
-        ViewInteraction btn = onView(allOf(withId(R.id.loadMore_btn),isDisplayed()));
+        ViewInteraction btn = onView(allOf(withId(R.id.loadMore_btn), isDisplayed()));
         try {
             onView(withId(R.id.loadMore_btn)).perform(click());
         } catch (AssertionFailedError e) {
@@ -122,7 +120,7 @@ public class ViewExistenceTests {
     // ------
     // On Xiaomi redmi 2 : test problem due to the phone config
     // : java.lang.RuntimeException: Could not launch intent Intent...
-    // Even by bypassing SplashScreenActivity and starting app directly through SearchUsersActivity
+    // Even by bypassing SplashScreenActivity and starting app directly through UsersSearchActivity
     // --> investigating what app thread or whatever is blocking starting, no background task present :
     // - animations are stopped
     // - not in stand-by/lock
@@ -211,7 +209,7 @@ public class ViewExistenceTests {
         constraintLayout.perform(click());
 
         ViewInteraction textView6 = onView(
-                allOf(withText("Profile"),isDisplayed()));
+                allOf(withText("Profile"), isDisplayed()));
         textView6.check(matches(withText("Profile")));
 
         ViewInteraction textView7 = onView(
@@ -251,7 +249,7 @@ public class ViewExistenceTests {
         textView10.check(matches(withText("PROFILE URL :")));
 
         ViewInteraction textView11 = onView(
-                allOf(withText("Repositories"),isDisplayed()));
+                allOf(withText("Repositories"), isDisplayed()));
         textView11.check(matches(withText("Repositories")));
 
         ViewInteraction imageView2 = onView(
@@ -284,11 +282,11 @@ public class ViewExistenceTests {
 
         ViewInteraction appCompatImageButton = onView(
                 allOf(childAtPosition(
-                                allOf(withId(R.id.detail_toolbar),
-                                        childAtPosition(
-                                                withId(R.id.detail_appbar),
-                                                0)),
-                                1),
+                        allOf(withId(R.id.detail_toolbar),
+                                childAtPosition(
+                                        withId(R.id.detail_appbar),
+                                        0)),
+                        1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
 

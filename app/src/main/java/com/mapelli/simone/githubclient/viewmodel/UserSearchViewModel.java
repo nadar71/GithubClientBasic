@@ -22,7 +22,7 @@ public class UserSearchViewModel extends ViewModel {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Constructor with parameter used by {@link SearchUserViewModelFactory}
+     * Standard Constructor
      */
     public UserSearchViewModel() {
         // get repository instance
@@ -34,6 +34,8 @@ public class UserSearchViewModel extends ViewModel {
 
         userProfile_Mini_list = githubUsersAppRepository.loadUserList();
     }
+
+
 
 
     /**

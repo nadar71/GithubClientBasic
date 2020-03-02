@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".UI.SearchUsersActivity">
+    tools:context=".UI.UsersSearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -31,6 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/quicksand"
                 android:text="@string/toolbar_title"
                 android:textColor="@android:color/background_light"
                 android:textSize="14sp"
@@ -63,6 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:fontFamily="@font/quicksand"
         android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -92,6 +94,7 @@
         android:layout_weight="0"
         android:backgroundTint="@android:color/background_light"
         android:elevation="@dimen/fab_margin"
+        android:fontFamily="@font/quicksand"
         android:text="@string/loadMore_btn_title"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -26,7 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void startAppDirect(){
-        Intent intent = new Intent(getApplicationContext(), SearchUsersActivity.class);
+        Intent intent = new Intent(getApplicationContext(), UsersSearchActivity.class);
         startActivity(intent);
         finish();
     }
@@ -35,7 +35,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getApplicationContext(), SearchUsersActivity.class);
+                Intent intent = new Intent(getApplicationContext(), UsersSearchActivity.class);
                 startActivity(intent);
                 finish();
             }

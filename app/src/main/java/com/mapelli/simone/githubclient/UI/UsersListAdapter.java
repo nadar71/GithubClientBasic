@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder> {
     private final static String TAG = UsersListAdapter.class.getSimpleName();
-    private SearchUsersActivity parentActivity;
+    private UsersSearchActivity parentActivity;
     private List<UserProfile_Mini> usersList;
 
 
@@ -38,7 +38,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     };
 
 
-    public UsersListAdapter(SearchUsersActivity parent,
+    public UsersListAdapter(UsersSearchActivity parent,
                             List<UserProfile_Mini> userList) {
         parentActivity = parent;
         this.usersList = userList;

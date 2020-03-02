@@ -19,7 +19,6 @@ import com.mapelli.simone.githubclient.util.AppExecutors;
  */
 public class GithubClientApplication extends Application {
     private AppExecutors mAppExecutors;
-
     private static Context sContext;
 
     @Override

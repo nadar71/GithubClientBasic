@@ -18,12 +18,6 @@ public interface NetworkService {
     //                               MAIN REQUESTS
     //----------------------------------------------------------------------------------------------
 
-    // get result from free search users and only get info needed for UserProfile_Mini
-    // https://api.github.com/search/users?q=simone
-    @GET("/search/users")
-    Call<UserProfile_Mini_List> usersListSearch(@Query("q") String searchKeyword);
-
-
     // get result from free search users loading next pages sequentially
     // https://api.github.com/search/users?q=simone&page=2&per_page=100
     @GET("/search/users")

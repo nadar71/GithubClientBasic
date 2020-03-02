@@ -164,7 +164,7 @@ public class UserDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, SearchUsersActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this, UsersSearchActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

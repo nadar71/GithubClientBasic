@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.mapelli.simone.githubclient.R;
-import com.mapelli.simone.githubclient.UI.SearchUsersActivity;
+import com.mapelli.simone.githubclient.UI.UsersSearchActivity;
 
 import junit.framework.AssertionFailedError;
 
@@ -39,17 +39,20 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+// Check what happens if push on Load More thousands of times.
+// Test : ERROR
+// TODO : Must be done  probably setting up a slot of time between each clicks
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class StressTestLoadMore {
 
     @Rule
-    public ActivityTestRule<SearchUsersActivity> mActivityTestRule = new ActivityTestRule<>(SearchUsersActivity.class);
+    public ActivityTestRule<UsersSearchActivity> mActivityTestRule = new ActivityTestRule<>(UsersSearchActivity.class);
 
     @Rule
     public CountingTaskExecutorRule mCountingTaskExecutorRule = new CountingTaskExecutorRule();
 
-    // Test : KO. Must be done  slowing down clicking
+
     @Test
     public void pressLoadMoreStressTest(){
         ViewInteraction appCompatImageView = onView(

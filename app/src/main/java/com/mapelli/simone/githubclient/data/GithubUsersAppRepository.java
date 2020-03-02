@@ -71,9 +71,16 @@ public class GithubUsersAppRepository {
     }
 
 
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Setup executors pool
+     * @param executors
+     */
     public void setExecutors(AppExecutors executors) {
         this.executors = executors;
     }
+
 
 
     /**

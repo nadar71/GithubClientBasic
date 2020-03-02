@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.mapelli.simone.githubclient.R;
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
 import com.mapelli.simone.githubclient.util.MyUtil;
-import com.mapelli.simone.githubclient.viewmodel.SearchUserViewModelFactory;
+import com.mapelli.simone.githubclient.viewmodel.UserSearchViewModelFactory;
 import com.mapelli.simone.githubclient.viewmodel.UserSearchViewModel;
 
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class SearchUsersActivity extends AppCompatActivity {
-    private final static String TAG = SearchUsersActivity.class.getSimpleName();
+public class UsersSearchActivity extends AppCompatActivity {
+    private final static String TAG = UsersSearchActivity.class.getSimpleName();
 
     private List<UserProfile_Mini> userList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -41,7 +41,7 @@ public class SearchUsersActivity extends AppCompatActivity {
     private UsersListAdapter adapter;
 
     private UserSearchViewModel mViewModel;
-    private SearchUserViewModelFactory factory;
+    private UserSearchViewModelFactory factory;
 
     private Button loadMore_btn;
     private int pageCount = 1;
@@ -97,7 +97,7 @@ public class SearchUsersActivity extends AppCompatActivity {
      * Set up ViewModel/Livedata for retrieving new users nick list from repo
      */
     private void setupUsersDataObserver() {
-        factory = new SearchUserViewModelFactory();
+        factory = new UserSearchViewModelFactory();
         mViewModel = new ViewModelProvider(this, factory).get(UserSearchViewModel.class);
 
         LiveData<List<UserProfile_Mini>> usersList_observed = mViewModel.getUserListObserved();
