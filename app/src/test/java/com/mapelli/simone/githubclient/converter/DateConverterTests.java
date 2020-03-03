@@ -16,7 +16,7 @@ public class DateConverterTests {
         // assertNull(DateConverter.toDate(null));
 
         Long date_01_long = 1537868854000L; // Tuesday, 25 Sep 2018 11:47:34 GMT
-        Date date_01      = DateConverter.toDate(date_01_long);
+        Date date_01      = DateConverter.INSTANCE.toDate(date_01_long);
 
         System.out.println("Date : "+date_01);
         Calendar cal      = Calendar.getInstance();
@@ -57,7 +57,7 @@ public class DateConverterTests {
         System.out.println("today_cal : "+today_cal.getTimeInMillis());
 
         // cinvert from long to date
-        Date test_date = DateConverter.toDate(today_cal.getTimeInMillis());
+        Date test_date = DateConverter.INSTANCE.toDate(today_cal.getTimeInMillis());
 
         Calendar test_cal = Calendar.getInstance();
         test_cal.setTime(test_date);
@@ -85,7 +85,7 @@ public class DateConverterTests {
         today_cal.setTime(today);
 
         // convert current to long
-        Long date_long =  DateConverter.fromDate(today);
+        Long date_long =  DateConverter.INSTANCE.fromDate(today);
 
         Date test_date = new Date();
         test_date.setTime(date_long);

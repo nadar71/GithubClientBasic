@@ -58,7 +58,7 @@ public class GithubAppRepositoryTests {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        repository = GithubUsersAppRepository.getInstance(mockDb);
+        repository = GithubUsersAppRepository.Companion.getInstance(mockDb);
         when(mockDb.githubUsersDao()).thenReturn(mockDao);
     }
 

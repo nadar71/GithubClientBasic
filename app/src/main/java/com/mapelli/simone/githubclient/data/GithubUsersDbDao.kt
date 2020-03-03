@@ -1,53 +1,51 @@
-package com.mapelli.simone.githubclient.data;
+package com.mapelli.simone.githubclient.data
 
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Full;
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini;
-import com.mapelli.simone.githubclient.data.entity.UserRepository;
+import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
+import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini
+import com.mapelli.simone.githubclient.data.entity.UserRepository
 
-import java.util.List;
-
-import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
-public interface GithubUsersDbDao {
+interface GithubUsersDbDao {
     // Tables : USERS_PROFILES_FULL, USERS_PROFILES_MINI, USERS_REPOSITORIES
 
     //----------------------------------------------------------------------------------------------
     //  QUERY
     //----------------------------------------------------------------------------------------------
     @Query("SELECT * FROM USERS_PROFILES_MINI ")
-    LiveData<List<UserProfile_Mini>> loadUserList();
+    fun loadUserList(): LiveData<List<UserProfile_Mini>>
 
     @Query("SELECT * FROM USERS_PROFILES_FULL ")
-    LiveData<UserProfile_Full> loadUserFull();
+    fun loadUserFull(): LiveData<UserProfile_Full>
 
     @Query("SELECT * FROM USERS_REPOSITORIES ")
-    LiveData<List<UserRepository>> loadUserRepoList();
+    fun loadUserRepoList(): LiveData<List<UserRepository>>
 
 
     //----------------------------------------------------------------------------------------------
     //  INSERT
     //----------------------------------------------------------------------------------------------
     @Insert
-    void insertUserMini(UserProfile_Mini userProfile_Mini);
+    fun insertUserMini(userProfile_Mini: UserProfile_Mini)
 
     @Insert
-    void insertUserFull(UserProfile_Full userProfile_Full);
+    fun insertUserFull(userProfile_Full: UserProfile_Full)
 
     @Insert
-    void insertUserRepo(UserRepository userRepository);
+    fun insertUserRepo(userRepository: UserRepository)
 
     // Insert all the UserProfile_Min as whole list
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll_UserMini(List<UserProfile_Mini> userProfile_MiniList);
+    fun insertAll_UserMini(userProfile_MiniList: List<UserProfile_Mini>)
 
     // Insert all the UserRepository as whole list
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll_UserRepo(List<UserRepository> userRepositoryList);
+    fun insertAll_UserRepo(userRepositoryList: List<UserRepository>)
 
 
     //----------------------------------------------------------------------------------------------
@@ -55,13 +53,13 @@ public interface GithubUsersDbDao {
     //----------------------------------------------------------------------------------------------
 
     @Query("DELETE FROM USERS_PROFILES_MINI")
-    void dropUserMiniTable();
+    fun dropUserMiniTable()
 
     @Query("DELETE FROM USERS_PROFILES_FULL")
-    void dropUserFullTable();
+    fun dropUserFullTable()
 
     @Query("DELETE FROM USERS_REPOSITORIES")
-    void dropUserRepoTable();
+    fun dropUserRepoTable()
 
 }
 

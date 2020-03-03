@@ -1,9 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
 
-    defaultConfig { 
+    defaultConfig {
         applicationId "com.mapelli.simone.githubclient"
         minSdkVersion 16
         targetSdkVersion 28
@@ -129,6 +131,12 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-accessibility:$espresso_version"
     androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espresso_version"
+    compile "androidx.core:core-ktx:+"
+    compile "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 
+}
+repositories {
+    mavenCentral()
 }
