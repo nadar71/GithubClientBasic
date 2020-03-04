@@ -12,7 +12,8 @@ import com.mapelli.simone.githubclient.data.entity.UserRepository
 import androidx.recyclerview.widget.RecyclerView
 
 class UserRepoListAdapter(private val parentActivity: UserDetailActivity,
-                          private var usersRepoList: MutableList<UserRepository>?) : RecyclerView.Adapter<UserRepoListAdapter.UsersRepoListViewHolder>() {
+                          private var usersRepoList: MutableList<UserRepository>?)
+    : RecyclerView.Adapter<UserRepoListAdapter.UsersRepoListViewHolder>() {
 
 
     private val mOnClickListener = View.OnClickListener { view ->
@@ -80,6 +81,6 @@ class UserRepoListAdapter(private val parentActivity: UserDetailActivity,
     }
 
     companion object {
-        private val TAG = UserRepoListAdapter::class.java!!.getSimpleName()
+        private val TAG = UserRepoListAdapter::class.java.getSimpleName()
     }
 }

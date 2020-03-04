@@ -9,10 +9,9 @@ import com.mapelli.simone.githubclient.util.AppExecutors
 import androidx.lifecycle.LiveData
 
 class GithubUsersAppRepository {
-    private val networkRequests: NetworkRequests
-    private var executors: AppExecutors? = null
-    private var appDb: GithubUsersDatabase? = null
-
+    lateinit var networkRequests: NetworkRequests
+    lateinit var appExecutors: AppExecutors
+    var appDb: GithubUsersDatabase
 
     private constructor(githubUsersDatabase: GithubUsersDatabase) {
         this.appDb = githubUsersDatabase
@@ -24,12 +23,12 @@ class GithubUsersAppRepository {
                         executors: AppExecutors) {
         this.appDb = githubUsersDatabase
         this.networkRequests = networkRequests
-        this.executors = executors
+        this.appExecutors = executors
 
         // Observe data taken from network and update db
         // The Livedata observing this data from a View (i.e. SearhUserActivity, UserDetailActivity)
         // will be awared and it'll show the data
-        val userMini_List_fromNet = networkRequests.usersProfilesMini
+        val userMini_List_fromNet = networkRequests.usersProfiles_Minis
 
         userMini_List_fromNet.observeForever { newUsers ->
             executors.diskIO().execute {
@@ -39,7 +38,7 @@ class GithubUsersAppRepository {
         }
 
 
-        val userProfileFull_fromNet = networkRequests.userProfilesFull
+        val userProfileFull_fromNet = networkRequests.userProfile_Full
 
         userProfileFull_fromNet.observeForever { newUserFull ->
             executors.diskIO().execute {
@@ -62,11 +61,11 @@ class GithubUsersAppRepository {
 
     /**
      * ---------------------------------------------------------------------------------------------
-     * Setup executors pool
+     * Setup appExecutors pool
      * @param executors
      */
     fun setExecutors(executors: AppExecutors) {
-        this.executors = executors
+        this.appExecutors = executors
     }
 
 
@@ -129,15 +128,15 @@ class GithubUsersAppRepository {
     //----------------------------------------------------------------------------------------------
 
     fun loadUserList(): LiveData<List<UserProfile_Mini>> {
-        return appDb!!.githubUsersDao().loadUserList()
+        return appDb.githubUsersDao().loadUserList()
     }
 
     fun loadUserFull(): LiveData<UserProfile_Full> {
-        return appDb!!.githubUsersDao().loadUserFull()
+        return appDb.githubUsersDao().loadUserFull()
     }
 
     fun loadUserRepoList(): LiveData<List<UserRepository>> {
-        return appDb!!.githubUsersDao().loadUserRepoList()
+        return appDb.githubUsersDao().loadUserRepoList()
     }
 
 
@@ -146,23 +145,23 @@ class GithubUsersAppRepository {
     //----------------------------------------------------------------------------------------------
 
     fun insertUserMini(userProfile_Mini: UserProfile_Mini) {
-        appDb!!.githubUsersDao().insertUserMini(userProfile_Mini)
+        appDb.githubUsersDao().insertUserMini(userProfile_Mini)
     }
 
     fun insertUserFull(userProfile_Full: UserProfile_Full) {
-        appDb!!.githubUsersDao().insertUserFull(userProfile_Full)
+        appDb.githubUsersDao().insertUserFull(userProfile_Full)
     }
 
     fun insertUserRepo(userRepository: UserRepository) {
-        appDb!!.githubUsersDao().insertUserRepo(userRepository)
+        appDb.githubUsersDao().insertUserRepo(userRepository)
     }
 
     fun insertAll_UserMini(userProfile_Mini: List<UserProfile_Mini>) {
-        appDb!!.githubUsersDao().insertAll_UserMini(userProfile_Mini)
+        appDb.githubUsersDao().insertAll_UserMini(userProfile_Mini)
     }
 
     fun insertAll_UserRepo(userRepository: List<UserRepository>) {
-        appDb!!.githubUsersDao().insertAll_UserRepo(userRepository)
+        appDb.githubUsersDao().insertAll_UserRepo(userRepository)
     }
 
 
@@ -171,19 +170,19 @@ class GithubUsersAppRepository {
     //----------------------------------------------------------------------------------------------
 
     fun dropUserMiniTable() {
-        appDb!!.githubUsersDao().dropUserMiniTable()
+        appDb.githubUsersDao().dropUserMiniTable()
     }
 
     fun dropUserFullTable() {
-        appDb!!.githubUsersDao().dropUserFullTable()
+        appDb.githubUsersDao().dropUserFullTable()
     }
 
     fun dropUserRepoTable() {
-        appDb!!.githubUsersDao().dropUserRepoTable()
+        appDb.githubUsersDao().dropUserRepoTable()
     }
 
     companion object {
-        private val TAG = GithubUsersAppRepository::class.java!!.getSimpleName()
+        private val TAG = GithubUsersAppRepository::class.java.getSimpleName()
 
         private var sInstance: GithubUsersAppRepository? = null
 
@@ -196,6 +195,12 @@ class GithubUsersAppRepository {
          * @return
          */
         fun getInstance(database: GithubUsersDatabase): GithubUsersAppRepository {
+
+            return sInstance ?: synchronized(this) {
+                sInstance ?: GithubUsersAppRepository(database);
+            }
+
+            /* BEFORE :
             if (sInstance == null) {
                 synchronized(GithubUsersAppRepository::class.java) {
                     if (sInstance == null) {
@@ -204,6 +209,7 @@ class GithubUsersAppRepository {
                 }
             }
             return sInstance
+            */
         }
 
 
@@ -219,6 +225,11 @@ class GithubUsersAppRepository {
         fun getInstanceWithDataSource(earthquakeDatabase: GithubUsersDatabase,
                                       networkRequests: NetworkRequests,
                                       executors: AppExecutors): GithubUsersAppRepository {
+
+            return sInstance ?: synchronized(this) {
+                sInstance ?: GithubUsersAppRepository(earthquakeDatabase, networkRequests, executors);
+            }
+            /* BEFORE :
             if (sInstance == null) {
                 synchronized(GithubUsersAppRepository::class.java) {
                     if (sInstance == null) {
@@ -227,6 +238,7 @@ class GithubUsersAppRepository {
                 }
             }
             return sInstance
+            */
         }
     }
 

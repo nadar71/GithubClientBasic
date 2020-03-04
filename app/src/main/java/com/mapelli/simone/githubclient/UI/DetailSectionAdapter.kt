@@ -5,18 +5,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-class DetailSectionAdapter internal constructor(fm: FragmentManager, private val numOfTabs: Int) : FragmentPagerAdapter(fm) {
+class DetailSectionAdapter internal constructor(fm: FragmentManager, private val numOfTabs: Int)
+    : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         when (position) {
-            0 -> {
-                return ProfileFragment()
-            }
-
-            1 -> {
-                return RepositoriesFragment()
-            }
-
+            0    -> return ProfileFragment()
+            1    -> return RepositoriesFragment()
             else -> return null
         }
     }
@@ -26,7 +21,7 @@ class DetailSectionAdapter internal constructor(fm: FragmentManager, private val
     }
 
     companion object {
-        private val TAG = DetailSectionAdapter::class.java!!.getSimpleName()
+        private val TAG = DetailSectionAdapter::class.java.getSimpleName()
     }
 
 }

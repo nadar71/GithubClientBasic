@@ -18,20 +18,22 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkRequests {
 
+    val usersProfiles_Minis = MutableLiveData<List<UserProfile_Mini>>()
+    val userProfile_Full    = MutableLiveData<UserProfile_Full>()
+    val userRepositories    = MutableLiveData<List<UserRepository>>()
 
-    private val usersProfiles_Minis = MutableLiveData<List<UserProfile_Mini>>()
-    private val userProfile_Full = MutableLiveData<UserProfile_Full>()
-    private val userRepositories = MutableLiveData<List<UserRepository>>()
 
+
+    /*
     val usersProfilesMini: LiveData<List<UserProfile_Mini>>
         get() = usersProfiles_Minis
 
     val userProfilesFull: LiveData<UserProfile_Full>
         get() = userProfile_Full
 
-    fun getUserRepositories(): LiveData<List<UserRepository>> {
-        return userRepositories
-    }
+    val userRepositories: LiveData<List<UserRepository>>
+        get() = userRepositories
+*/
 
 
     /**
@@ -43,16 +45,14 @@ class NetworkRequests {
      * the search are done (#issue13).
      * So another call getUserProfileFullByLogin using "login" as parameter is necessary to get "name
      * after selecting a user in list ", for user details
-     *
-     * @param keyword
-    </search> */
+    */
     fun doUsersSearch(keyword: String, page_num: String, per_page: String) {
         val builder = Retrofit.Builder()
                 .baseUrl(BASE_URL_API)
                 .addConverterFactory(GsonConverterFactory.create())
 
         val retrofit = builder.build()
-        val client = retrofit.create<NetworkService>(NetworkService::class.java!!)
+        val client = retrofit.create<NetworkService>(NetworkService::class.java)
 
         val call = client.usersListSearch_Paging(keyword, page_num, per_page)
         call.enqueue(object : Callback<UserProfile_Mini_List> {
@@ -90,7 +90,7 @@ class NetworkRequests {
                 .addConverterFactory(GsonConverterFactory.create())
 
         val retrofit = builder.build()
-        val client = retrofit.create<NetworkService>(NetworkService::class.java!!)
+        val client = retrofit.create<NetworkService>(NetworkService::class.java)
 
         val call = client.userProfileByUserLogin(login)
         call.enqueue(object : Callback<UserProfile_Full> {
@@ -128,7 +128,7 @@ class NetworkRequests {
                 .addConverterFactory(GsonConverterFactory.create())
 
         val retrofit = builder.build()
-        val client = retrofit.create<NetworkService>(NetworkService::class.java!!)
+        val client = retrofit.create<NetworkService>(NetworkService::class.java)
 
         val call = client.userReposBy_name_direction(login, direction)
 
@@ -171,7 +171,7 @@ class NetworkRequests {
                 .addConverterFactory(GsonConverterFactory.create())
 
         val retrofit = builder.build()
-        val client = retrofit.create<NetworkService>(NetworkService::class.java!!)
+        val client = retrofit.create<NetworkService>(NetworkService::class.java)
 
         val call = client.userReposBy_created_direction(login, "created", direction)
         call.enqueue(object : Callback<List<UserRepository>> {
@@ -204,7 +204,7 @@ class NetworkRequests {
                 .addConverterFactory(GsonConverterFactory.create())
 
         val retrofit = builder.build()
-        val client = retrofit.create<NetworkService>(NetworkService::class.java!!)
+        val client = retrofit.create<NetworkService>(NetworkService::class.java)
 
         val call = client.reposForuser_updated_asc(login, "updated", direction)
         call.enqueue(object : Callback<List<UserRepository>> {
@@ -236,7 +236,7 @@ class NetworkRequests {
                 .addConverterFactory(GsonConverterFactory.create())
 
         val retrofit = builder.build()
-        val client = retrofit.create<NetworkService>(NetworkService::class.java!!)
+        val client = retrofit.create<NetworkService>(NetworkService::class.java)
 
         val call = client.reposForuser_pushed_asc(login, "pushed", direction)
         call.enqueue(object : Callback<List<UserRepository>> {
@@ -256,7 +256,7 @@ class NetworkRequests {
     }
 
     companion object {
-        private val TAG = NetworkRequests::class.java!!.getSimpleName()
+        private val TAG = NetworkRequests::class.java.getSimpleName()
         val BASE_URL_API = "https://api.github.com"
     }
 

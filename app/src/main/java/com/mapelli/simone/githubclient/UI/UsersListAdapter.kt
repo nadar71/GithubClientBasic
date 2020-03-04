@@ -15,7 +15,8 @@ import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini
 import androidx.recyclerview.widget.RecyclerView
 
 class UsersListAdapter(private val parentActivity: UsersSearchActivity,
-                       private var usersList: MutableList<UserProfile_Mini>?) : RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>() {
+                       private var usersList: MutableList<UserProfile_Mini>?)
+    : RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>() {
 
 
     private val mOnClickListener = View.OnClickListener { view ->

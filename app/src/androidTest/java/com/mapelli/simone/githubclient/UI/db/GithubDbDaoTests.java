@@ -163,7 +163,7 @@ public class GithubDbDaoTests {
 
     public UserRepository createUserRepo(){
         Date today = new Date();
-        Long today_long = DateConverter.INSTANCE.fromDate(today);
+        Long today_long = DateConverter.INSTANCE.calendarToLong(today);
         UserRepository user = new UserRepository("1234","simo","simo mape",
                  "http://prova.it/repo.html", "today_long",
                 "today_long", "today_long", "3","2");

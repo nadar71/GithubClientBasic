@@ -29,37 +29,37 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 class RepositoriesFragment : Fragment() {
-    private var title_list: TextView? = null
-    private var filter_type: TextView? = null
-    private var filter_btn: Button? = null
-    private var asc_order_btn: Button? = null
-    private var desc_order_btn: Button? = null
-    private var loadingInProgress: ProgressBar? = null
-    private var emptyListText: TextView? = null
-    private var parentContext: Context? = null
+    lateinit var title_list: TextView
+    lateinit var filter_type: TextView
+    lateinit var filter_btn: Button
+    lateinit var asc_order_btn: Button
+    lateinit var desc_order_btn: Button
+    lateinit var loadingInProgress: ProgressBar
+    lateinit var emptyListText: TextView
+    lateinit var parentContext: Context
 
-    private var parent: UserDetailActivity? = null
-    private var currentUser: UserProfile_Full? = null
-    private var user_login: String? = null
+    lateinit var parent: UserDetailActivity
+    lateinit var currentUser: UserProfile_Full
+    lateinit var user_login: String
 
-    private var userRepoList: MutableList<UserRepository>? = null
-    private var recyclerView: RecyclerView? = null
-    private var adapter: UserRepoListAdapter? = null
+    lateinit var userRepoList: MutableList<UserRepository>
+    lateinit var recyclerView: RecyclerView
+    lateinit var adapter: UserRepoListAdapter
 
-    private var mViewModel: UserRepositoriesViewModel? = null
-    private var factory: UserRepositoriesViewModelFactory? = null
+    lateinit var mViewModel: UserRepositoriesViewModel
+    lateinit var factory: UserRepositoriesViewModelFactory
 
-    private var FILTER_TYPE = "name"
+    var FILTER_TYPE = "name"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_repositories, container, false)
-        parent = activity as UserDetailActivity?
-        currentUser = parent!!.currentUser
-        user_login = currentUser!!.login
+        parent = activity as UserDetailActivity
+        currentUser = parent.currentUser
+        user_login = currentUser.login
 
-        parentContext = parent!!.baseContext
+        parentContext = parent.baseContext
 
         title_list = rootView.findViewById(R.id.title_list_txt)
         filter_type = rootView.findViewById(R.id.filter_type_txt)
@@ -71,7 +71,7 @@ class RepositoriesFragment : Fragment() {
         setupButton(rootView, parentContext)
 
         setupRepoListObserver()
-        mViewModel!!.storeUserRepoList_ByName(user_login, "asc")
+        mViewModel.storeUserRepoList_ByName(user_login, "asc")
 
         return rootView
     }
@@ -84,10 +84,10 @@ class RepositoriesFragment : Fragment() {
     private fun setupRepoListObserver() {
         // set up viewmodel/livedata to observe data in db and ask for new ones to repo
         factory = UserRepositoriesViewModelFactory()
-        mViewModel = ViewModelProvider(this, factory!!).get(UserRepositoriesViewModel::class.java!!)
+        mViewModel = ViewModelProvider(this, factory).get(UserRepositoriesViewModel::class.java)
 
-        val usersList_observed = mViewModel!!.userRepoListObserved
-        usersList_observed.observe(parent!!, Observer { repoEntries ->
+        val usersList_observed = mViewModel.userRepoListObserved
+        usersList_observed.observe(parent, Observer { repoEntries ->
             if (repoEntries != null && !repoEntries.isEmpty()) { // data ready in db
                 userRepoList = repoEntries
                 updateAdapter(repoEntries)
@@ -115,30 +115,30 @@ class RepositoriesFragment : Fragment() {
         desc_order_btn = rootView.findViewById(R.id.desc_order_btn)
 
 
-        filter_btn!!.setOnClickListener { showAlertDialog() }
+        filter_btn.setOnClickListener { showAlertDialog() }
 
-        asc_order_btn!!.setOnClickListener {
-            filter_type!!.text = parentContext!!.getString(R.string.filter_type_start_label) +
+        asc_order_btn.setOnClickListener {
+            filter_type.text = parentContext.getString(R.string.filter_type_start_label) +
                     FILTER_TYPE + " asc "
             when (FILTER_TYPE) {
-                "name" -> mViewModel!!.storeUserRepoList_ByName(user_login, "asc")
-                "data creation" -> mViewModel!!.storeUserRepoList_ByCreated(user_login, "asc")
-                "data update" -> mViewModel!!.storeUserRepoList_ByUpdated(user_login, "asc")
-                "data pushed" -> mViewModel!!.storeUserRepoList_ByPushed(user_login, "asc")
+                "name" -> mViewModel.storeUserRepoList_ByName(user_login, "asc")
+                "data creation" -> mViewModel.storeUserRepoList_ByCreated(user_login, "asc")
+                "data update" -> mViewModel.storeUserRepoList_ByUpdated(user_login, "asc")
+                "data pushed" -> mViewModel.storeUserRepoList_ByPushed(user_login, "asc")
                 else -> {
                 }
             }
         }
 
 
-        desc_order_btn!!.setOnClickListener {
-            filter_type!!.text = parentContext!!.getString(R.string.filter_type_start_label) +
+        desc_order_btn.setOnClickListener {
+            filter_type.text = parentContext.getString(R.string.filter_type_start_label) +
                     FILTER_TYPE + " desc "
             when (FILTER_TYPE) {
-                "name" -> mViewModel!!.storeUserRepoList_ByName(user_login, "desc")
-                "data creation" -> mViewModel!!.storeUserRepoList_ByCreated(user_login, "desc")
-                "data update" -> mViewModel!!.storeUserRepoList_ByUpdated(user_login, "desc")
-                "data pushed" -> mViewModel!!.storeUserRepoList_ByPushed(user_login, "desc")
+                "name" -> mViewModel.storeUserRepoList_ByName(user_login, "desc")
+                "data creation" -> mViewModel.storeUserRepoList_ByCreated(user_login, "desc")
+                "data update" -> mViewModel.storeUserRepoList_ByUpdated(user_login, "desc")
+                "data pushed" -> mViewModel.storeUserRepoList_ByPushed(user_login, "desc")
                 else -> {
                 }
             }
@@ -153,14 +153,14 @@ class RepositoriesFragment : Fragment() {
      */
     private fun setupRecyclerView(rootView: View) {
         recyclerView = rootView.findViewById(R.id.repo_list)
-        recyclerView!!.layoutManager = LinearLayoutManager(parent!!.baseContext)
+        recyclerView.layoutManager = LinearLayoutManager(parent.baseContext)
 
         adapter = UserRepoListAdapter(parent, userRepoList)
-        recyclerView!!.adapter = adapter
+        recyclerView.adapter = adapter
 
-        val decoration = DividerItemDecoration(parent!!.baseContext,
+        val decoration = DividerItemDecoration(parent.baseContext,
                 LinearLayout.VERTICAL)
-        recyclerView!!.addItemDecoration(decoration)
+        recyclerView.addItemDecoration(decoration)
     }
 
     /**
@@ -169,7 +169,7 @@ class RepositoriesFragment : Fragment() {
      * @param userRepoList
      */
     private fun updateAdapter(userRepoList: MutableList<UserRepository>?) {
-        adapter!!.setAdapterUserList(userRepoList)
+        adapter.setAdapterUserList(userRepoList)
     }
 
 
@@ -180,7 +180,7 @@ class RepositoriesFragment : Fragment() {
     private fun showAlertDialog() {
         val alert: AlertDialog
         val alertDialog = AlertDialog.Builder(parent)
-        alertDialog.setTitle(parentContext!!.getString(R.string.alert_filter_title))
+        alertDialog.setTitle(parentContext.getString(R.string.alert_filter_title))
 
         val items = arrayOf("name", "data creation", "data update", "data pushed")
         var checkedItem = 0
@@ -211,10 +211,10 @@ class RepositoriesFragment : Fragment() {
      * Show No Internet Connection view
      */
     private fun showNoInternetConnection() {
-        loadingInProgress!!.visibility = View.GONE
-        recyclerView!!.visibility = View.GONE
-        emptyListText!!.visibility = View.VISIBLE
-        emptyListText!!.setText(R.string.no_connection)
+        loadingInProgress.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+        emptyListText.visibility = View.VISIBLE
+        emptyListText.setText(R.string.no_connection)
     }
 
     /**
@@ -222,10 +222,10 @@ class RepositoriesFragment : Fragment() {
      * Show loading in progress view, hiding  list
      */
     private fun showLoading() {
-        loadingInProgress!!.visibility = View.VISIBLE
-        recyclerView!!.visibility = View.GONE
-        emptyListText!!.visibility = View.VISIBLE
-        emptyListText!!.setText(R.string.searching)
+        loadingInProgress.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        emptyListText.visibility = View.VISIBLE
+        emptyListText.setText(R.string.searching)
     }
 
     /**
@@ -233,9 +233,9 @@ class RepositoriesFragment : Fragment() {
      * Show list after loading/retrieving data completed
      */
     private fun showRepoList() {
-        loadingInProgress!!.visibility = View.INVISIBLE
-        recyclerView!!.visibility = View.VISIBLE
-        emptyListText!!.visibility = View.INVISIBLE
+        loadingInProgress.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
+        emptyListText.visibility = View.INVISIBLE
     }
 
     companion object {

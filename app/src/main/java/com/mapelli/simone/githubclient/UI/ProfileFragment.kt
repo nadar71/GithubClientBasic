@@ -15,23 +15,23 @@ import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
 
 
 class ProfileFragment : Fragment() {
-    private var user_photo: ImageView? = null
-    private var name: TextView? = null
-    private var location: TextView? = null
-    private var email: TextView? = null
-    private var profile_url: TextView? = null
-    private var location_str: String? = null
-    private var email_str: String? = null
+    lateinit var user_photo: ImageView
+    lateinit var name: TextView
+    lateinit var location: TextView
+    lateinit var email: TextView
+    lateinit var profile_url: TextView
+    lateinit var location_str: String
+    lateinit var email_str: String
 
-    private var parent: UserDetailActivity? = null
-    private var currentUser: UserProfile_Full? = null
+    lateinit var parent: UserDetailActivity
+    lateinit var currentUser: UserProfile_Full
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_profile, container, false)
-        parent = activity as UserDetailActivity?
-        currentUser = parent!!.currentUser
+        parent = activity as UserDetailActivity
+        currentUser = parent.currentUser
 
         user_photo = rootView.findViewById(R.id.user_photo_img)
         name = rootView.findViewById(R.id.name_txt)
@@ -40,21 +40,21 @@ class ProfileFragment : Fragment() {
         profile_url = rootView.findViewById(R.id.profile_url_txt)
 
 
-        Glide.with(parent!!.baseContext)
-                .load(currentUser!!.avatar_url)
+        Glide.with(parent.baseContext)
+                .load(currentUser.avatar_url)
                 .fitCenter()
-                .into(user_photo!!)
+                .into(user_photo)
 
-        location_str = currentUser!!.location
-        if (location == null) currentUser!!.location = "No location present"
+        location_str = currentUser.location
+        if (location == null) currentUser.location = "No location present"
 
-        email_str = currentUser!!.email
-        if (email_str == null) currentUser!!.email = "No email present"
+        email_str = currentUser.email
+        if (email_str == null) currentUser.email = "No email present"
 
-        name!!.text = currentUser!!.name
-        location!!.text = currentUser!!.location
-        email!!.text = currentUser!!.email
-        profile_url!!.text = currentUser!!.repos_url
+        name.text = currentUser.name
+        location.text = currentUser.location
+        email.text = currentUser.email
+        profile_url.text = currentUser.repos_url
 
         return rootView
     }

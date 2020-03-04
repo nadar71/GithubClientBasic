@@ -23,23 +23,23 @@ import androidx.viewpager.widget.ViewPager
 
 class UserDetailActivity : AppCompatActivity() {
 
-    private var toolbar: Toolbar? = null
+    lateinit var toolbar: Toolbar
 
-    private var tabLayout: TabLayout? = null
-    private var viewPager: ViewPager? = null
-    private var detailSectionAdapter: DetailSectionAdapter? = null
-    private var tabProfile: TabItem? = null
-    private var tabRepositories: TabItem? = null
-    private var user_login: String? = null
+    lateinit var tabLayout: TabLayout
+    lateinit var viewPager: ViewPager
+    lateinit var detailSectionAdapter: DetailSectionAdapter
+    lateinit var tabProfile: TabItem
+    lateinit var tabRepositories: TabItem
+    lateinit var user_login: String
     /**
      * ---------------------------------------------------------------------------------------------
      * Used to export the current user to child fragments
      */
-    var currentUser: UserProfile_Full? = null
+    lateinit var currentUser: UserProfile_Full
         private set
 
-    private var mViewModel: UserDetailViewModel? = null
-    private var factory: UserDetailViewModelFactory? = null
+    lateinit var mViewModel: UserDetailViewModel
+    lateinit var factory: UserDetailViewModelFactory
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +57,7 @@ class UserDetailActivity : AppCompatActivity() {
         setupUpperBar()
 
         setupUserProfileObserver()
-        mViewModel!!.storeUserFull(user_login)
+        mViewModel.storeUserFull(user_login)
 
 
     }
@@ -68,9 +68,9 @@ class UserDetailActivity : AppCompatActivity() {
      */
     private fun setupUserProfileObserver() {
         factory = UserDetailViewModelFactory()
-        mViewModel = ViewModelProvider(this, factory!!).get(UserDetailViewModel::class.java!!)
+        mViewModel = ViewModelProvider(this, factory).get(UserDetailViewModel::class.java)
 
-        val currentUser_observed = mViewModel!!.userObserved
+        val currentUser_observed = mViewModel.userObserved
         currentUser_observed.observe(this, Observer { userEntry ->
             if (userEntry != null) {
                 currentUser = userEntry
@@ -88,8 +88,8 @@ class UserDetailActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.detail_toolbar)
 
         if (user_login !== "") {
-            Log.d(TAG, "currentuser login : " + user_login!!)
-            toolbar!!.title = user_login
+            Log.d(TAG, "currentuser login : " + user_login)
+            toolbar.title = user_login
         }
 
         setSupportActionBar(toolbar)
@@ -107,12 +107,12 @@ class UserDetailActivity : AppCompatActivity() {
      */
     private fun setupViewPager() {
         detailSectionAdapter = DetailSectionAdapter(supportFragmentManager,
-                tabLayout!!.tabCount)
+                tabLayout.tabCount)
 
-        viewPager!!.adapter = detailSectionAdapter
-        tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        viewPager.adapter = detailSectionAdapter
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                viewPager!!.currentItem = tab.position
+                viewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -123,7 +123,7 @@ class UserDetailActivity : AppCompatActivity() {
 
             }
         })
-        viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
     }
 
 
@@ -151,7 +151,7 @@ class UserDetailActivity : AppCompatActivity() {
 
     companion object {
 
-        private val TAG = UserDetailActivity::class.java!!.getSimpleName()
+        private val TAG = UserDetailActivity::class.java.getSimpleName()
 
         // current user data, toolbar title
         val ARG_ITEM_ID = "item_id"

@@ -12,35 +12,47 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [UserRepository::class, UserProfile_Full::class, UserProfile_Mini::class], version = 1, exportSchema = false)
+@Database(entities = [UserRepository::class, UserProfile_Full::class, UserProfile_Mini::class],
+        version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class GithubUsersDatabase : RoomDatabase() {
 
-    // get for the dao
     abstract fun githubUsersDao(): GithubUsersDbDao
 
     companion object {
-        private val TAG = GithubUsersDatabase::class.java!!.getSimpleName()
+        private val TAG = GithubUsersDatabase::class.java.getSimpleName()
 
         // lock for synchro
-        private val LOCK = Any()
+        // private val LOCK = Any()
         private val DBNAME = "GithubUsersDB"
-        private var sDbInstance: GithubUsersDatabase? = null
+        @Volatile private var sDbInstance: GithubUsersDatabase? = null
 
 
-        fun getsDbInstance(context: Context): GithubUsersDatabase {
+        fun getsDbInstance(context: Context): GithubUsersDatabase? {
+            return sDbInstance ?: synchronized(this) {
+                sDbInstance ?: buildDb(context).also { sDbInstance = it }
+            }
+        }
+
+        private fun buildDb(context: Context) : GithubUsersDatabase{
+            return Room.databaseBuilder<GithubUsersDatabase>(context.applicationContext,
+                    GithubUsersDatabase::class.java, DBNAME)
+                    .build()
+        }
+        /* BEFORE :
             if (sDbInstance == null) {
-                synchronized(LOCK) {
+                synchronized(this) {
                     Log.d(TAG, "Creating App db singleton instance...")
                     sDbInstance = Room.databaseBuilder<GithubUsersDatabase>(context.applicationContext,
-                            GithubUsersDatabase::class.java!!, GithubUsersDatabase.DBNAME)
+                            GithubUsersDatabase::class.java, GithubUsersDatabase.DBNAME)
                             .build()
                 }
 
             }
             Log.d(TAG, "Db created")
             return sDbInstance
-        }
+
+             */
     }
 
 

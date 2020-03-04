@@ -13,7 +13,8 @@ import java.util.concurrent.Executors
  * webservice requests).
  */
 class AppExecutors// singleton constructor
-private constructor(private val diskIO: Executor, private val mainThread: Executor, private val networkIO: Executor) {
+private constructor(private val diskIO: Executor, private val mainThread: Executor,
+                    private val networkIO: Executor) {
 
 
     fun diskIO(): Executor {
