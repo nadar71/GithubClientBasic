@@ -43,8 +43,9 @@ class UserRepositoriesViewModel : ViewModel() {
      * ---------------------------------------------------------------------------------------------
      * Load user repo list into db for being observed sort by name
      */
-    fun storeUserRepoList_ByName(login: String, direction: String) {
-        executors!!.networkIO().execute { githubUsersAppRepository.fetchUserRepoList(login, direction) }
+    fun storeUserRepoList_ByName(login: String?, direction: String) {
+        login?.let{executors!!.networkIO().execute {
+            githubUsersAppRepository.fetchUserRepoList(login, direction) }}
     }
 
 

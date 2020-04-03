@@ -1,5 +1,6 @@
 package com.mapelli.simone.githubclient.data
 
+import android.util.Log
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini
 import com.mapelli.simone.githubclient.data.entity.UserRepository
@@ -26,7 +27,7 @@ class GithubUsersAppRepository {
         this.appExecutors = executors
 
         // Observe data taken from network and update db
-        // The Livedata observing this data from a View (i.e. SearhUserActivity, UserDetailActivity)
+        // The Livedata observing this data from a View (i.e. SearchUserActivity, UserDetailActivity)
         // will be awared and it'll show the data
         val userMini_List_fromNet = networkRequests.usersProfiles_Minis
 
@@ -194,10 +195,10 @@ class GithubUsersAppRepository {
          * @param database
          * @return
          */
-        fun getInstance(database: GithubUsersDatabase): GithubUsersAppRepository {
+        fun getInstance(database: GithubUsersDatabase?): GithubUsersAppRepository {
 
             return sInstance ?: synchronized(this) {
-                sInstance ?: GithubUsersAppRepository(database);
+                sInstance ?: GithubUsersAppRepository(database!!);
             }
 
             /* BEFORE :

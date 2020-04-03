@@ -40,9 +40,21 @@ private constructor(private val diskIO: Executor, private val mainThread: Execut
 
     companion object {
         // singleton instantiation
-        private val LOCK = Any()
-        private var singleInstance: AppExecutors? = null
+        // private val LOCK = Any()
+        @Volatile private var singleInstance: AppExecutors? = null
 
+        val instance: AppExecutors
+            get(){
+                return singleInstance ?: synchronized(this) {
+                    AppExecutors(
+                            Executors.newSingleThreadExecutor(),
+                            Executors.newFixedThreadPool(3),
+                            MainThreadExecutor()
+                    )
+                }
+            }
+
+        /*
         val instance: AppExecutors
             get() {
                 if (singleInstance == null) {
@@ -56,7 +68,9 @@ private constructor(private val diskIO: Executor, private val mainThread: Execut
                 }
                 return singleInstance
             }
+        */
     }
+
 
 
 }

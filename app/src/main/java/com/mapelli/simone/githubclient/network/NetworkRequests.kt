@@ -24,18 +24,6 @@ class NetworkRequests {
 
 
 
-    /*
-    val usersProfilesMini: LiveData<List<UserProfile_Mini>>
-        get() = usersProfiles_Minis
-
-    val userProfilesFull: LiveData<UserProfile_Full>
-        get() = userProfile_Full
-
-    val userRepositories: LiveData<List<UserRepository>>
-        get() = userRepositories
-*/
-
-
     /**
      * ---------------------------------------------------------------------------------------------
      * Recover user list based on keyword
@@ -60,7 +48,7 @@ class NetworkRequests {
                                     response: Response<UserProfile_Mini_List>) {
                 val result = response.body()
                 val userList = result!!.userList
-                for (profile in userList!!) {
+                for (profile in userList) {
                     Log.d(TAG, "onResponse: login + " + profile.login +
                             " id : " + profile.id +
                             " avatar_url : " + profile.avatar_url +
@@ -179,7 +167,7 @@ class NetworkRequests {
                                     response: Response<List<UserRepository>>) {
                 val listRepo = response.body()
                 for (repo in listRepo!!) {
-                    Log.d(TAG, "onResponse:  created_at : " + repo.created_at!!)
+                    Log.d(TAG, "onResponse:  created_at : " + repo.created_at)
                 }
                 userRepositories.postValue(listRepo)
 
@@ -212,7 +200,7 @@ class NetworkRequests {
                                     response: Response<List<UserRepository>>) {
                 val listRepo = response.body()
                 for (repo in listRepo!!) {
-                    Log.d(TAG, "onResponse:  updated_at : " + repo.updated_at!!)
+                    Log.d(TAG, "onResponse:  updated_at : " + repo.updated_at)
                 }
                 userRepositories.postValue(listRepo)
             }
@@ -244,7 +232,7 @@ class NetworkRequests {
                                     response: Response<List<UserRepository>>) {
                 val listRepo = response.body()
                 for (repo in listRepo!!) {
-                    Log.d(TAG, "onResponse:  pushed_at : " + repo.pushed_at!!)
+                    Log.d(TAG, "onResponse:  pushed_at : " + repo.pushed_at)
                 }
                 userRepositories.postValue(listRepo)
             }

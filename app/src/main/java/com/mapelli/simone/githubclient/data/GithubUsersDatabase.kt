@@ -23,12 +23,13 @@ abstract class GithubUsersDatabase : RoomDatabase() {
         private val TAG = GithubUsersDatabase::class.java.getSimpleName()
 
         // lock for synchro
-        // private val LOCK = Any()
+        private val LOCK = Any()
         private val DBNAME = "GithubUsersDB"
         @Volatile private var sDbInstance: GithubUsersDatabase? = null
 
 
-        fun getsDbInstance(context: Context): GithubUsersDatabase? {
+        /*
+        fun getsDbInstance(context: Context): GithubUsersDatabase {
             return sDbInstance ?: synchronized(this) {
                 sDbInstance ?: buildDb(context).also { sDbInstance = it }
             }
@@ -39,7 +40,10 @@ abstract class GithubUsersDatabase : RoomDatabase() {
                     GithubUsersDatabase::class.java, DBNAME)
                     .build()
         }
-        /* BEFORE :
+        */
+
+        // BEFORE :
+        fun getsDbInstance(context: Context): GithubUsersDatabase? {
             if (sDbInstance == null) {
                 synchronized(this) {
                     Log.d(TAG, "Creating App db singleton instance...")
@@ -51,8 +55,9 @@ abstract class GithubUsersDatabase : RoomDatabase() {
             }
             Log.d(TAG, "Db created")
             return sDbInstance
+        }
 
-             */
+
     }
 
 

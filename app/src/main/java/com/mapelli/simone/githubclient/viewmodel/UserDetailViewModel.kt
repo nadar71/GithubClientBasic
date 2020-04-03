@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 class UserDetailViewModel : ViewModel() {
 
     private val githubUsersAppRepository: GithubUsersAppRepository
-    private val executors: AppExecutors?
+    private val executors: AppExecutors
 
     // Livedata on UserProfile_Full List to be populated by ViewModel
     /**
@@ -44,12 +44,12 @@ class UserDetailViewModel : ViewModel() {
      * Load user details into db for being observed,so to get UserActivity and any other observer aware
      */
     fun storeUserFull(login: String) {
-        executors!!.networkIO().execute { githubUsersAppRepository.fetchUserFull(login) }
+        executors.networkIO().execute { githubUsersAppRepository.fetchUserFull(login) }
 
     }
 
     companion object {
-        private val TAG = UserSearchViewModel::class.java!!.getSimpleName()
+        private val TAG = UserSearchViewModel::class.java.getSimpleName()
     }
 
 }

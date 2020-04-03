@@ -30,20 +30,20 @@ import androidx.recyclerview.widget.RecyclerView
 
 class UsersSearchActivity : AppCompatActivity() {
 
-    private var userList: MutableList<UserProfile_Mini>? = ArrayList()
-    private var recyclerView: RecyclerView? = null
-    private var loadingInProgress: ProgressBar? = null
-    private var emptyListText: TextView? = null
-    private var toolbarTitle: TextView? = null
-    private var adapter: UsersListAdapter? = null
+    var userList = mutableListOf<UserProfile_Mini>()
+    lateinit var recyclerView: RecyclerView
+    lateinit var loadingInProgress: ProgressBar
+    lateinit var emptyListText: TextView
+    lateinit var toolbarTitle: TextView
+    lateinit var adapter: UsersListAdapter
 
-    private var mViewModel: UserSearchViewModel? = null
-    private var factory: UserSearchViewModelFactory? = null
+    lateinit var mViewModel: UserSearchViewModel
+    lateinit var factory: UserSearchViewModelFactory
 
-    private var loadMore_btn: Button? = null
-    private var pageCount = 1
-    private val userPerPage = 30
-    private var currentSearchingKeywords = ""
+    lateinit var loadMore_btn: Button
+    var pageCount = 1
+    val userPerPage = 30
+    var currentSearchingKeywords = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +58,7 @@ class UsersSearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        toolbarTitle!!.setText(R.string.toolbar_title)
+        toolbarTitle.setText(R.string.toolbar_title)
     }
 
     /**
@@ -72,10 +72,10 @@ class UsersSearchActivity : AppCompatActivity() {
 
 
         loadMore_btn = findViewById(R.id.loadMore_btn)
-        loadMore_btn!!.visibility = View.INVISIBLE
+        loadMore_btn.visibility = View.INVISIBLE
 
-        loadMore_btn!!.setOnClickListener {
-            mViewModel!!.storeUserList(currentSearchingKeywords,
+        loadMore_btn.setOnClickListener {
+            mViewModel.storeUserList(currentSearchingKeywords,
                     Integer.toString(pageCount),
                     Integer.toString(userPerPage))
             pageCount++
@@ -90,13 +90,13 @@ class UsersSearchActivity : AppCompatActivity() {
      */
     private fun setupUsersDataObserver() {
         factory = UserSearchViewModelFactory()
-        mViewModel = ViewModelProvider(this, factory!!).get(UserSearchViewModel::class.java!!)
+        mViewModel = ViewModelProvider(this, factory).get(UserSearchViewModel::class.java)
 
-        val usersList_observed = mViewModel!!.userListObserved
+        val usersList_observed = mViewModel.userListObserved
         usersList_observed.observe(this, Observer { userEntries ->
             if (userEntries != null && !userEntries.isEmpty()) { // data ready in db
-                userList = userEntries
-                val currentPos = adapter!!.itemCount
+                userList = userEntries as MutableList<UserProfile_Mini>
+                val currentPos = adapter.itemCount
                 updateAdapter(userEntries)
 
                 showUserList()
@@ -131,14 +131,14 @@ class UsersSearchActivity : AppCompatActivity() {
      */
     private fun setupRecyclerView() {
         recyclerView = findViewById(R.id.userList)
-        recyclerView!!.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
         adapter = UsersListAdapter(this, userList)
-        recyclerView!!.adapter = adapter
+        recyclerView.adapter = adapter
 
         val decoration = DividerItemDecoration(applicationContext,
                 LinearLayout.VERTICAL)
-        recyclerView!!.addItemDecoration(decoration)
+        recyclerView.addItemDecoration(decoration)
     }
 
 
@@ -147,7 +147,7 @@ class UsersSearchActivity : AppCompatActivity() {
      * Scrollup a bit RecyclerView : useful after new loading by pagination
      */
     private fun bumpUpList(currentPos: Int) {
-        recyclerView!!.post { recyclerView!!.smoothScrollToPosition(adapter!!.itemCount - (userPerPage - 2)) }
+        recyclerView.post { recyclerView.smoothScrollToPosition(adapter.itemCount - (userPerPage - 2)) }
     }
 
     /**
@@ -155,11 +155,11 @@ class UsersSearchActivity : AppCompatActivity() {
      * Renew recyclerview data
      * @param userList
      */
-    private fun updateAdapter(userList: MutableList<UserProfile_Mini>?) {
+    private fun updateAdapter(userList: List<UserProfile_Mini>?) {
         if (!userList!!.isEmpty() && !currentSearchingKeywords.isEmpty()) {
-            loadMore_btn!!.visibility = View.VISIBLE
+            loadMore_btn.visibility = View.VISIBLE
         }
-        adapter!!.setAdapterUserList(userList)
+        adapter.setAdapterUserList(userList)
     }
 
 
@@ -168,10 +168,10 @@ class UsersSearchActivity : AppCompatActivity() {
      * Show No Internet Connection view
      */
     private fun showNoInternetConnection() {
-        loadingInProgress!!.visibility = View.GONE
-        recyclerView!!.visibility = View.GONE
-        emptyListText!!.visibility = View.VISIBLE
-        emptyListText!!.setText(R.string.no_connection)
+        loadingInProgress.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+        emptyListText.visibility = View.VISIBLE
+        emptyListText.setText(R.string.no_connection)
     }
 
     /**
@@ -179,10 +179,10 @@ class UsersSearchActivity : AppCompatActivity() {
      * Show loading in progress view, hiding  list
      */
     private fun showLoading() {
-        loadingInProgress!!.visibility = View.VISIBLE
-        recyclerView!!.visibility = View.GONE
-        emptyListText!!.visibility = View.VISIBLE
-        emptyListText!!.setText(R.string.searching)
+        loadingInProgress.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        emptyListText.visibility = View.VISIBLE
+        emptyListText.setText(R.string.searching)
     }
 
     /**
@@ -190,14 +190,14 @@ class UsersSearchActivity : AppCompatActivity() {
      * Show list after loading/retrieving data completed
      */
     private fun showUserList() {
-        loadingInProgress!!.visibility = View.INVISIBLE
-        recyclerView!!.visibility = View.VISIBLE
+        loadingInProgress.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
 
-        if (adapter!!.itemCount <= 0) {
-            emptyListText!!.visibility = View.VISIBLE
-            emptyListText!!.text = "Click on lens and search someone !"
+        if (adapter.itemCount <= 0) {
+            emptyListText.visibility = View.VISIBLE
+            emptyListText.text = "Click on lens and search someone !"
         } else
-            emptyListText!!.visibility = View.INVISIBLE
+            emptyListText.visibility = View.INVISIBLE
     }
 
 
@@ -222,8 +222,8 @@ class UsersSearchActivity : AppCompatActivity() {
                 showLoading()
 
                 currentSearchingKeywords = keywords
-                mViewModel!!.deleteUserList() // delete previous results
-                mViewModel!!.storeUserList(currentSearchingKeywords,
+                mViewModel.deleteUserList() // delete previous results
+                mViewModel.storeUserList(currentSearchingKeywords,
                         Integer.toString(pageCount),
                         Integer.toString(userPerPage))
                 pageCount++
@@ -245,13 +245,13 @@ class UsersSearchActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
-        toolbarTitle!!.text = ""
+        toolbarTitle.text = ""
 
         return super.onOptionsItemSelected(item)
     }
 
     companion object {
-        private val TAG = UsersSearchActivity::class.java!!.getSimpleName()
+        private val TAG = UsersSearchActivity::class.java.getSimpleName()
     }
 
 

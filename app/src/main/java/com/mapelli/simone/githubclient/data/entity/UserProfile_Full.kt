@@ -37,14 +37,14 @@ class UserProfile_Full {
 
     @Ignore
     constructor(login: String, id: String, avatar_url: String, repos_url: String,
-                name: String, location: String, email: String) {
+                name: String, location: String?, email: String?) {
         this.login = login
         this.id = id
         this.avatar_url = avatar_url
         this.repos_url = repos_url
         this.name = name
-        this.location = location
-        this.email = email
+        this.location = location ?: ""
+        this.email = email  ?: ""
     }
 
     /**
@@ -61,14 +61,14 @@ class UserProfile_Full {
      * @param email
      */
     constructor(idx: Int, login: String, id: String, avatar_url: String, repos_url: String,
-                name: String, location: String, email: String) {
+                name: String, location: String?, email: String?) {
         this.idx = idx
         this.login = login
         this.id = id
         this.avatar_url = avatar_url
         this.repos_url = repos_url
         this.name = name
-        this.location = location
-        this.email = email
+        this.location = location ?: ""
+        this.email = email ?: ""
     }
 }

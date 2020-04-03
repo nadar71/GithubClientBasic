@@ -23,7 +23,7 @@ class GithubClientApplication : Application() {
      * Return AppExecutors singleton instance
      * @return
      */
-    var appExecutorsInstance: AppExecutors? = null
+    lateinit var appExecutorsInstance: AppExecutors
         private set
 
     /**
@@ -31,7 +31,7 @@ class GithubClientApplication : Application() {
      * Return singleton db instance
      * @return
      */
-    val database: GithubUsersDatabase
+    val database: GithubUsersDatabase?
         get() = GithubUsersDatabase.getsDbInstance(this)
 
 
@@ -52,7 +52,7 @@ class GithubClientApplication : Application() {
             val executors = AppExecutors.instance
             val networkRequests = NetworkRequests()
 
-            return GithubUsersAppRepository.getInstanceWithDataSource(db, networkRequests, executors)
+            return GithubUsersAppRepository.getInstanceWithDataSource(db!!, networkRequests, executors)
         }
 
     override fun onCreate() {

@@ -12,7 +12,7 @@ import com.mapelli.simone.githubclient.data.entity.UserRepository
 import androidx.recyclerview.widget.RecyclerView
 
 class UserRepoListAdapter(private val parentActivity: UserDetailActivity,
-                          private var usersRepoList: MutableList<UserRepository>?)
+                          private var usersRepoList: List<UserRepository>?)
     : RecyclerView.Adapter<UserRepoListAdapter.UsersRepoListViewHolder>() {
 
 
@@ -34,12 +34,12 @@ class UserRepoListAdapter(private val parentActivity: UserDetailActivity,
         holder.repo_name.text = item.name
         // holder.star_img.setImageResource(R.);
 
-        holder.itemView.tag = usersRepoList!![position]
+        holder.itemView.tag = item
         holder.itemView.setOnClickListener(mOnClickListener)
     }
 
     override fun getItemCount(): Int {
-        return if (usersRepoList == null) 0 else usersRepoList!!.size
+        return usersRepoList?.size ?: 0
     }
 
 
@@ -47,10 +47,10 @@ class UserRepoListAdapter(private val parentActivity: UserDetailActivity,
      * ---------------------------------------------------------------------------------------------
      * Class Item Holder
      */
-    internal inner class UsersRepoListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val stars_num: TextView
-        private val repo_name: TextView
-        private val star_img: ImageView
+    class UsersRepoListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val stars_num: TextView
+        val repo_name: TextView
+        val star_img: ImageView
 
         init {
             stars_num = view.findViewById(R.id.stars_num)
@@ -66,19 +66,12 @@ class UserRepoListAdapter(private val parentActivity: UserDetailActivity,
      *
      * @param usersRepoList
      */
-    fun setAdapterUserList(usersRepoList: MutableList<UserRepository>) {
+    fun setAdapterUserList(usersRepoList: List<UserRepository>) {
         this.usersRepoList = usersRepoList
         notifyDataSetChanged()    //refresh recyclerview
     }
 
 
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Reset adapter
-     */
-    fun resetUsersRepoList() {
-        if (usersRepoList != null) usersRepoList!!.clear()
-    }
 
     companion object {
         private val TAG = UserRepoListAdapter::class.java.getSimpleName()

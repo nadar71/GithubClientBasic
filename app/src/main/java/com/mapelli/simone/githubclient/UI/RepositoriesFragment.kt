@@ -40,9 +40,9 @@ class RepositoriesFragment : Fragment() {
 
     lateinit var parent: UserDetailActivity
     lateinit var currentUser: UserProfile_Full
-    lateinit var user_login: String
+    var user_login: String? = null
 
-    lateinit var userRepoList: MutableList<UserRepository>
+    var userRepoList: List<UserRepository>? = null
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: UserRepoListAdapter
 
@@ -72,6 +72,7 @@ class RepositoriesFragment : Fragment() {
 
         setupRepoListObserver()
         mViewModel.storeUserRepoList_ByName(user_login, "asc")
+
 
         return rootView
     }
@@ -109,7 +110,7 @@ class RepositoriesFragment : Fragment() {
      * @param rootView
      * @param parentContext
      */
-    private fun setupButton(rootView: View, parentContext: Context?) {
+    private fun setupButton(rootView: View, parentContext: Context) {
         filter_btn = rootView.findViewById(R.id.filter_btn)
         asc_order_btn = rootView.findViewById(R.id.asc_order_btn)
         desc_order_btn = rootView.findViewById(R.id.desc_order_btn)
@@ -121,12 +122,10 @@ class RepositoriesFragment : Fragment() {
             filter_type.text = parentContext.getString(R.string.filter_type_start_label) +
                     FILTER_TYPE + " asc "
             when (FILTER_TYPE) {
-                "name" -> mViewModel.storeUserRepoList_ByName(user_login, "asc")
-                "data creation" -> mViewModel.storeUserRepoList_ByCreated(user_login, "asc")
-                "data update" -> mViewModel.storeUserRepoList_ByUpdated(user_login, "asc")
-                "data pushed" -> mViewModel.storeUserRepoList_ByPushed(user_login, "asc")
-                else -> {
-                }
+                "name"          -> mViewModel.storeUserRepoList_ByName(user_login!!, "asc")
+                "data creation" -> mViewModel.storeUserRepoList_ByCreated(user_login!!, "asc")
+                "data update"   -> mViewModel.storeUserRepoList_ByUpdated(user_login!!, "asc")
+                "data pushed"   -> mViewModel.storeUserRepoList_ByPushed(user_login!!, "asc")
             }
         }
 
@@ -135,12 +134,10 @@ class RepositoriesFragment : Fragment() {
             filter_type.text = parentContext.getString(R.string.filter_type_start_label) +
                     FILTER_TYPE + " desc "
             when (FILTER_TYPE) {
-                "name" -> mViewModel.storeUserRepoList_ByName(user_login, "desc")
-                "data creation" -> mViewModel.storeUserRepoList_ByCreated(user_login, "desc")
-                "data update" -> mViewModel.storeUserRepoList_ByUpdated(user_login, "desc")
-                "data pushed" -> mViewModel.storeUserRepoList_ByPushed(user_login, "desc")
-                else -> {
-                }
+                "name" -> mViewModel.storeUserRepoList_ByName(user_login!!, "desc")
+                "data creation" -> mViewModel.storeUserRepoList_ByCreated(user_login!!, "desc")
+                "data update"   -> mViewModel.storeUserRepoList_ByUpdated(user_login!!, "desc")
+                "data pushed"   -> mViewModel.storeUserRepoList_ByPushed(user_login!!, "desc")
             }
         }
 
@@ -161,6 +158,7 @@ class RepositoriesFragment : Fragment() {
         val decoration = DividerItemDecoration(parent.baseContext,
                 LinearLayout.VERTICAL)
         recyclerView.addItemDecoration(decoration)
+
     }
 
     /**
@@ -168,7 +166,7 @@ class RepositoriesFragment : Fragment() {
      * Renew recyclerview data
      * @param userRepoList
      */
-    private fun updateAdapter(userRepoList: MutableList<UserRepository>?) {
+    private fun updateAdapter(userRepoList: List<UserRepository>) {
         adapter.setAdapterUserList(userRepoList)
     }
 
@@ -186,9 +184,9 @@ class RepositoriesFragment : Fragment() {
         var checkedItem = 0
         when (FILTER_TYPE) {
             "data creation" -> checkedItem = 1
-            "data update" -> checkedItem = 2
-            "data pushed" -> checkedItem = 3
-            else -> checkedItem = 0
+            "data update"   -> checkedItem = 2
+            "data pushed"   -> checkedItem = 3
+            else            -> checkedItem = 0
         }
         alertDialog.setSingleChoiceItems(items, checkedItem) { dialog, which ->
             when (which) {
@@ -239,7 +237,6 @@ class RepositoriesFragment : Fragment() {
     }
 
     companion object {
-
-        private val TAG = "RepositoriesFragment :"
+        private val TAG = RepositoriesFragment::class.java.getSimpleName()
     }
 }

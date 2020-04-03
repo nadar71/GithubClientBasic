@@ -14,31 +14,40 @@ class UserRepository {
     var idx: Int = 0
 
     // @SerializedName("login")
-    var user_id_owner: String? = null
+    var user_id_owner: String
+    // var user_id_owner: String? = null
 
     @SerializedName("name")
-    var name: String? = null
+    var name: String
+    // var name: String? = null
 
     @SerializedName("full_name")
-    var full_name: String? = null
+    var full_name: String
+    // var full_name: String? = null
 
     @SerializedName("html_url")
-    var html_url: String? = null
+    var html_url: String
+    // var html_url: String? = null
 
     @SerializedName("created_at")
-    var created_at: String? = null
+    var created_at: String
+    // var created_at: String? = null
 
     @SerializedName("updated_at")
-    var updated_at: String? = null
+    var updated_at: String
+    // var updated_at: String? = null
 
     @SerializedName("pushed_at")
-    var pushed_at: String? = null
+    var pushed_at: String
+    // var pushed_at: String? = null
 
     @SerializedName("stargazers_count")
-    var stargazers_count: String? = null
+    var stargazers_count: String
+    // var stargazers_count: String? = null
 
     @SerializedName("forks_count")
-    var forks_count: String? = null
+    var forks_count: String
+    // var forks_count: String? = null
 
     @Ignore
     constructor(user_id_owner: String, name: String, full_name: String, html_url: String,

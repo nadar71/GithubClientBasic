@@ -2,6 +2,7 @@ package com.mapelli.simone.githubclient.UI
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        Log.d(TAG, "CHECK : inside ProfileFragment")
         val rootView = inflater.inflate(R.layout.fragment_profile, container, false)
         parent = activity as UserDetailActivity
         currentUser = parent.currentUser
@@ -39,24 +41,29 @@ class ProfileFragment : Fragment() {
         email = rootView.findViewById(R.id.email_txt)
         profile_url = rootView.findViewById(R.id.profile_url_txt)
 
+        location_str = currentUser.location!!
+        currentUser.location ?: "No location present"
 
-        Glide.with(parent.baseContext)
-                .load(currentUser.avatar_url)
-                .fitCenter()
-                .into(user_photo)
-
-        location_str = currentUser.location
-        if (location == null) currentUser.location = "No location present"
-
-        email_str = currentUser.email
-        if (email_str == null) currentUser.email = "No email present"
+        email_str = currentUser.email!!
+        currentUser.email ?: "No email present"
 
         name.text = currentUser.name
         location.text = currentUser.location
         email.text = currentUser.email
         profile_url.text = currentUser.repos_url
 
+        Glide.with(parent.baseContext)
+                .load(currentUser.avatar_url)
+                .fitCenter()
+                .into(user_photo)
+
+
         return rootView
+    }
+
+
+    companion object {
+        private val TAG = ProfileFragment::class.java.getSimpleName()
     }
 
 }

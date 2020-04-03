@@ -19,6 +19,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
+import kotlinx.android.synthetic.main.activity_user_detail.*
 
 
 class UserDetailActivity : AppCompatActivity() {
@@ -28,15 +29,15 @@ class UserDetailActivity : AppCompatActivity() {
     lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager
     lateinit var detailSectionAdapter: DetailSectionAdapter
-    lateinit var tabProfile: TabItem
-    lateinit var tabRepositories: TabItem
+    var tabProfile: TabItem? = null
+    var tabRepositories: TabItem? = null
     lateinit var user_login: String
+
     /**
      * ---------------------------------------------------------------------------------------------
      * Used to export the current user to child fragments
      */
     lateinit var currentUser: UserProfile_Full
-        private set
 
     lateinit var mViewModel: UserDetailViewModel
     lateinit var factory: UserDetailViewModelFactory
@@ -45,21 +46,33 @@ class UserDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
+        getLoginFromCaller()
+        setupUserProfileObserver()
+        mViewModel.storeUserFull(user_login)
+        Log.d(TAG, "CHECK : stored user data for login = $user_login")
+        setupLayoutViews()
+    }
 
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Setup all the view in the activity
+     */
+    private fun setupLayoutViews() {
         tabLayout = findViewById(R.id.tablayout)
         tabProfile = findViewById(R.id.tabProfile)
         tabRepositories = findViewById(R.id.tabRepositories)
         viewPager = findViewById(R.id.viewPager)
+        setupUpperBar()
+    }
 
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * Get the login info passed by the parent actvity
+     */
+    private fun getLoginFromCaller() {
         val intent = intent
         user_login = intent.getStringExtra(ARG_ITEM_ID)
-
-        setupUpperBar()
-
-        setupUserProfileObserver()
-        mViewModel.storeUserFull(user_login)
-
-
+        Log.d(TAG, "CHECK : user_login : $user_login")
     }
 
     /**
@@ -67,12 +80,13 @@ class UserDetailActivity : AppCompatActivity() {
      * Set up ViewModel/Livedata for retrieving new users profile data from repo
      */
     private fun setupUserProfileObserver() {
-        factory = UserDetailViewModelFactory()
+        factory    = UserDetailViewModelFactory()
         mViewModel = ViewModelProvider(this, factory).get(UserDetailViewModel::class.java)
 
         val currentUser_observed = mViewModel.userObserved
         currentUser_observed.observe(this, Observer { userEntry ->
             if (userEntry != null) {
+                Log.d(TAG, "CHECK : userEntry.login : ${userEntry.login}")
                 currentUser = userEntry
                 setupViewPager()
             }
@@ -88,7 +102,7 @@ class UserDetailActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.detail_toolbar)
 
         if (user_login !== "") {
-            Log.d(TAG, "currentuser login : " + user_login)
+            Log.d(TAG, "CHECK : currentuser login : " + user_login)
             toolbar.title = user_login
         }
 
@@ -106,10 +120,14 @@ class UserDetailActivity : AppCompatActivity() {
      * Setup adapter and ViewPager
      */
     private fun setupViewPager() {
+        Log.d(TAG, "CHECK : setupViewPager init")
+
         detailSectionAdapter = DetailSectionAdapter(supportFragmentManager,
                 tabLayout.tabCount)
 
         viewPager.adapter = detailSectionAdapter
+        viewPager.currentItem = 0
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
@@ -150,9 +168,7 @@ class UserDetailActivity : AppCompatActivity() {
     }
 
     companion object {
-
         private val TAG = UserDetailActivity::class.java.getSimpleName()
-
         // current user data, toolbar title
         val ARG_ITEM_ID = "item_id"
     }

@@ -15,7 +15,7 @@ import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini
 import androidx.recyclerview.widget.RecyclerView
 
 class UsersListAdapter(private val parentActivity: UsersSearchActivity,
-                       private var usersList: MutableList<UserProfile_Mini>?)
+                       private var usersList: List<UserProfile_Mini>?)
     : RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>() {
 
 
@@ -46,12 +46,12 @@ class UsersListAdapter(private val parentActivity: UsersSearchActivity,
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.userPhoto)
 
-        holder.itemView.tag = usersList!![position]
+        holder.itemView.tag = item
         holder.itemView.setOnClickListener(mOnClickListener)
     }
 
     override fun getItemCount(): Int {
-        return if (usersList == null) 0 else usersList!!.size
+        return usersList?.size ?: 0
     }
 
 
@@ -59,7 +59,7 @@ class UsersListAdapter(private val parentActivity: UsersSearchActivity,
      * ---------------------------------------------------------------------------------------------
      * Class Item Holder
      */
-    internal inner class UsersListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class UsersListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val mContentView: TextView
         val userPhoto: ImageView
 
@@ -76,21 +76,13 @@ class UsersListAdapter(private val parentActivity: UsersSearchActivity,
      *
      * @param userList
      */
-    fun setAdapterUserList(userList: MutableList<UserProfile_Mini>) {
+    fun setAdapterUserList(userList: List<UserProfile_Mini>) {
         this.usersList = userList
         notifyDataSetChanged()    //refresh recyclerview
     }
 
 
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * Reset adapter
-     */
-    fun resetUsersList() {
-        if (usersList != null) usersList!!.clear()
-    }
-
     companion object {
-        private val TAG = UsersListAdapter::class.java!!.getSimpleName()
+        private val TAG = UsersListAdapter::class.java.getSimpleName()
     }
 }

@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName
 class UserProfile_Mini_List {
 
     @SerializedName("items")
-    var userList: List<UserProfile_Mini>? = null
+    // var userList: List<UserProfile_Mini>? = null
+    lateinit var userList: List<UserProfile_Mini>
 
 }
