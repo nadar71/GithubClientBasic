@@ -3,10 +3,10 @@ package com.mapelli.simone.githubclient.network
 
 import android.util.Log
 
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
+// import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini_List
-import com.mapelli.simone.githubclient.data.entity.UserRepository
+// import com.mapelli.simone.githubclient.data.entity.UserRepository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,8 +19,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class NetworkRequests {
 
     val usersProfiles_Minis = MutableLiveData<List<UserProfile_Mini>>()
-    val userProfile_Full    = MutableLiveData<UserProfile_Full>()
-    val userRepositories    = MutableLiveData<List<UserRepository>>()
+    // val userProfile_Full    = MutableLiveData<UserProfile_Full>()
+    // val userRepositories    = MutableLiveData<List<UserRepository>>()
 
 
 

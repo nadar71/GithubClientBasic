@@ -1,9 +1,9 @@
 package com.mapelli.simone.githubclient.data
 
 import android.util.Log
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
+// import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini
-import com.mapelli.simone.githubclient.data.entity.UserRepository
+// import com.mapelli.simone.githubclient.data.entity.UserRepository
 import com.mapelli.simone.githubclient.network.NetworkRequests
 import com.mapelli.simone.githubclient.util.AppExecutors
 

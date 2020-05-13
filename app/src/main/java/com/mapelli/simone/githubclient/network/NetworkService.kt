@@ -1,8 +1,8 @@
 package com.mapelli.simone.githubclient.network
 
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
+// import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini_List
-import com.mapelli.simone.githubclient.data.entity.UserRepository
+// import com.mapelli.simone.githubclient.data.entity.UserRepository
 
 import retrofit2.Call
 import retrofit2.http.GET

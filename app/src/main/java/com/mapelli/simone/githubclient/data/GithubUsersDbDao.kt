@@ -1,8 +1,8 @@
 package com.mapelli.simone.githubclient.data
 
-import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
+// import com.mapelli.simone.githubclient.data.entity.UserProfile_Full
 import com.mapelli.simone.githubclient.data.entity.UserProfile_Mini
-import com.mapelli.simone.githubclient.data.entity.UserRepository
+// import com.mapelli.simone.githubclient.data.entity.UserRepository
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
