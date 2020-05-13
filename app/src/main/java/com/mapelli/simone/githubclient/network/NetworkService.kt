@@ -23,17 +23,18 @@ interface NetworkService {
                                @Query("page") page_num: String,
                                @Query("per_page") res_x_page: String): Call<UserProfile_Mini_List>
 
-
+    /*
     // get specific user profile from user login field
     // https://api.github.com/users/nadar71
     @GET("/users/{login}")
     fun userProfileByUserLogin(@Path("login") login: String): Call<UserProfile_Full>
-
+    */
 
     //----------------------------------------------------------------------------------------------
     //                               REPO QUERIES REQUESTS
     //----------------------------------------------------------------------------------------------
 
+    /*
     // repositories with direction full_name desc
     // https://api.github.com/users/nadar71/repos?direction=desc
     @GET("/users/{user}/repos")
@@ -63,6 +64,6 @@ interface NetworkService {
     fun reposForuser_pushed_asc(@Path("user") user: String,
                                 @Query("sort") pushed: String,
                                 @Query("direction") direction: String): Call<List<UserRepository>>
-
+    */
 
 }

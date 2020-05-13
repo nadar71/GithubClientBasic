@@ -18,7 +18,7 @@ class UsersListAdapter(private val parentActivity: UsersSearchActivity,
                        private var usersList: List<UserProfile_Mini>?)
     : RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder>() {
 
-
+/*
     private val mOnClickListener = View.OnClickListener { view ->
         val item = view.tag as UserProfile_Mini
 
@@ -28,6 +28,8 @@ class UsersListAdapter(private val parentActivity: UsersSearchActivity,
 
         context.startActivity(intent)
     }
+
+ */
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersListViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -47,7 +49,7 @@ class UsersListAdapter(private val parentActivity: UsersSearchActivity,
                 .into(holder.userPhoto)
 
         holder.itemView.tag = item
-        holder.itemView.setOnClickListener(mOnClickListener)
+        // holder.itemView.setOnClickListener(mOnClickListener)
     }
 
     override fun getItemCount(): Int {

@@ -19,34 +19,34 @@ interface GithubUsersDbDao {
     //----------------------------------------------------------------------------------------------
     @Query("SELECT * FROM USERS_PROFILES_MINI ")
     fun loadUserList(): LiveData<List<UserProfile_Mini>>
-
+/*
     @Query("SELECT * FROM USERS_PROFILES_FULL ")
     fun loadUserFull(): LiveData<UserProfile_Full>
 
     @Query("SELECT * FROM USERS_REPOSITORIES ")
     fun loadUserRepoList(): LiveData<List<UserRepository>>
-
+*/
 
     //----------------------------------------------------------------------------------------------
     //  INSERT
     //----------------------------------------------------------------------------------------------
     @Insert
     fun insertUserMini(userProfile_Mini: UserProfile_Mini)
-
+/*
     @Insert
     fun insertUserFull(userProfile_Full: UserProfile_Full)
 
     @Insert
     fun insertUserRepo(userRepository: UserRepository)
-
+*/
     // Insert all the UserProfile_Min as whole list
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll_UserMini(userProfile_MiniList: List<UserProfile_Mini>)
-
+/*
     // Insert all the UserRepository as whole list
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll_UserRepo(userRepositoryList: List<UserRepository>)
-
+*/
 
     //----------------------------------------------------------------------------------------------
     //  DROP TABLE : delete all table content
@@ -55,11 +55,13 @@ interface GithubUsersDbDao {
     @Query("DELETE FROM USERS_PROFILES_MINI")
     fun dropUserMiniTable()
 
+    /*
     @Query("DELETE FROM USERS_PROFILES_FULL")
     fun dropUserFullTable()
 
     @Query("DELETE FROM USERS_REPOSITORIES")
     fun dropUserRepoTable()
+     */
 
 }
 

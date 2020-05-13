@@ -66,6 +66,7 @@ class NetworkRequests {
     }
 
 
+    /*
     /**
      * ---------------------------------------------------------------------------------------------
      * Get single user full profile by login
@@ -242,6 +243,7 @@ class NetworkRequests {
             }
         })
     }
+    */
 
     companion object {
         private val TAG = NetworkRequests::class.java.getSimpleName()

@@ -38,7 +38,7 @@ class GithubUsersAppRepository {
             }
         }
 
-
+/*
         val userProfileFull_fromNet = networkRequests.userProfile_Full
 
         userProfileFull_fromNet.observeForever { newUserFull ->
@@ -56,6 +56,7 @@ class GithubUsersAppRepository {
                 insertAll_UserRepo(newRepositories)
             }
         }
+ */
 
     }
 
@@ -82,7 +83,7 @@ class GithubUsersAppRepository {
         networkRequests.doUsersSearch(keyword, page_num, per_page)
     }
 
-
+/*
     /**
      * ---------------------------------------------------------------------------------------------
      * Fetch new user profile Full
@@ -122,7 +123,7 @@ class GithubUsersAppRepository {
     fun fetchRepoFilterByPushed(login: String, direction: String) {
         networkRequests.getRepoFilterByPushed_Direction(login, direction)
     }
-
+*/
 
     //----------------------------------------------------------------------------------------------
     //  QUERY WRAPPING
@@ -131,7 +132,7 @@ class GithubUsersAppRepository {
     fun loadUserList(): LiveData<List<UserProfile_Mini>> {
         return appDb.githubUsersDao().loadUserList()
     }
-
+/*
     fun loadUserFull(): LiveData<UserProfile_Full> {
         return appDb.githubUsersDao().loadUserFull()
     }
@@ -140,7 +141,7 @@ class GithubUsersAppRepository {
         return appDb.githubUsersDao().loadUserRepoList()
     }
 
-
+*/
     //----------------------------------------------------------------------------------------------
     //  INSERT WRAPPING
     //----------------------------------------------------------------------------------------------
@@ -148,7 +149,7 @@ class GithubUsersAppRepository {
     fun insertUserMini(userProfile_Mini: UserProfile_Mini) {
         appDb.githubUsersDao().insertUserMini(userProfile_Mini)
     }
-
+/*
     fun insertUserFull(userProfile_Full: UserProfile_Full) {
         appDb.githubUsersDao().insertUserFull(userProfile_Full)
     }
@@ -156,16 +157,16 @@ class GithubUsersAppRepository {
     fun insertUserRepo(userRepository: UserRepository) {
         appDb.githubUsersDao().insertUserRepo(userRepository)
     }
-
+*/
     fun insertAll_UserMini(userProfile_Mini: List<UserProfile_Mini>) {
         appDb.githubUsersDao().insertAll_UserMini(userProfile_Mini)
     }
-
+/*
     fun insertAll_UserRepo(userRepository: List<UserRepository>) {
         appDb.githubUsersDao().insertAll_UserRepo(userRepository)
     }
 
-
+*/
     //----------------------------------------------------------------------------------------------
     //  DROP TABLE  WRAPPING
     //----------------------------------------------------------------------------------------------
@@ -174,6 +175,7 @@ class GithubUsersAppRepository {
         appDb.githubUsersDao().dropUserMiniTable()
     }
 
+    /*
     fun dropUserFullTable() {
         appDb.githubUsersDao().dropUserFullTable()
     }
@@ -181,6 +183,7 @@ class GithubUsersAppRepository {
     fun dropUserRepoTable() {
         appDb.githubUsersDao().dropUserRepoTable()
     }
+    */
 
     companion object {
         private val TAG = GithubUsersAppRepository::class.java.getSimpleName()
